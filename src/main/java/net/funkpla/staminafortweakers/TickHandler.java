@@ -1,24 +1,17 @@
 package net.funkpla.staminafortweakers;
 
+import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class TickHandler implements ServerTickEvents.EndWorldTick {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(StaminaForTweakers.MOD_ID);
-    private final StaminaConfig config;
-
-    public TickHandler() {
-        config = new StaminaConfig();
-    }
+    private final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
 
     public void onEndTick(ServerWorld server) {
         server.getPlayers().forEach(this::handleStamina);
@@ -37,18 +30,21 @@ public class TickHandler implements ServerTickEvents.EndWorldTick {
 
         boolean notHungry = player.getHungerManager().getFoodLevel() >= 6;
         boolean canRecover = (config.recoverWhenHungry || notHungry)
-                && (config.recoverWhenAirborne || player.isOnGround());
+                && (config.recoverWhileAirborne || player.isOnGround())
+                && (config.recoverUnderwater || !player.isSubmergedInWater());
 
-        if (player.isSwimming() || player.isSprinting())
+        if (player.isSwimming()
+                || player.isSprinting()
+                || (config.jumpingCostsStamina && ((Jumper) player).hasJumped())
+        ) {
             staminaAttr.setBaseValue(staminaAttr.getBaseValue() - config.depletionPerTick);
-        else if (canRecover) {
-            double recoveryAmount = Math.min(10, (Math.pow(maxStaminaAttr.getValue(), 2.0D)) / (Math.pow(staminaAttr.getValue(), 2.0D)));
-
-            if (player.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED) <= 0) {
-                LOGGER.debug("Standing still, bonus recovery;");
+        } else if (canRecover) {
+            double recoveryAmount = config.recoveryPerTick;
+            double moved = player.horizontalSpeed - player.prevHorizontalSpeed;
+            if (moved <= 0.01) {
                 staminaAttr.setBaseValue(staminaAttr.getBaseValue() + recoveryAmount * 2);
-            } else if (config.recoverWhileWalking) {
-                LOGGER.debug("Walking, normal recovery;");
+            } else if (config.recoverWhileWalking ||
+                    (config.recoverWhileSneaking && player.isSneaking())) {
                 staminaAttr.setBaseValue(staminaAttr.getBaseValue() + recoveryAmount);
             }
             if (staminaAttr.getBaseValue() >= maxStamina) staminaAttr.setBaseValue(maxStamina);
@@ -57,6 +53,10 @@ public class TickHandler implements ServerTickEvents.EndWorldTick {
         double exhaustionPercentage = (staminaAttr.getValue() / maxStamina) * 100;
 
         if (exhaustionPercentage <= config.exhaustedPercentage) {
+            if (config.exhaustionSucksBad) {
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 3, 1, true, false));
+            }
+            player.addStatusEffect(makeSlow(4));
             player.addStatusEffect(makeSlow(4));
             player.setSprinting(false);
         } else if (exhaustionPercentage <= config.windedPercentage) player.addStatusEffect(makeSlow(2));

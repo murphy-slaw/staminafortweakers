@@ -1,0 +1,18 @@
+{
+  "text.autoconfig.staminafortweakers.title": "Stamina For Tweakers",
+  "text.autoconfig.staminafortweakers.option.exhaustedPercentage": "Exhausted Threshold (%)",
+  "text.autoconfig.staminafortweakers.option.windedPercentage": "Winded Threshold (%)",
+  "text.autoconfig.staminafortweakers.option.fatiguedPercentage": "Fatigued Threshold (%)",
+  "text.autoconfig.staminafortweakers.option.depletionPerTick": "Stamina cost per tick of exertion",
+  "text.autoconfig.staminafortweakers.option.jumpingCostsStamina": "Jumping costs stamina",
+  "text.autoconfig.staminafortweakers.option.canJumpWhileExhausted": "Can jump while exhausted",
+  "text.autoconfig.staminafortweakers.option.exhaustionSucksBad": "Exhaustion brings darkness",
+  "text.autoconfig.staminafortweakers.option.recoveryPerTick": "Stamina recovered per tick of rest",
+  "text.autoconfig.staminafortweakers.option.recoverWhileWalking": "Recover while walking",
+  "text.autoconfig.staminafortweakers.option.recoverWhileSneaking": "Recover while sneaking",
+  "text.autoconfig.staminafortweakers.option.recoverWhenHungry": "Recover while hungry",
+  "text.autoconfig.staminafortweakers.option.recoverWhileAirborne": "Recover while airborne",
+  "text.autoconfig.staminafortweakers.option.recoverUnderwater": "Recover while submerged",
+  "text.autoconfig.staminafortweakers.category.Exhaustion": "Exhaustion",
+  "text.autoconfig.staminafortweakers.category.Recovery": "Recovery"
+}

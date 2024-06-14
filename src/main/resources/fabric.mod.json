@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "template-mod",
+  "id": "staminafortweakers",
   "version": "${version}",
   "name": "Stamina For Tweakers",
   "description": "A painfully configurable stamina mod.",
@@ -12,7 +12,7 @@
     "sources": "https://github.com/FabricMC/fabric-example-mod"
   },
   "license": "MIT",
-  "icon": "assets/template-mod/icon.png",
+  "icon": "assets/staminafortweakers/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -20,12 +20,15 @@
     ],
     "client": [
       "net.funkpla.staminafortweakers.StaminaForTweakersClient"
+    ],
+    "modmenu": [
+      "net.funkpla.staminafortweakers.ModMenuConfig"
     ]
   },
   "mixins": [
-    "hamina-stamina.mixins.json",
+    "staminafortweakers.mixins.json",
     {
-      "config": "hamina-stamina.client.mixins.json",
+      "config": "staminafortweakers.client.mixins.json",
       "environment": "client"
     }
   ],
@@ -36,6 +39,6 @@
     "fabric-api": "*"
   },
   "suggests": {
-    "another-mod": "*"
+    "cloth-config": "*"
   }
 }
