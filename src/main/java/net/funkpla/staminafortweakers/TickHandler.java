@@ -33,11 +33,12 @@ public class TickHandler implements ServerTickEvents.EndWorldTick {
                 && (config.recoverWhileAirborne || player.isOnGround())
                 && (config.recoverUnderwater || !player.isSubmergedInWater());
 
-        if (player.isSwimming()
-                || player.isSprinting()
-                || (config.jumpingCostsStamina && ((Jumper) player).hasJumped())
-        ) {
-            staminaAttr.setBaseValue(staminaAttr.getBaseValue() - config.depletionPerTick);
+        if (player.isSwimming()) {
+            staminaAttr.setBaseValue(staminaAttr.getBaseValue() - config.depletionPerTickSwimming);
+        } else if (player.isSprinting()) {
+            staminaAttr.setBaseValue(staminaAttr.getBaseValue() - config.depletionPerTickSprinting);
+        } else if (config.jumpingCostsStamina && ((Jumper) player).hasJumped()) {
+            staminaAttr.setBaseValue(staminaAttr.getBaseValue() - config.depletionPerJump);
         } else if (canRecover) {
             double recoveryAmount = config.recoveryPerTick;
             double moved = player.horizontalSpeed - player.prevHorizontalSpeed;
@@ -53,7 +54,7 @@ public class TickHandler implements ServerTickEvents.EndWorldTick {
         double exhaustionPercentage = (staminaAttr.getValue() / maxStamina) * 100;
 
         if (exhaustionPercentage <= config.exhaustedPercentage) {
-            if (config.exhaustionSucksBad) {
+            if (config.exhaustionBlackout) {
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 3, 1, true, false));
             }
             player.addStatusEffect(makeSlow(4));
