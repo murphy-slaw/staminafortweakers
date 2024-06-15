@@ -15,6 +15,7 @@ So many knobs to tweak!
 * Recovery under different conditions
   * Resting (not moving)
   * Walking
+  * Sneaking
   * Underwater
 * Recovery formula (linear or logarithmic)
 * Exhaustion effects with configurable thresholds
