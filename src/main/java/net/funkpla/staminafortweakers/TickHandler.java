@@ -9,7 +9,7 @@ public class TickHandler implements ServerTickEvents.EndWorldTick {
 
     public void onEndTick(ServerWorld server) {
         for (ServerPlayerEntity player : server.getPlayers()) {
-            ((StaminaManager) player).update();
+            ((StaminaEntity) player).update();
         }
     }
 }

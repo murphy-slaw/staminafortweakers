@@ -10,8 +10,13 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 @Config(name = "staminafortweakers")
 public class StaminaConfig implements ConfigData {
     public enum Orientation {
-        Horizontal,
-        Vertical
+        HORIZONTAL,
+        VERTICAL
+    }
+
+    public enum Formula {
+        LINEAR,
+        LOGARITHMIC
     }
 
     @Comment("Percentage of total stamina triggering exhaustion")
@@ -82,6 +87,11 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.Category("Recovery")
     public boolean recoverUnderwater = true;
 
+    @Comment("Which formula to use for recovery")
+    @ConfigEntry.Category("Recovery")
+    @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
+    public Formula formula = Formula.LINEAR;
+
     @Comment("HUD offset from center of screen")
     @ConfigEntry.Category("HUD")
     public int hudOffsetX = 91;
@@ -101,7 +111,7 @@ public class StaminaConfig implements ConfigData {
     @Comment("Stamina bar orientation")
     @ConfigEntry.Category("HUD")
     @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
-    public Orientation orientation = Orientation.Horizontal;
+    public Orientation orientation = Orientation.HORIZONTAL;
 
     @Comment("Stamina bar main color")
     @ConfigEntry.ColorPicker

@@ -31,7 +31,7 @@ public class StaminaHudOverlay implements HudRenderCallback {
             color += config.staminaBarColor;
         }
 
-        if (config.orientation == StaminaConfig.Orientation.Horizontal) {
+        if (config.orientation == StaminaConfig.Orientation.HORIZONTAL) {
             int x1 = width / 2 - config.hudOffsetX;
             int y1 = height - config.hudOffsetY - config.hudHeight;
             int x2 = x1 + config.hudWidth;

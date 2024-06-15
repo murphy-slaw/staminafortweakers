@@ -1,8 +1,8 @@
 package net.funkpla.staminafortweakers.mixin;
 
 import me.shedaniel.autoconfig.AutoConfig;
-import net.funkpla.staminafortweakers.Jumper;
 import net.funkpla.staminafortweakers.StaminaConfig;
+import net.funkpla.staminafortweakers.StaminaEntity;
 import net.funkpla.staminafortweakers.StaminaForTweakers;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity implements Jumper, net.funkpla.staminafortweakers.StaminaManager {
+public abstract class LivingEntityMixin extends Entity implements StaminaEntity {
     @Unique
     private final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
     @Unique
@@ -33,6 +33,10 @@ public abstract class LivingEntityMixin extends Entity implements Jumper, net.fu
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
     }
+
+    /**
+     * Inject into LivingEntity.createLivingAttributes to add STAMINA and MAX_STAMINA attributes.
+     */
 
     @Inject(
             method = "createLivingAttributes()Lnet/minecraft/entity/attribute/DefaultAttributeContainer$Builder;",
@@ -44,6 +48,9 @@ public abstract class LivingEntityMixin extends Entity implements Jumper, net.fu
         info.getReturnValue().add(StaminaForTweakers.STAMINA);
         info.getReturnValue().add(StaminaForTweakers.MAX_STAMINA);
     }
+
+
+    // Shadow methods from Entity
 
     @Shadow
     public abstract double getAttributeValue(EntityAttribute attribute);
@@ -60,6 +67,10 @@ public abstract class LivingEntityMixin extends Entity implements Jumper, net.fu
     @Shadow
     public abstract boolean addStatusEffect(StatusEffectInstance effect);
 
+    /**
+     * Track whether the entity jumped this tick. Set the flag in jump() and clear it at the beginning of every tick.
+     */
+
     @Inject(method = "tick", at = @At("HEAD"))
     private void clearJumpedFlag(CallbackInfo ci) {
         jumped = false;
@@ -70,28 +81,27 @@ public abstract class LivingEntityMixin extends Entity implements Jumper, net.fu
         jumped = true;
     }
 
+    /**
+     * Inject into LivingEntity.jump() to block jumping according to config.
+     */
+
     @Inject(method = "jump", at = @At("HEAD"), cancellable = true)
     private void blockJumping(CallbackInfo ci) {
-        if (!config.canJumpWhileExhausted) {
-            double stamina = this.getAttributeValue(StaminaForTweakers.STAMINA);
-            double maxStamina = this.getAttributeValue(StaminaForTweakers.MAX_STAMINA);
-            double exhaustionPercentage = (stamina / maxStamina) * 100;
-            if (exhaustionPercentage <= config.exhaustedPercentage) ci.cancel();
-        }
+        if (config.canJumpWhileExhausted) return;
+        if (getExhaustionPct() <= config.exhaustedPercentage) ci.cancel();
     }
 
-    @Override
-    public boolean hasJumped() {
+
+    private boolean hasJumped() {
         return jumped;
     }
 
     @Override
     public void update() {
-        doExertion();
-        if (canRecover()) {
-            doRecovery();
-        }
-
+        if (isSwimming()) depleteStamina(config.depletionPerTickSwimming);
+        else if (isSprinting()) depleteStamina(config.depletionPerTickSprinting);
+        else if (config.jumpingCostsStamina && hasJumped()) depleteStamina(config.depletionPerJump);
+        else if (canRecover()) doRecovery();
         doExhaustion();
     }
 
@@ -104,8 +114,9 @@ public abstract class LivingEntityMixin extends Entity implements Jumper, net.fu
     public void doExhaustion() {
         double pct = getExhaustionPct();
         if (pct <= config.exhaustedPercentage) {
-            if (config.exhaustionBlackout)
-                addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 3, 1, true, false));
+            if (config.exhaustionBlackout) {
+                addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 20, 1, true, false));
+            }
             addStatusEffect(makeSlow(4));
             setSprinting(false);
         } else if (pct <= config.windedPercentage) addStatusEffect(makeSlow(2));
@@ -113,21 +124,25 @@ public abstract class LivingEntityMixin extends Entity implements Jumper, net.fu
     }
 
     @Unique
-    public void doExertion() {
-        if (isSwimming()) depleteStamina(config.depletionPerTickSwimming);
-        else if (isSprinting()) depleteStamina(config.depletionPerTickSprinting);
-        else if (config.jumpingCostsStamina && hasJumped()) depleteStamina(config.depletionPerJump);
-    }
-
-    @Unique
     public void doRecovery() {
-        double moved = horizontalSpeed - prevHorizontalSpeed;
-        if (moved <= 0.01) {
-            recoverStamina(config.recoveryPerTick * config.recoveryRestBonusMultiplier);
+        if (horizontalSpeed - prevHorizontalSpeed <= 0.01) {
+            recoverStamina(getBaseRecovery() * config.recoveryRestBonusMultiplier);
         } else if (config.recoverWhileWalking ||
                 (config.recoverWhileSneaking && isSneaking())) {
-            recoverStamina(config.recoveryPerTick);
+            recoverStamina(getBaseRecovery());
         }
+    }
+
+    public double getBaseRecovery() {
+        if (config.formula == StaminaConfig.Formula.LOGARITHMIC) return calcLogRecovery();
+        // Formula.LINEAR
+        return config.recoveryPerTick;
+    }
+
+    public double calcLogRecovery() {
+        return Math.log(Math.pow((getMaxStamina() - getStamina() + 1), (double) 1 / 3))
+                / Math.log(3)
+                * config.recoveryPerTick;
     }
 
     @Unique
@@ -151,7 +166,7 @@ public abstract class LivingEntityMixin extends Entity implements Jumper, net.fu
     }
 
     @Unique
-    public void recoverStamina(float recoveryAmount) {
+    public void recoverStamina(double recoveryAmount) {
         setStamina(getStamina() + recoveryAmount);
         if (getStamina() > getMaxStamina()) {
             setStamina(getMaxStamina());

@@ -1,5 +1,5 @@
 package net.funkpla.staminafortweakers;
 
-public interface StaminaManager {
+public interface StaminaEntity {
     void update();
 }
