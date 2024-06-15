@@ -109,6 +109,9 @@ publishing {
 			// The scope can be `required`, `optional`, `incompatible`, or `embedded`
 			// The type can either be `project` or `version`
 			//incompatible.project "tectonic"
+			required.project "fabric-api"
+			required.project "cloth-config"
+			optional.project "modmenu"
 		}
 	}
 
