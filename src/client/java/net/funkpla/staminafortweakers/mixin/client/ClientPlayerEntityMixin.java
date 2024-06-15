@@ -1,6 +1,7 @@
 package net.funkpla.staminafortweakers.mixin.client;
 
 import com.mojang.authlib.GameProfile;
+import me.shedaniel.autoconfig.AutoConfig;
 import net.funkpla.staminafortweakers.StaminaConfig;
 import net.funkpla.staminafortweakers.StaminaForTweakers;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -14,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class ClientPlayerEntityMixin extends PlayerEntity {
+    private final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
 
     public ClientPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
         super(world, pos, yaw, gameProfile);
@@ -25,7 +27,6 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity {
             at = @At("HEAD"),
             cancellable = true)
     private void canSprint(CallbackInfoReturnable<Boolean> cir) {
-        StaminaConfig config = new StaminaConfig();
         double stamina = this.getAttributeValue(StaminaForTweakers.STAMINA);
         double max_stamina = this.getAttributeValue(StaminaForTweakers.MAX_STAMINA);
         boolean isNotExhausted = ((stamina / max_stamina) * 100) <= config.exhaustedPercentage;

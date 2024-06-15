@@ -58,6 +58,10 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.Category("Recovery")
     public float recoveryPerTick = 0.25F;
 
+    @Comment("Bonus recovery multiplier for not moving.")
+    @ConfigEntry.Category("Recovery")
+    public float recoveryRestBonusMultiplier = 2;
+
     @Comment("Do players recover stamina while walking?")
     @ConfigEntry.Category("Recovery")
     public boolean recoverWhileWalking = false;
