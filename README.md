@@ -14,7 +14,6 @@ So many knobs to tweak!
   * Jumping
 * Recovery under different conditions
   * Resting (not moving)
-  * Sneaking
   * Walking
   * Underwater
 * Recovery formula (linear or logarithmic)
