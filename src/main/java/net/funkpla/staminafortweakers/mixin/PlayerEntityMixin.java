@@ -54,7 +54,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements StaminaE
         double pct = getExhaustionPct();
         if (pct <= config.exhaustedPercentage) {
             if (config.exhaustionBlackout) {
-                addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 20, 1, true, false));
+                addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 40, 1, true, false));
             }
             addStatusEffect(makeSlow(4));
             setSprinting(false);
@@ -117,9 +117,14 @@ public abstract class PlayerEntityMixin extends LivingEntity implements StaminaE
         setStamina(getStamina() - depletionAmount);
     }
 
+    private boolean isStandingStill() {
+        return ((horizontalSpeed - prevHorizontalSpeed) <= 0.1);
+    }
+
     @Unique
     private boolean canRecover() {
         return (config.recoverWhenHungry || isNotHungry())
+                && (config.recoverWhileWalking || isStandingStill())
                 && (config.recoverWhileAirborne || isOnGround())
                 && (config.recoverUnderwater || !isSubmergedInWater());
     }
