@@ -1,6 +1,5 @@
 package net.funkpla.staminafortweakers.mixin;
 
-import net.funkpla.staminafortweakers.StaminaEntity;
 import net.funkpla.staminafortweakers.StaminaForTweakers;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -13,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity implements StaminaEntity {
+public abstract class LivingEntityMixin extends Entity {
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);

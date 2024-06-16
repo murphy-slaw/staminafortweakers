@@ -2,7 +2,6 @@ package net.funkpla.staminafortweakers.mixin;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import net.funkpla.staminafortweakers.StaminaConfig;
-import net.funkpla.staminafortweakers.StaminaEntity;
 import net.funkpla.staminafortweakers.StaminaForTweakers;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -19,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity implements StaminaEntity {
+public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Unique
     private final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
@@ -35,8 +34,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements StaminaE
     public abstract HungerManager getHungerManager();
 
 
-    @Override
-    public void update() {
+    @Inject(method = "tick", at = @At("HEAD"))
+    public void updateStamina(CallbackInfo ci) {
         if (isSwimming()) depleteStamina(config.depletionPerTickSwimming);
         else if (isSprinting()) depleteStamina(config.depletionPerTickSprinting);
         else if (config.jumpingCostsStamina && hasJumped()) depleteStamina(config.depletionPerJump);
@@ -115,6 +114,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements StaminaE
     @Unique
     public void depleteStamina(float depletionAmount) {
         setStamina(getStamina() - depletionAmount);
+        if (getStamina() < 0) setStamina(0);
     }
 
     private boolean isStandingStill() {
