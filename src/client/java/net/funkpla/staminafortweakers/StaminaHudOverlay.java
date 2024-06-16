@@ -33,20 +33,20 @@ public class StaminaHudOverlay implements HudRenderCallback {
 
         if (config.orientation == StaminaConfig.Orientation.HORIZONTAL) {
             int x1 = width / 2 - config.hudOffsetX;
-            int y1 = height - config.hudOffsetY - config.hudHeight;
-            int x2 = x1 + config.hudWidth;
-            int y2 = y1 + config.hudHeight;
+            int y1 = height - config.hudOffsetY - config.hudShortSide;
+            int x2 = x1 + config.hudLongSide;
+            int y2 = y1 + config.hudShortSide;
             context.fill(x1, y1, x2, y2, opaque + config.staminaBarBackgroundColor);
-            context.fill(x1, y1, (int) (x1 + (config.hudWidth * scaledStamina)), y2, color);
-            context.drawBorder(x1, y1, config.hudWidth, config.hudHeight, opaque + config.staminaBarOutlineColor);
+            context.fill(x1, y1, (int) (x1 + (config.hudLongSide * scaledStamina)), y2, color);
+            context.drawBorder(x1, y1, config.hudLongSide, config.hudShortSide, opaque + config.staminaBarOutlineColor);
         } else {
             int x1 = width / 2 - config.hudOffsetX;
-            int y1 = height - config.hudOffsetY - config.hudWidth;
-            int x2 = x1 + config.hudHeight;
-            int y2 = y1 + config.hudWidth;
+            int y1 = height - config.hudOffsetY - config.hudLongSide;
+            int x2 = x1 + config.hudShortSide;
+            int y2 = y1 + config.hudLongSide;
             context.fill(x1, y1, x2, y2, opaque + config.staminaBarBackgroundColor);
-            context.fill(x1, y2, x2, y2 - (int) (config.hudWidth * scaledStamina), color);
-            context.drawBorder(x1, y1, config.hudHeight, config.hudWidth, opaque + config.staminaBarOutlineColor);
+            context.fill(x1, y2, x2, y2 - (int) (config.hudLongSide * scaledStamina), color);
+            context.drawBorder(x1, y1, config.hudShortSide, config.hudLongSide, opaque + config.staminaBarOutlineColor);
         }
 
         //context.drawTexture(FILLED_STAMINA, x, y1, 0, 0, (int) (BAR_LENGTH * scaledStamina), BAR_HEIGHT, BAR_LENGTH, BAR_HEIGHT);

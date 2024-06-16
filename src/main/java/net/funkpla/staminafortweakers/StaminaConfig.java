@@ -102,11 +102,11 @@ public class StaminaConfig implements ConfigData {
 
     @Comment("Width of stamina bar")
     @ConfigEntry.Category("HUD")
-    public int hudWidth = 81;
+    public int hudLongSide = 81;
 
     @Comment("Height of stamina bar")
     @ConfigEntry.Category("HUD")
-    public int hudHeight = 6;
+    public int hudShortSide = 6;
 
     @Comment("Stamina bar orientation")
     @ConfigEntry.Category("HUD")
