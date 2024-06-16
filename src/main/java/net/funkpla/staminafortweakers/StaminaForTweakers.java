@@ -8,6 +8,7 @@ import net.minecraft.entity.attribute.ClampedEntityAttribute;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 
 
@@ -17,22 +18,24 @@ public class StaminaForTweakers implements ModInitializer {
     // That way, it's clear which mod wrote info, warnings, and errors.
     public static final String MOD_ID = "staminafortweakers";
 
-    public static EntityAttribute STAMINA = registerAttribute(
+    public static RegistryEntry<EntityAttribute> STAMINA = registerAttribute(
             "generic.stamina",
             100,
             0,
             1024
     );
-    public static EntityAttribute MAX_STAMINA = registerAttribute(
+    public static RegistryEntry<EntityAttribute> MAX_STAMINA = registerAttribute(
             "generic.max_stamina",
             100,
             0,
             1024
     );
 
-    private static EntityAttribute registerAttribute(final String name, double base, double min, double max) {
+    private static RegistryEntry<EntityAttribute> registerAttribute(final String name, double base, double min, double max) {
+        Identifier id = Identifier.of(MOD_ID, name);
         EntityAttribute attribute = new ClampedEntityAttribute("attribute.name." + MOD_ID + '.' + name, base, min, max).setTracked(true);
-        return Registry.register(Registries.ATTRIBUTE, new Identifier(MOD_ID, name), attribute);
+        Registry.register(Registries.ATTRIBUTE, id, attribute);
+        return Registries.ATTRIBUTE.getEntry(attribute);
     }
 
 

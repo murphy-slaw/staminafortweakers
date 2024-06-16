@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.render.RenderTickCounter;
 
 public class StaminaHudOverlay implements HudRenderCallback {
     private final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
@@ -12,7 +13,7 @@ public class StaminaHudOverlay implements HudRenderCallback {
 
 
     @Override
-    public void onHudRender(DrawContext context, float tickDelta) {
+    public void onHudRender(DrawContext context, RenderTickCounter tickCounter) {
         MinecraftClient client = MinecraftClient.getInstance();
         int width = client.getWindow().getScaledWidth();
         int height = client.getWindow().getScaledHeight();
