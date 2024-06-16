@@ -11,6 +11,12 @@ base {
 	archivesName = project.archives_base_name
 }
 
+java {
+	toolchain {
+		languageVersion.set JavaLanguageVersion.of(17)
+	}
+}
+
 repositories {
 	// Add repositories to retrieve artifacts from in here.
 	// You should only use this when depending on other mods because
