@@ -13,7 +13,7 @@ base {
 
 java {
 	toolchain {
-		languageVersion.set JavaLanguageVersion.of(21)
+		languageVersion.set JavaLanguageVersion.of(java_language_version)
 	}
 }
 
