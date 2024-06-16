@@ -3,13 +3,14 @@ package net.funkpla.staminafortweakers;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.attribute.ClampedEntityAttribute;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class StaminaForTweakers implements ModInitializer {
@@ -17,6 +18,8 @@ public class StaminaForTweakers implements ModInitializer {
     // It is considered best practice to use your mod id as the logger's name.
     // That way, it's clear which mod wrote info, warnings, and errors.
     public static final String MOD_ID = "staminafortweakers";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
 
     public static RegistryEntry<EntityAttribute> STAMINA = registerAttribute(
             "generic.stamina",
@@ -42,7 +45,5 @@ public class StaminaForTweakers implements ModInitializer {
     @Override
     public void onInitialize() {
         AutoConfig.register(StaminaConfig.class, JanksonConfigSerializer::new);
-        TickHandler t = new TickHandler();
-        ServerTickEvents.END_WORLD_TICK.register(t);
     }
 }
