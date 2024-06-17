@@ -8,6 +8,7 @@ import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -42,7 +43,7 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
     @Shadow
-    public abstract double getAttributeBaseValue(EntityAttribute attribute);
+    public abstract double getAttributeBaseValue(RegistryEntry<EntityAttribute> attribute);
 
     @Unique
     public double getMaxStamina() {
@@ -55,10 +56,10 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
     @Shadow
-    public abstract EntityAttributeInstance getAttributeInstance(EntityAttribute attribute);
+    public abstract EntityAttributeInstance getAttributeInstance(RegistryEntry<EntityAttribute> attribute);
 
     @Shadow
-    public abstract double getAttributeValue(EntityAttribute attribute);
+    public abstract double getAttributeValue(RegistryEntry<EntityAttribute> attribute);
 
     @Shadow
     public abstract boolean isClimbing();
