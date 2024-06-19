@@ -9,6 +9,7 @@
   "text.autoconfig.staminafortweakers.option.depletionPerJump": "Stamina cost per jump",
   "text.autoconfig.staminafortweakers.option.canJumpWhileExhausted": "Can jump while exhausted",
   "text.autoconfig.staminafortweakers.option.exhaustionBlackout": "Exhaustion causes Darkness",
+  "text.autoconfig.staminafortweakers.option.exhaustionSounds": "Play sounds when winded",
   "text.autoconfig.staminafortweakers.option.recoveryPerTick": "Stamina recovered per tick of rest",
   "text.autoconfig.staminafortweakers.option.recoverWhileWalking": "Recover while walking",
   "text.autoconfig.staminafortweakers.option.recoverWhileSneaking": "Recover while sneaking",
@@ -31,5 +32,6 @@
   "text.autoconfig.staminafortweakers.option.staminaBarOutlineColor": "Outline color",
   "text.autoconfig.staminafortweakers.option.staminaBarFatiguedColor": "Fatigued color",
   "text.autoconfig.staminafortweakers.option.staminaBarWindedColor": "Winded color",
-  "text.autoconfig.staminafortweakers.option.staminaBarNearlyExhaustedColor": "Nearly exhausted color"
+  "text.autoconfig.staminafortweakers.option.staminaBarNearlyExhaustedColor": "Nearly exhausted color",
+  "subtitles.staminafortweakers.breath_scared": "Exhausted panting"
 }

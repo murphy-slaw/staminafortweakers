@@ -8,6 +8,7 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,9 +48,13 @@ public class StaminaForTweakers implements ModInitializer {
         return Registries.ATTRIBUTE.getEntry(attribute);
     }
 
+    public static final Identifier BREATH_SCARED =  Identifier.of("staminafortweakers:breath_scared");
+    public static SoundEvent ENTITY_PLAYER_PANT = SoundEvent.of(BREATH_SCARED);
+
 
     @Override
     public void onInitialize() {
         AutoConfig.register(StaminaConfig.class, JanksonConfigSerializer::new);
+        Registry.register(Registries.SOUND_EVENT, StaminaForTweakers.BREATH_SCARED, ENTITY_PLAYER_PANT);
     }
 }

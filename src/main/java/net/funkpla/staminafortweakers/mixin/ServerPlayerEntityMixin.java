@@ -7,19 +7,20 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayerEntity.class)
-public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin {
+public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implements Climber {
     protected ServerPlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
+
 
     private Vec3d lastPos = new Vec3d(0, 0, 0);
 
@@ -42,6 +43,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin {
         updateClimbModifiers();
     }
 
+
     @Unique
     private void doExhaustion() {
         double pct = getExhaustionPct();
@@ -53,6 +55,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin {
             setSprinting(false);
         } else if (pct <= config.windedPercentage) makeSlow(2);
         else if (pct <= config.fatiguedPercentage) makeSlow(1);
+
     }
 
     @Unique

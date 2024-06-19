@@ -59,6 +59,10 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.Category("Exhaustion")
     public boolean exhaustionBlackout = true;
 
+    @Comment("Exhaustion sounds")
+    @ConfigEntry.Category("Exhaustion")
+    public boolean exhaustionSounds = true;
+
     @Comment("Stamina points recovered per tick.")
     @ConfigEntry.Category("Recovery")
     public float recoveryPerTick = 0.25F;
