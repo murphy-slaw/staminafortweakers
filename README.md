@@ -12,6 +12,8 @@ So many knobs to tweak!
   * Sprinting
   * Swimming
   * Jumping
+  * Climbing
+* Optional, somewhat upsetting panting noises when the player is winded.
 * Recovery under different conditions
   * Resting (not moving)
   * Walking
@@ -30,3 +32,7 @@ With all these options, you can make stamina management anything from a mild ann
 
 ## Future Plans
 Even more ridiculous options! Suggestions welcome on the [issues page](https://github.com/murphy-slaw/staminafortweakers/issues).
+
+## Acknowledgements
+### Sounds:
+Breath_Scared_18.wav by LittleRobotSoundFactory -- https://freesound.org/s/270496/ -- License: Attribution 4.0
