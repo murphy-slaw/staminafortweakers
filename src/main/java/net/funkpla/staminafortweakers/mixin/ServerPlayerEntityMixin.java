@@ -49,7 +49,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
         double pct = getExhaustionPct();
         if (pct <= config.exhaustedPercentage) {
             if (config.exhaustionBlackout) {
-                addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 20, 1, true, false));
+                addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 60, 1, true, false));
             }
             makeSlow(4);
             setSprinting(false);
