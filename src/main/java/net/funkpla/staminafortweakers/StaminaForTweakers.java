@@ -32,6 +32,12 @@ public class StaminaForTweakers implements ModInitializer {
             0,
             1024
     );
+    public static EntityAttribute CLIMB_SPEED = registerAttribute(
+            "generic.climb_speed",
+            0,
+            -1,
+            1
+    );
 
     private static EntityAttribute registerAttribute(final String name, double base, double min, double max) {
         EntityAttribute attribute = new ClampedEntityAttribute("attribute.name." + MOD_ID + '.' + name, base, min, max).setTracked(true);

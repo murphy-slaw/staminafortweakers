@@ -5,7 +5,7 @@
   "text.autoconfig.staminafortweakers.option.fatiguedPercentage": "Fatigued Threshold (%)",
   "text.autoconfig.staminafortweakers.option.depletionPerTickSwimming": "Stamina cost per tick of swimming",
   "text.autoconfig.staminafortweakers.option.depletionPerTickSprinting": "Stamina cost per tick of sprinting",
-  "text.autoconfig.staminafortweakers.option.jumpingCostsStamina": "Jumping costs stamina",
+  "text.autoconfig.staminafortweakers.option.depletionPerTickClimbing": "Stamina cost per tick of climbing",
   "text.autoconfig.staminafortweakers.option.depletionPerJump": "Stamina cost per jump",
   "text.autoconfig.staminafortweakers.option.canJumpWhileExhausted": "Can jump while exhausted",
   "text.autoconfig.staminafortweakers.option.exhaustionBlackout": "Exhaustion causes Darkness",

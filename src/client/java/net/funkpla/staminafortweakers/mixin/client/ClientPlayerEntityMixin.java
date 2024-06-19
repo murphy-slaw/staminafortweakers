@@ -1,12 +1,12 @@
 package net.funkpla.staminafortweakers.mixin.client;
 
-import com.mojang.authlib.GameProfile;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.funkpla.staminafortweakers.StaminaConfig;
 import net.funkpla.staminafortweakers.StaminaForTweakers;
+import net.funkpla.staminafortweakers.mixin.PlayerEntityMixin;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,11 +14,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientPlayerEntity.class)
-public abstract class ClientPlayerEntityMixin extends PlayerEntity {
+public abstract class ClientPlayerEntityMixin extends PlayerEntityMixin {
     private final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
 
-    public ClientPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
-        super(world, pos, yaw, gameProfile);
+    protected ClientPlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
+        super(entityType, world);
     }
 
 
