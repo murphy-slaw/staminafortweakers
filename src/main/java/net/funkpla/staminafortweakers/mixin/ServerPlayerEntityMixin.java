@@ -2,11 +2,15 @@ package net.funkpla.staminafortweakers.mixin;
 
 import net.funkpla.staminafortweakers.Climber;
 import net.funkpla.staminafortweakers.StaminaConfig;
+import net.funkpla.staminafortweakers.StaminaForTweakers;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,10 +20,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayerEntity.class)
-public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin {
+public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implements Climber {
     protected ServerPlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
+
+    @Shadow
+    public abstract void playSound(SoundEvent event, SoundCategory category, float volume, float pitch);
 
     private Vec3d lastPos = new Vec3d(0, 0, 0);
 
@@ -42,6 +49,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin {
         updateClimbModifiers();
     }
 
+    private int breathCount = 0;
+    private static final int BREATH_TICKS = 40;
+
     @Unique
     private void doExhaustion() {
         double pct = getExhaustionPct();
@@ -53,6 +63,16 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin {
             setSprinting(false);
         } else if (pct <= config.windedPercentage) makeSlow(2);
         else if (pct <= config.fatiguedPercentage) makeSlow(1);
+
+        if (!config.exhaustionSounds) return;
+
+        breathCount += (int) (Math.random() * 3);
+        if (breathCount >= BREATH_TICKS) breathCount = 0;
+        if (pct <= config.windedPercentage) {
+            if (breathCount == 0) {
+                playSound(StaminaForTweakers.ENTITY_PLAYER_PANT, SoundCategory.PLAYERS, 0.8f, (float) (Math.random() * 0.25f) + 0.875f);
+            }
+        }
     }
 
     @Unique
