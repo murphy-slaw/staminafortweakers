@@ -5,6 +5,7 @@ import net.funkpla.staminafortweakers.StaminaConfig;
 import net.funkpla.staminafortweakers.StaminaForTweakers;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
@@ -14,9 +15,17 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
+
+
+    @Inject(method = "createPlayerAttributes()Lnet/minecraft/entity/attribute/DefaultAttributeContainer$Builder;", require = 1, allow = 1, at = @At("RETURN"))
+    private static void staminafortweakers$addPlayerAttributes(final CallbackInfoReturnable<DefaultAttributeContainer.Builder> info) {
+        info.getReturnValue().add(StaminaForTweakers.STAMINA);
+        info.getReturnValue().add(StaminaForTweakers.MAX_STAMINA);
+    }
 
     @Unique
     protected final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
