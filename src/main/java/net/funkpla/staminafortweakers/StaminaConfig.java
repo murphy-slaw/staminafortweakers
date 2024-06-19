@@ -43,9 +43,9 @@ public class StaminaConfig implements ConfigData {
     @Comment("Stamina points depleted per tick while swimming.")
     public float depletionPerTickSwimming = 1F;
 
-    @Comment("Does jumping cost stamina?")
     @ConfigEntry.Category("Exhaustion")
-    public boolean jumpingCostsStamina = true;
+    @Comment("Stamina points depleted per tick while climbing.")
+    public float depletionPerTickClimbing = 1F;
 
     @Comment("Stamina points depleted per jump")
     @ConfigEntry.Category("Exhaustion")

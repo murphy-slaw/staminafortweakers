@@ -33,6 +33,12 @@ public class StaminaForTweakers implements ModInitializer {
             0,
             1024
     );
+    public static RegistryEntry<EntityAttribute> CLIMB_SPEED = registerAttribute(
+            "generic.climb_speed",
+            0,
+            -1,
+            1
+    );
 
     private static RegistryEntry<EntityAttribute> registerAttribute(final String name, double base, double min, double max) {
         Identifier id = Identifier.of(MOD_ID, name);
