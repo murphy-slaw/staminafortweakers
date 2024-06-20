@@ -1,0 +1,25 @@
+# Automatically build the project and run any configured tests for every push
+# and submitted pull request. This can help catch issues that only occur on
+# certain platforms or Java versions, and provides a first line of defence
+# against bad commits.
+
+name: publish
+on: [ push ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        # Use these Java versions
+        java: [
+          21,    # Current Java LTS
+        ]
+    runs-on: ubuntu-22.04
+    steps:
+      - name: mc-publish
+        uses: Kir-Antipov/mc-publish@v3.3.0
+        with:
+          modrinth-id: AejtfAlC
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-id: 1040808
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
