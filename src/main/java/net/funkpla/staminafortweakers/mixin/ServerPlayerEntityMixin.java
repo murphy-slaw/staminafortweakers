@@ -7,9 +7,13 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,6 +21,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implements Climber {
+    @Shadow
+    public abstract ServerWorld getServerWorld();
+
+    @Shadow
+    protected abstract GameMode getServerGameMode(@Nullable GameMode backupGameMode);
+
+    @Shadow
+    public abstract boolean isCreative();
+
+    @Shadow
+    public abstract boolean isSpawnForced();
+
+    @Shadow
+    public abstract boolean isSpectator();
+
     protected ServerPlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -26,6 +45,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void updateStamina(CallbackInfo ci) {
+        if (isCreative() || isSpectator()) return;
         double ySpeed = getPos().getY() - lastPos.getY();
         if (isSwimming()) depleteStamina(config.depletionPerTickSwimming);
         else if (isSprinting()) depleteStamina(config.depletionPerTickSprinting);
