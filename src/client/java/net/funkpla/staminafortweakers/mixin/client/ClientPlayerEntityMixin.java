@@ -32,6 +32,7 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntityMixin {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void doExhaustionSounds(CallbackInfo ci) {
+        if (isSubmergedInWater()) return;
         double pct = getExhaustionPct();
         if (!config.exhaustionSounds) return;
 
