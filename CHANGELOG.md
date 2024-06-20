@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.8] 2024-06-20
+
+### Added
+
+- New option to toggle stamina recovery when suffocating
+- Low stamina applies a new effect, "Fatigue" instead of Slowness
+- Fatigue affects movement speed, climbing speed, and swimming speed.
+
 ## [1.0.7] 2024-06-20
 
 ### Fixed
