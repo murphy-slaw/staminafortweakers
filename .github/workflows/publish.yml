@@ -4,7 +4,10 @@
 # against bad commits.
 
 name: publish
-on: [ push ]
+on:
+  push:
+    branches:
+      - tags/release/*
 
 jobs:
   build:
