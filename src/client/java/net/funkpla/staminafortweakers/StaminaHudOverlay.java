@@ -18,6 +18,7 @@ public class StaminaHudOverlay implements HudRenderCallback {
         int height = client.getWindow().getScaledHeight();
 
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        if (player.isCreative() || player.isSpectator()) return;
         float scaledStamina = (float) (player.getAttributeValue(StaminaForTweakers.STAMINA) / player.getAttributeValue(StaminaForTweakers.MAX_STAMINA));
         float pct = scaledStamina * 100;
         int color = opaque;
