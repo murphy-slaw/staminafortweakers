@@ -58,6 +58,9 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Climber 
     @Shadow
     public abstract float getMovementSpeed();
 
+    @Shadow
+    protected boolean isSubmergedInWater;
+
     @Unique
     public double getExhaustionPct() {
         return getStamina() / getMaxStamina() * 100;
