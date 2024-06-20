@@ -91,6 +91,10 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.Category("Recovery")
     public boolean recoverUnderwater = true;
 
+    @Comment("Do players recover stamina when suffocating?")
+    @ConfigEntry.Category("Recovery")
+    public boolean recoverWhileBreathless = false;
+
     @Comment("Which formula to use for recovery")
     @ConfigEntry.Category("Recovery")
     @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)

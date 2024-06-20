@@ -2,6 +2,7 @@ package net.funkpla.staminafortweakers.mixin;
 
 import net.funkpla.staminafortweakers.Climber;
 import net.funkpla.staminafortweakers.StaminaConfig;
+import net.funkpla.staminafortweakers.StaminaForTweakers;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -59,8 +60,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
 
     @Unique
     private void makeSlow(int amplifier) {
-        addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 3, amplifier, true, false));
-        updateClimbModifiers();
+        addStatusEffect(new StatusEffectInstance(StaminaForTweakers.FATIGUE, 3, amplifier, true, true));
     }
 
 
@@ -123,7 +123,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
         return (config.recoverWhenHungry || isNotHungry())
                 && (config.recoverWhileWalking || isStandingStill())
                 && (config.recoverWhileAirborne || isOnGround())
-                && (config.recoverUnderwater || !isSubmergedInWater());
+                && (config.recoverUnderwater || !isSubmergedInWater())
+                && (config.recoverWhileBreathless || getAir() > 0);
     }
 
     @Unique

@@ -16,6 +16,7 @@
   "text.autoconfig.staminafortweakers.option.recoverWhenHungry": "Recover while hungry",
   "text.autoconfig.staminafortweakers.option.recoverWhileAirborne": "Recover while airborne",
   "text.autoconfig.staminafortweakers.option.recoverUnderwater": "Recover while submerged",
+  "text.autoconfig.staminafortweakers.option.recoverWhileBreathless": "Recover while suffocating",
   "text.autoconfig.staminafortweakers.option.recoveryRestBonusMultiplier": "Rest bonus multiplier",
   "text.autoconfig.staminafortweakers.option.formula": "Recovery formula",
   "text.autoconfig.staminafortweakers.category.Exhaustion": "Exhaustion",
@@ -33,5 +34,6 @@
   "text.autoconfig.staminafortweakers.option.staminaBarFatiguedColor": "Fatigued color",
   "text.autoconfig.staminafortweakers.option.staminaBarWindedColor": "Winded color",
   "text.autoconfig.staminafortweakers.option.staminaBarNearlyExhaustedColor": "Nearly exhausted color",
-  "subtitles.staminafortweakers.breath_scared": "Exhausted panting"
+  "subtitles.staminafortweakers.breath_scared": "Exhausted panting",
+  "effect.staminafortweakers.fatigue": "Fatigue"
 }

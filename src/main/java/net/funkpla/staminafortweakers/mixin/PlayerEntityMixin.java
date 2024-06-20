@@ -125,7 +125,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Climber 
     public Vec3d getClimbSpeed(Vec3d original) {
         EntityAttributeInstance climbSpeed = getAttributeInstance(StaminaForTweakers.CLIMB_SPEED);
         if (climbSpeed == null || original.y <= 0 || (jumping && !isClimbing())) return original;
-        updateClimbModifiers();
         climbSpeed.setBaseValue(original.y);
         return new Vec3d(original.x, climbSpeed.getValue(), original.z);
     }
