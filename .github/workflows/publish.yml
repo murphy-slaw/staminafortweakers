@@ -1,9 +1,9 @@
 # Publish with mc-publish on release tag creation
 name: publish
 on:
-  create:
-    branches:
-      - tags/release/*
+  push:
+    tags:
+      - release/*
 
 jobs:
   build:
