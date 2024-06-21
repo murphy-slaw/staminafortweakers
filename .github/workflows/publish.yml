@@ -47,3 +47,4 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: 1040808
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+#comment
