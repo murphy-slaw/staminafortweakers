@@ -20,6 +20,7 @@
   "text.autoconfig.staminafortweakers.option.recoverUnderwater": "Recover while submerged",
   "text.autoconfig.staminafortweakers.option.recoverWhileBreathless": "Recover while suffocating",
   "text.autoconfig.staminafortweakers.option.recoveryRestBonusMultiplier": "Rest bonus multiplier",
+  "text.autoconfig.staminafortweakers.option.recoveryDelayTicks": "Delay (ticks) before recovering",
   "text.autoconfig.staminafortweakers.option.formula": "Recovery formula",
   "text.autoconfig.staminafortweakers.category.Exhaustion": "Exhaustion",
   "text.autoconfig.staminafortweakers.category.Recovery": "Recovery",

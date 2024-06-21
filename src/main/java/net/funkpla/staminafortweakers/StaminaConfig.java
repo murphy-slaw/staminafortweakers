@@ -10,6 +10,18 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 @Config(name = "staminafortweakers")
 public class StaminaConfig implements ConfigData {
 
+    public enum AlignmentV {
+        TOP,
+        BOTTOM,
+        CENTER,
+    }
+
+    public enum AlignmentH {
+        LEFT,
+        RIGHT,
+        CENTER
+    }
+
     public enum Orientation {
         HORIZONTAL,
         VERTICAL
@@ -20,9 +32,14 @@ public class StaminaConfig implements ConfigData {
         LOGARITHMIC
     }
 
+    /*
+     * Exhaustion rules
+     */
+
     @Comment("Stamina points depleted per attack")
     @ConfigEntry.Category("Exhaustion")
     public float depletionPerAttack = 1F;
+
     @Comment("Exhaustion slows mining")
     @ConfigEntry.Category("Exhaustion")
     public boolean exhaustionSlowsMining = false;
@@ -58,10 +75,6 @@ public class StaminaConfig implements ConfigData {
     @Comment("Stamina points depleted per jump")
     @ConfigEntry.Category("Exhaustion")
     public float depletionPerJump = 4.0F;
-    @Comment("HUD horizontal alignment")
-    @ConfigEntry.Category("HUD")
-    @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
-    public AlignmentH alignH = AlignmentH.CENTER;
 
     @Comment("Can jump while exhausted")
     @ConfigEntry.Category("Exhaustion")
@@ -70,14 +83,14 @@ public class StaminaConfig implements ConfigData {
     @Comment("Exhaustion causes Darkness")
     @ConfigEntry.Category("Exhaustion")
     public boolean exhaustionBlackout = true;
-    @Comment("HUD vertical alignment")
-    @ConfigEntry.Category("HUD")
-    @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
-    public AlignmentV alignV = AlignmentV.BOTTOM;
 
     @Comment("Exhaustion sounds")
     @ConfigEntry.Category("Exhaustion")
     public boolean exhaustionSounds = true;
+
+    /*
+     * Recovery rules
+     */
 
     @Comment("Stamina points recovered per tick.")
     @ConfigEntry.Category("Recovery")
@@ -111,18 +124,29 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.Category("Recovery")
     public boolean recoverWhileBreathless = false;
 
+    @Comment("Delay in ticks before starting recovery from exhaustion")
+    @ConfigEntry.BoundedDiscrete(max = 600)
+    @ConfigEntry.Category("Recovery")
+    public int recoveryDelayTicks = 0;
+
     @Comment("Which formula to use for recovery")
     @ConfigEntry.Category("Recovery")
     @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
     public Formula formula = Formula.LINEAR;
-    @Comment("Stamina bar background color")
-    @ConfigEntry.ColorPicker
-    @ConfigEntry.Category("Colors")
-    public int staminaBarBackgroundColor = 0x222222;
-    @Comment("Stamina bar outline color")
-    @ConfigEntry.ColorPicker
-    @ConfigEntry.Category("Colors")
-    public int staminaBarOutlineColor = 0x000000;
+
+    /*
+     * Stamina bar configuration
+     */
+
+    @Comment("HUD vertical alignment")
+    @ConfigEntry.Category("HUD")
+    @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
+    public AlignmentV alignV = AlignmentV.BOTTOM;
+
+    @Comment("HUD horizontal alignment")
+    @ConfigEntry.Category("HUD")
+    @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
+    public AlignmentH alignH = AlignmentH.CENTER;
 
     @Comment("HUD vertical offset")
     @ConfigEntry.Category("HUD")
@@ -145,17 +169,19 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
     public Orientation orientation = Orientation.HORIZONTAL;
 
-    public enum AlignmentV {
-        TOP,
-        BOTTOM,
-        CENTER,
-    }
+    /*
+     * Stamina bar colors.
+     */
 
-    public enum AlignmentH {
-        LEFT,
-        RIGHT,
-        CENTER
-    }
+    @Comment("Stamina bar background color")
+    @ConfigEntry.ColorPicker
+    @ConfigEntry.Category("Colors")
+    public int staminaBarBackgroundColor = 0x222222;
+
+    @Comment("Stamina bar outline color")
+    @ConfigEntry.ColorPicker
+    @ConfigEntry.Category("Colors")
+    public int staminaBarOutlineColor = 0x000000;
 
     @Comment("Stamina bar main color")
     @ConfigEntry.ColorPicker
