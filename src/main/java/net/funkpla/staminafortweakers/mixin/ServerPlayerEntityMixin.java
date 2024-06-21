@@ -1,6 +1,7 @@
 package net.funkpla.staminafortweakers.mixin;
 
 import net.funkpla.staminafortweakers.Climber;
+import net.funkpla.staminafortweakers.RecoveryDelayTimer;
 import net.funkpla.staminafortweakers.StaminaConfig;
 import net.funkpla.staminafortweakers.StaminaForTweakers;
 import net.minecraft.entity.EntityType;
@@ -26,9 +27,12 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
     @Shadow
     public abstract boolean isSpectator();
 
+
     protected ServerPlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
+
+    private RecoveryDelayTimer timer = new RecoveryDelayTimer(config.recoveryDelayTicks);
 
 
     private Vec3d lastPos = new Vec3d(0, 0, 0);
@@ -48,6 +52,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
         } else if (canRecover()) doRecovery();
         doExhaustion();
         lastPos = getPos();
+        timer.tickDown();
     }
 
     @Unique
@@ -68,6 +73,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
             }
             makeSlow(4);
             setSprinting(false);
+            if (timer.expired()) {
+                timer = new RecoveryDelayTimer(config.recoveryDelayTicks);
+            }
         } else if (pct <= config.windedPercentage) makeSlow(2);
         else if (pct <= config.fatiguedPercentage) makeSlow(1);
 
@@ -115,7 +123,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
 
     @Unique
     private boolean canRecover() {
-        return (config.recoverWhenHungry || isNotHungry())
+        return timer.expired() &&
+                (config.recoverWhenHungry || isNotHungry())
                 && (config.recoverWhileWalking || isStandingStill())
                 && (config.recoverWhileAirborne || isOnGround())
                 && (config.recoverUnderwater || !isSubmergedInWater())

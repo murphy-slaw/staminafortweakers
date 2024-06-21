@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fatigue affects movement speed, climbing speed, and swimming speed.
 - New option for mining to cost stamina.
 - New option for exhaustion to cause Mining Fatigue.
+- Optional delay before recovering from exhausting.
 
 ## [1.0.7] 2024-06-20
 
