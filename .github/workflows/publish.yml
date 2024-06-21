@@ -1,7 +1,7 @@
 # Publish with mc-publish on release tag creation
 name: publish
 on:
-  push:
+  create:
     tags:
       - release/*
 
