@@ -6,9 +6,8 @@ jobs:
     env:
       MINECRAFT_VERSION: 1.20.1
       JAVA_VERSION: 17
-      BASE_VERSION: 1.0.8
-      VERSION: "${{ VERSION }}+${{ MINECRAFT_VERSION }}"
-      RELEASE_NAME: "stamina-for-tweakers-${{ VERSION }}"
+      VERSION: 1.0.8
+      RELEASE_NAME: "stamina-for-tweakers"
     strategy:
       matrix:
         # Use these Java versions
@@ -41,8 +40,8 @@ jobs:
       - name: mc-publish
         uses: Kir-Antipov/mc-publish@v3.3.0
         with:
-          name: "${{env.RELEASE_NAME}}"
-          version: "${{env.VERSION}}"
+          name: "${{env.RELEASE_NAME}}-${{env.VERSION}}+${{env.MINECRAFT_VERSION}}"
+          version: "${{env.VERSION}}+${{env.MINECRAFT_VERSION}}"
           modrinth-id: AejtfAlC
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: 1040808
