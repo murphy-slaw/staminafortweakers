@@ -19,6 +19,15 @@ public class StaminaConfig implements ConfigData {
         LOGARITHMIC
     }
 
+    @Comment("HUD horizontal alignment")
+    @ConfigEntry.Category("HUD")
+    @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
+    public AlignmentH alignH = AlignmentH.CENTER;
+    @Comment("HUD vertical alignment")
+    @ConfigEntry.Category("HUD")
+    @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
+    public AlignmentV alignV = AlignmentV.BOTTOM;
+
     @Comment("Percentage of total stamina triggering exhaustion")
     @ConfigEntry.BoundedDiscrete(max = 100)
     @ConfigEntry.Category("Exhaustion")
@@ -99,14 +108,20 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.Category("Recovery")
     @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
     public Formula formula = Formula.LINEAR;
-
-    @Comment("HUD offset from center of screen")
+    @Comment("HUD vertical offset")
     @ConfigEntry.Category("HUD")
-    public int hudOffsetX = 91;
-
-    @Comment("HUD offset from bottom of screen")
+    public int hudOffsetX = 51;
+    @Comment("HUD horizontal offset")
     @ConfigEntry.Category("HUD")
     public int hudOffsetY = 41;
+    @Comment("Stamina bar background color")
+    @ConfigEntry.ColorPicker
+    @ConfigEntry.Category("Colors")
+    public int staminaBarBackgroundColor = 0x222222;
+    @Comment("Stamina bar outline color")
+    @ConfigEntry.ColorPicker
+    @ConfigEntry.Category("Colors")
+    public int staminaBarOutlineColor = 0x000000;
 
     @Comment("Width of stamina bar")
     @ConfigEntry.Category("HUD")
@@ -126,15 +141,17 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.Category("Colors")
     public int staminaBarColor = 0x00FF00;
 
-    @Comment("Stamina bar background color")
-    @ConfigEntry.ColorPicker
-    @ConfigEntry.Category("Colors")
-    public int staminaBarBackgroundColor = 0x000000;
+    public enum AlignmentV {
+        TOP,
+        BOTTOM,
+        CENTER,
+    }
 
-    @Comment("Stamina bar outline color")
-    @ConfigEntry.ColorPicker
-    @ConfigEntry.Category("Colors")
-    public int staminaBarOutlineColor = 0xFFFFFF;
+    public enum AlignmentH {
+        LEFT,
+        RIGHT,
+        CENTER
+    }
 
     @Comment("Stamina bar fatigued color")
     @ConfigEntry.ColorPicker
