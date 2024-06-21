@@ -2,14 +2,13 @@ package net.funkpla.staminafortweakers.mixin;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import net.funkpla.staminafortweakers.Climber;
+import net.funkpla.staminafortweakers.Miner;
 import net.funkpla.staminafortweakers.StaminaConfig;
 import net.funkpla.staminafortweakers.StaminaForTweakers;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,10 +22,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Set;
-
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity implements Climber {
+public abstract class PlayerEntityMixin extends LivingEntity implements Miner, Climber {
 
     @Inject(method = "createPlayerAttributes()Lnet/minecraft/entity/attribute/DefaultAttributeContainer$Builder;", require = 1, allow = 1, at = @At("RETURN"))
     private static void staminafortweakers$addPlayerAttributes(final CallbackInfoReturnable<DefaultAttributeContainer.Builder> info) {
@@ -40,7 +37,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Climber 
     @Unique
     private boolean jumped;
 
-    protected boolean movedUp;
+    protected boolean mining = false;
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -84,8 +81,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Climber 
      */
 
     @Inject(method = "tick", at = @At("HEAD"))
-    private void clearJumpedFlag(CallbackInfo ci) {
+    private void clearFlags(CallbackInfo ci) {
         jumped = false;
+    }
+
+    public void setMining(boolean b) {
+        mining = b;
     }
 
     @Inject(method = "jump", at = @At("TAIL"))
@@ -108,18 +109,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Climber 
         return jumped;
     }
 
-    public void updateClimbModifiers() {
-        EntityAttributeInstance climbSpeed = getAttributeInstance(StaminaForTweakers.CLIMB_SPEED);
-        Set<EntityAttributeModifier> curMods = climbSpeed.getModifiers();
-        EntityAttributeInstance moveSpeed = getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
-        Set<EntityAttributeModifier> targetMods = moveSpeed.getModifiers();
-        if (!curMods.equals(targetMods)) {
-            StaminaForTweakers.LOGGER.info("targetMods: {}", targetMods);
-            climbSpeed.clearModifiers();
-            for (EntityAttributeModifier modifier : moveSpeed.getModifiers()) {
-                climbSpeed.addPersistentModifier(modifier);
-            }
-        }
+    protected boolean isAttacking() {
+        return mining;
     }
 
     public Vec3d getClimbSpeed(Vec3d original) {

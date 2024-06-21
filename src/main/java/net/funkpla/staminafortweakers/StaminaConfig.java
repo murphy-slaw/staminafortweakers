@@ -9,6 +9,7 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 @Config(name = "staminafortweakers")
 public class StaminaConfig implements ConfigData {
+
     public enum Orientation {
         HORIZONTAL,
         VERTICAL
@@ -19,14 +20,12 @@ public class StaminaConfig implements ConfigData {
         LOGARITHMIC
     }
 
-    @Comment("HUD horizontal alignment")
-    @ConfigEntry.Category("HUD")
-    @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
-    public AlignmentH alignH = AlignmentH.CENTER;
-    @Comment("HUD vertical alignment")
-    @ConfigEntry.Category("HUD")
-    @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
-    public AlignmentV alignV = AlignmentV.BOTTOM;
+    @Comment("Stamina points depleted per attack")
+    @ConfigEntry.Category("Exhaustion")
+    public float depletionPerAttack = 1F;
+    @Comment("Exhaustion slows mining")
+    @ConfigEntry.Category("Exhaustion")
+    public boolean exhaustionSlowsMining = false;
 
     @Comment("Percentage of total stamina triggering exhaustion")
     @ConfigEntry.BoundedDiscrete(max = 100)
@@ -59,6 +58,10 @@ public class StaminaConfig implements ConfigData {
     @Comment("Stamina points depleted per jump")
     @ConfigEntry.Category("Exhaustion")
     public float depletionPerJump = 4.0F;
+    @Comment("HUD horizontal alignment")
+    @ConfigEntry.Category("HUD")
+    @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
+    public AlignmentH alignH = AlignmentH.CENTER;
 
     @Comment("Can jump while exhausted")
     @ConfigEntry.Category("Exhaustion")
@@ -67,6 +70,10 @@ public class StaminaConfig implements ConfigData {
     @Comment("Exhaustion causes Darkness")
     @ConfigEntry.Category("Exhaustion")
     public boolean exhaustionBlackout = true;
+    @Comment("HUD vertical alignment")
+    @ConfigEntry.Category("HUD")
+    @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
+    public AlignmentV alignV = AlignmentV.BOTTOM;
 
     @Comment("Exhaustion sounds")
     @ConfigEntry.Category("Exhaustion")
@@ -108,12 +115,6 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.Category("Recovery")
     @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
     public Formula formula = Formula.LINEAR;
-    @Comment("HUD vertical offset")
-    @ConfigEntry.Category("HUD")
-    public int hudOffsetX = 51;
-    @Comment("HUD horizontal offset")
-    @ConfigEntry.Category("HUD")
-    public int hudOffsetY = 41;
     @Comment("Stamina bar background color")
     @ConfigEntry.ColorPicker
     @ConfigEntry.Category("Colors")
@@ -122,6 +123,14 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.ColorPicker
     @ConfigEntry.Category("Colors")
     public int staminaBarOutlineColor = 0x000000;
+
+    @Comment("HUD vertical offset")
+    @ConfigEntry.Category("HUD")
+    public int hudOffsetX = 51;
+
+    @Comment("HUD horizontal offset")
+    @ConfigEntry.Category("HUD")
+    public int hudOffsetY = 41;
 
     @Comment("Width of stamina bar")
     @ConfigEntry.Category("HUD")
@@ -136,11 +145,6 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
     public Orientation orientation = Orientation.HORIZONTAL;
 
-    @Comment("Stamina bar main color")
-    @ConfigEntry.ColorPicker
-    @ConfigEntry.Category("Colors")
-    public int staminaBarColor = 0x00FF00;
-
     public enum AlignmentV {
         TOP,
         BOTTOM,
@@ -152,6 +156,11 @@ public class StaminaConfig implements ConfigData {
         RIGHT,
         CENTER
     }
+
+    @Comment("Stamina bar main color")
+    @ConfigEntry.ColorPicker
+    @ConfigEntry.Category("Colors")
+    public int staminaBarColor = 0x00FF00;
 
     @Comment("Stamina bar fatigued color")
     @ConfigEntry.ColorPicker

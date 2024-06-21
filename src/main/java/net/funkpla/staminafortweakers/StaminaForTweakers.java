@@ -1,18 +1,18 @@
 package net.funkpla.staminafortweakers;
 
-import de.dafuqs.additionalentityattributes.AdditionalEntityAttributes;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.entity.attribute.ClampedEntityAttribute;
 import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,10 +62,18 @@ public class StaminaForTweakers implements ModInitializer {
         AutoConfig.register(StaminaConfig.class, JanksonConfigSerializer::new);
         FATIGUE = Registry.registerReference(Registries.STATUS_EFFECT, Identifier.of("staminafortweakers", "fatigue"),
                 new FatigueStatusEffect()
-                        .addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED, Identifier.of(MOD_ID, "effect.speed.fatigue"), -0.15f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
-                        .addAttributeModifier(CLIMB_SPEED, Identifier.of(MOD_ID, "effect.climb.fatigue"), -0.15f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
-                        .addAttributeModifier(AdditionalEntityAttributes.WATER_SPEED, Identifier.of(MOD_ID, "effect.water.fatigue"), -0.15f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
         );
         Registry.register(Registries.SOUND_EVENT, StaminaForTweakers.BREATH_SCARED, ENTITY_PLAYER_PANT);
+
+        AttackBlockCallback.EVENT.register(((player, world, hand, pos, direction) -> {
+            ((Miner) player).setMining(true);
+            return ActionResult.PASS;
+        }));
+        PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
+            ((Miner) player).setMining(false);
+        });
+        PlayerBlockBreakEvents.CANCELED.register((world, player, pos, state, blockEntity) -> {
+            ((Miner) player).setMining(false);
+        });
     }
 }
