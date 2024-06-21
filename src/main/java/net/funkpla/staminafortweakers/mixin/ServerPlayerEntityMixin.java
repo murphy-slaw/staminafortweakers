@@ -8,11 +8,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -22,17 +19,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implements Climber {
-    @Shadow
-    public abstract ServerWorld getServerWorld();
-
-    @Shadow
-    protected abstract GameMode getServerGameMode(@Nullable GameMode backupGameMode);
 
     @Shadow
     public abstract boolean isCreative();
-
-    @Shadow
-    public abstract boolean isSpawnForced();
 
     @Shadow
     public abstract boolean isSpectator();
@@ -44,16 +33,19 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
 
     private Vec3d lastPos = new Vec3d(0, 0, 0);
 
-    @Inject(method = "tick", at = @At("HEAD"))
+    @Inject(method = "tick", at = @At("TAIL"))
     public void updateStamina(CallbackInfo ci) {
         if (isCreative() || isSpectator()) return;
         double ySpeed = getPos().getY() - lastPos.getY();
+
         if (isSwimming()) depleteStamina(config.depletionPerTickSwimming);
         else if (isSprinting()) depleteStamina(config.depletionPerTickSprinting);
         else if (config.depletionPerJump > 0 && hasJumped()) depleteStamina(config.depletionPerJump);
         else if (config.depletionPerTickClimbing > 0 && isClimbing() && ySpeed > 0 && !isOnGround() && !isHoldingOntoLadder())
             depleteStamina(config.depletionPerTickClimbing);
-        else if (canRecover()) doRecovery();
+        else if (config.depletionPerAttack > 0 && mining) {
+            depleteStamina(config.depletionPerAttack);
+        } else if (canRecover()) doRecovery();
         doExhaustion();
         lastPos = getPos();
     }
@@ -70,6 +62,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
         if (pct <= config.exhaustedPercentage) {
             if (config.exhaustionBlackout) {
                 addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 60, 1, true, false));
+            }
+            if (config.exhaustionSlowsMining) {
+                addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, 20, 1, true, true));
             }
             makeSlow(4);
             setSprinting(false);
