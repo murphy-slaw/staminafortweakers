@@ -7,7 +7,7 @@ name: publish
 on:
   push:
     branches:
-      - tags/release/*
+      - release/*
 
 jobs:
   build:
