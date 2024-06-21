@@ -1,6 +1,6 @@
 # Publish with mc-publish on release tag creation
 name: publish
-on: push
+on: [ push, create ]
 jobs:
   build:
     strategy:
