@@ -52,18 +52,20 @@ public class StaminaForTweakers implements ModInitializer {
         return Registries.ATTRIBUTE.getEntry(attribute);
     }
 
-    public static final Identifier BREATH_SCARED =  Identifier.of("staminafortweakers:breath_scared");
+    public static final Identifier BREATH_SCARED = Identifier.of("staminafortweakers:breath_scared");
     public static SoundEvent ENTITY_PLAYER_PANT = SoundEvent.of(BREATH_SCARED);
 
-    public static final StatusEffect FATIGUE = new FatigueStatusEffect()
-            .addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED, "B7793F99-A88F-44E1-B19E-C753E9ACED3F", -0.15f, EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
-            .addAttributeModifier(CLIMB_SPEED, "2059DAB0-6417-46B1-AAA1-26BB473E773F", -0.15f, EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
-            .addAttributeModifier(AdditionalEntityAttributes.WATER_SPEED, "11D1DE67-7351-499C-BF48-4836D6EEC8FF", -0.15f, EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
+    public static RegistryEntry<StatusEffect> FATIGUE;
 
     @Override
     public void onInitialize() {
         AutoConfig.register(StaminaConfig.class, JanksonConfigSerializer::new);
-        Registry.register(Registries.STATUS_EFFECT, new Identifier("staminafortweakers", "fatigue"), FATIGUE);
+        FATIGUE = Registry.registerReference(Registries.STATUS_EFFECT, Identifier.of("staminafortweakers", "fatigue"),
+                new FatigueStatusEffect()
+                        .addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED, Identifier.of(MOD_ID, "effect.speed.fatigue"), -0.15f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+                        .addAttributeModifier(CLIMB_SPEED, Identifier.of(MOD_ID, "effect.climb.fatigue"), -0.15f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+                        .addAttributeModifier(AdditionalEntityAttributes.WATER_SPEED, Identifier.of(MOD_ID, "effect.water.fatigue"), -0.15f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+        );
         Registry.register(Registries.SOUND_EVENT, StaminaForTweakers.BREATH_SCARED, ENTITY_PLAYER_PANT);
     }
 }
