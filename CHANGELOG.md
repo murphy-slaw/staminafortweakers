@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New option to toggle stamina recovery when suffocating
 - Low stamina applies a new effect, "Fatigue" instead of Slowness
 - Fatigue affects movement speed, climbing speed, and swimming speed.
+- New option for mining to cost stamina.
+- New option for exhaustion to cause Mining Fatigue.
 
 ## [1.0.7] 2024-06-20
 
