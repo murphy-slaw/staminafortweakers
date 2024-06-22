@@ -12,7 +12,7 @@ jobs:
         ]
     runs-on: ubuntu-22.04
     environment:
-      name: Build
+      name: Publish
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
