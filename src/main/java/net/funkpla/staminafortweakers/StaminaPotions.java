@@ -16,7 +16,7 @@ public class StaminaPotions {
 
     public static final Potion TIRELESSNESS_POTION =
             Registry.register(Registries.POTION, new Identifier(StaminaForTweakers.MOD_ID, "tirelessness_potion"),
-                    new Potion(new StatusEffectInstance(StaminaForTweakers.TIRELESSNESS, 3600, 1)));
+                    new Potion(new StatusEffectInstance(StaminaForTweakers.TIRELESSNESS, 3600, 0)));
 
     public static void registerPotions() {
 

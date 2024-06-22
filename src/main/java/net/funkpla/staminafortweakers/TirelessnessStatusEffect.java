@@ -7,7 +7,7 @@ public class TirelessnessStatusEffect extends StatusEffect {
     public TirelessnessStatusEffect() {
         super(
                 StatusEffectCategory.BENEFICIAL,
-                0xFFFF7657
+                0xFF5C1D0B
         );
     }
 }
