@@ -13,16 +13,19 @@ So many knobs to tweak!
   * Swimming
   * Jumping
   * Climbing
+  * Mining blocks
 * Optional, somewhat upsetting panting noises when the player is winded.
 * Recovery under different conditions
   * Resting (not moving)
   * Walking
   * Sneaking
   * Underwater
+  * Suffocating
 * Recovery formula (linear or logarithmic)
 * Exhaustion effects with configurable thresholds
-  * Slowness (multiple levels)
+  * Fatigue (like Slowness but affects climbing and swimming)
   * Darkness when completely exhausted (optional)
+  * Mining fatigue (optional)
 * Configurable stamina bar in the HUD
   * Position
   * Colors
