@@ -53,6 +53,7 @@ public class StaminaForTweakers implements ModInitializer {
     public static SoundEvent ENTITY_PLAYER_PANT = SoundEvent.of(BREATH_SCARED);
 
     public static RegistryEntry<StatusEffect> FATIGUE;
+    public static RegistryEntry<StatusEffect> TIRELESSNESS;
 
     @Override
     public void onInitialize() {
@@ -60,6 +61,11 @@ public class StaminaForTweakers implements ModInitializer {
         FATIGUE = Registry.registerReference(Registries.STATUS_EFFECT, Identifier.of("staminafortweakers", "fatigue"),
                 new FatigueStatusEffect()
         );
+        TIRELESSNESS = Registry.register(Registries.STATUS_EFFECT, new Identifier("staminafortweakers", "tirelessness"),
+                new TirelessnessStatusEffect()
+        );
         Registry.register(Registries.SOUND_EVENT, StaminaForTweakers.BREATH_SCARED, ENTITY_PLAYER_PANT);
+        StaminaPotions.registerPotions();
+        StaminaPotions.registerPotionRecipes();
     }
 }

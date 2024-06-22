@@ -22,6 +22,7 @@ public class StaminaHudOverlay implements HudRenderCallback {
         if (player.isCreative() || player.isSpectator()) return;
         float scaledStamina = (float) (player.getAttributeValue(StaminaForTweakers.STAMINA) / player.getAttributeValue(StaminaForTweakers.MAX_STAMINA));
         float pct = scaledStamina * 100;
+
         int color = opaque;
         if (pct <= 10) {
             color += config.staminaBarNearlyExhaustedColor;
@@ -72,6 +73,10 @@ public class StaminaHudOverlay implements HudRenderCallback {
         else context.fill(x1, y2, x2, y2 - (int) (barHeight * scaledStamina), color);
 
         context.drawBorder(x1, y1, barWidth, barHeight, opaque + config.staminaBarOutlineColor);
+
+        if (player.hasStatusEffect(StaminaForTweakers.TIRELESSNESS)) {
+            context.drawBorder(x1 - 1, y1 - 1, barWidth + 2, barHeight + 2, opaque + 0xFF8800);
+        }
 
         //context.drawTexture(FILLED_STAMINA, x, y1, 0, 0, (int) (BAR_LENGTH * scaledStamina), BAR_HEIGHT, BAR_LENGTH, BAR_HEIGHT);
     }

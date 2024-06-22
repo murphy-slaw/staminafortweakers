@@ -46,7 +46,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
         if (isCreative() || isSpectator()) return;
         double ySpeed = getPos().getY() - lastPos.getY();
 
-        if (isSwimming()) depleteStamina(config.depletionPerTickSwimming);
+        if (hasStatusEffect(StaminaForTweakers.TIRELESSNESS)) {
+            if (canRecover()) doRecovery();
+        } else if (isSwimming()) depleteStamina(config.depletionPerTickSwimming);
         else if (isSprinting()) depleteStamina(config.depletionPerTickSprinting);
         else if (config.depletionPerJump > 0 && hasJumped()) depleteStamina(config.depletionPerJump);
         else if (config.depletionPerTickClimbing > 0 && isClimbing() && ySpeed > 0 && !isOnGround() && !isHoldingOntoLadder())
