@@ -47,6 +47,7 @@ public class StaminaForTweakers implements ModInitializer {
     }
 
     public static final StatusEffect FATIGUE = new FatigueStatusEffect();
+    public static final StatusEffect TIRELESSNESS = new TirelessnessStatusEffect();
     public static final Identifier BREATH_SCARED = new Identifier("staminafortweakers:breath_scared");
     public static SoundEvent ENTITY_PLAYER_PANT = SoundEvent.of(BREATH_SCARED);
 
@@ -55,7 +56,10 @@ public class StaminaForTweakers implements ModInitializer {
     public void onInitialize() {
         AutoConfig.register(StaminaConfig.class, JanksonConfigSerializer::new);
         Registry.register(Registries.STATUS_EFFECT, new Identifier("staminafortweakers", "fatigue"), FATIGUE);
+        Registry.register(Registries.STATUS_EFFECT, new Identifier("staminafortweakers", "tirelessness"), TIRELESSNESS);
         Registry.register(Registries.SOUND_EVENT, StaminaForTweakers.BREATH_SCARED, ENTITY_PLAYER_PANT);
+        StaminaPotions.registerPotions();
+        StaminaPotions.registerPotionRecipes();
     }
 
 }
