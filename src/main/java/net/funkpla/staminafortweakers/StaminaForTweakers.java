@@ -3,15 +3,12 @@ package net.funkpla.staminafortweakers;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
-import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.entity.attribute.ClampedEntityAttribute;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,17 +56,6 @@ public class StaminaForTweakers implements ModInitializer {
         AutoConfig.register(StaminaConfig.class, JanksonConfigSerializer::new);
         Registry.register(Registries.STATUS_EFFECT, new Identifier("staminafortweakers", "fatigue"), FATIGUE);
         Registry.register(Registries.SOUND_EVENT, StaminaForTweakers.BREATH_SCARED, ENTITY_PLAYER_PANT);
-
-        AttackBlockCallback.EVENT.register(((player, world, hand, pos, direction) -> {
-            ((Miner) player).setMining(true);
-            return ActionResult.PASS;
-        }));
-        PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
-            ((Miner) player).setMining(false);
-        });
-        PlayerBlockBreakEvents.CANCELED.register((world, player, pos, state, blockEntity) -> {
-            ((Miner) player).setMining(false);
-        });
     }
 
 }
