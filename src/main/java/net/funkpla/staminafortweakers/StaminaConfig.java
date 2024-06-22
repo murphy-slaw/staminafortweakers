@@ -202,4 +202,9 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.ColorPicker
     @ConfigEntry.Category("Colors")
     public int staminaBarNearlyExhaustedColor = 0xFF0000;
+
+    @Comment("Stamina bar Tireless effect color")
+    @ConfigEntry.ColorPicker
+    @ConfigEntry.Category("Colors")
+    public int staminaBarTirelessColor = 0xFEB236;
 }

@@ -3,9 +3,11 @@ package net.funkpla.staminafortweakers;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.minecraft.entity.attribute.ClampedEntityAttribute;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -61,11 +63,22 @@ public class StaminaForTweakers implements ModInitializer {
         FATIGUE = Registry.registerReference(Registries.STATUS_EFFECT, Identifier.of("staminafortweakers", "fatigue"),
                 new FatigueStatusEffect()
         );
-        TIRELESSNESS = Registry.register(Registries.STATUS_EFFECT, new Identifier("staminafortweakers", "tirelessness"),
+        TIRELESSNESS = Registry.registerReference(Registries.STATUS_EFFECT, Identifier.of("staminafortweakers", "tirelessness"),
                 new TirelessnessStatusEffect()
         );
         Registry.register(Registries.SOUND_EVENT, StaminaForTweakers.BREATH_SCARED, ENTITY_PLAYER_PANT);
         StaminaPotions.registerPotions();
         StaminaPotions.registerPotionRecipes();
+
+        /*
+         * TOO MUCH COFFEE
+         */
+
+        EntitySleepEvents.ALLOW_SLEEPING.register((player, sleepingPos) -> {
+            if (player.hasStatusEffect(TIRELESSNESS)) {
+                return PlayerEntity.SleepFailureReason.OTHER_PROBLEM;
+            }
+            return null;
+        });
     }
 }

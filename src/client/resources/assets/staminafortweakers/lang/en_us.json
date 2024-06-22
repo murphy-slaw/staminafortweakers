@@ -40,5 +40,6 @@
   "text.autoconfig.staminafortweakers.option.staminaBarWindedColor": "Winded color",
   "text.autoconfig.staminafortweakers.option.staminaBarNearlyExhaustedColor": "Nearly exhausted color",
   "subtitles.staminafortweakers.breath_scared": "Exhausted panting",
-  "effect.staminafortweakers.fatigue": "Fatigue"
+  "effect.staminafortweakers.fatigue": "Fatigue",
+  "effect.staminafortweakers.tirelessness": "Tirelessness"
 }

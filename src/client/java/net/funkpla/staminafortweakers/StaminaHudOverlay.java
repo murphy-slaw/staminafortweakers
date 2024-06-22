@@ -75,7 +75,7 @@ public class StaminaHudOverlay implements HudRenderCallback {
         context.drawBorder(x1, y1, barWidth, barHeight, opaque + config.staminaBarOutlineColor);
 
         if (player.hasStatusEffect(StaminaForTweakers.TIRELESSNESS)) {
-            context.drawBorder(x1 - 1, y1 - 1, barWidth + 2, barHeight + 2, opaque + 0xFF8800);
+            context.drawBorder(x1 - 1, y1 - 1, barWidth + 2, barHeight + 2, opaque + config.staminaBarTirelessColor);
         }
 
         //context.drawTexture(FILLED_STAMINA, x, y1, 0, 0, (int) (BAR_LENGTH * scaledStamina), BAR_HEIGHT, BAR_LENGTH, BAR_HEIGHT);
