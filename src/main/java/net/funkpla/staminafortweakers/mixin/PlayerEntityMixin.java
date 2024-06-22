@@ -2,7 +2,6 @@ package net.funkpla.staminafortweakers.mixin;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import net.funkpla.staminafortweakers.Climber;
-import net.funkpla.staminafortweakers.Miner;
 import net.funkpla.staminafortweakers.StaminaConfig;
 import net.funkpla.staminafortweakers.StaminaForTweakers;
 import net.minecraft.entity.EntityType;
@@ -22,8 +21,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity implements Miner, Climber {
+public abstract class PlayerEntityMixin extends LivingEntity implements Climber {
 
     @Inject(method = "createPlayerAttributes()Lnet/minecraft/entity/attribute/DefaultAttributeContainer$Builder;", require = 1, allow = 1, at = @At("RETURN"))
     private static void staminafortweakers$addPlayerAttributes(final CallbackInfoReturnable<DefaultAttributeContainer.Builder> info) {
@@ -37,7 +37,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Miner, C
     @Unique
     private boolean jumped;
 
-    protected boolean mining = false;
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -85,10 +84,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Miner, C
         jumped = false;
     }
 
-    public void setMining(boolean b) {
-        mining = b;
-    }
-
     @Inject(method = "jump", at = @At("TAIL"))
     private void setJumpedFlag(CallbackInfo ci) {
         jumped = true;
@@ -109,15 +104,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Miner, C
         return jumped;
     }
 
-    protected boolean isAttacking() {
-        return mining;
-    }
-
     public Vec3d getClimbSpeed(Vec3d original) {
         EntityAttributeInstance climbSpeed = getAttributeInstance(StaminaForTweakers.CLIMB_SPEED);
         if (climbSpeed == null || original.y <= 0 || (jumping && !isClimbing())) return original;
         climbSpeed.setBaseValue(original.y);
         return new Vec3d(original.x, climbSpeed.getValue(), original.z);
     }
-
 }

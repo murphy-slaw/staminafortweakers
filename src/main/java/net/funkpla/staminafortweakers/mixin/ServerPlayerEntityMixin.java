@@ -9,8 +9,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.network.ServerPlayerInteractionManager;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -27,13 +29,15 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
     @Shadow
     public abstract boolean isSpectator();
 
+    @Shadow
+    @Final
+    public ServerPlayerInteractionManager interactionManager;
 
     protected ServerPlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
 
     private RecoveryDelayTimer timer = new RecoveryDelayTimer(config.recoveryDelayTicks);
-
 
     private Vec3d lastPos = new Vec3d(0, 0, 0);
 
@@ -47,7 +51,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
         else if (config.depletionPerJump > 0 && hasJumped()) depleteStamina(config.depletionPerJump);
         else if (config.depletionPerTickClimbing > 0 && isClimbing() && ySpeed > 0 && !isOnGround() && !isHoldingOntoLadder())
             depleteStamina(config.depletionPerTickClimbing);
-        else if (config.depletionPerAttack > 0 && mining) {
+        else if (config.depletionPerAttack > 0 && isMining()) {
             depleteStamina(config.depletionPerAttack);
         } else if (canRecover()) doRecovery();
         doExhaustion();
@@ -134,5 +138,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
     @Unique
     private boolean isNotHungry() {
         return getHungerManager().getFoodLevel() >= 6;
+    }
+
+    private boolean isMining() {
+        return ((ServerPlayerInteractionManagerMixin) interactionManager).getMining();
     }
 }
