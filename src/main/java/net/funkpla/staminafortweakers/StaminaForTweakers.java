@@ -4,6 +4,7 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.attribute.ClampedEntityAttribute;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.effect.StatusEffect;
@@ -22,7 +23,6 @@ public class StaminaForTweakers implements ModInitializer {
     // That way, it's clear which mod wrote info, warnings, and errors.
     public static final String MOD_ID = "staminafortweakers";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-
 
     public static EntityAttribute STAMINA = registerAttribute(
             "generic.stamina",
@@ -52,7 +52,7 @@ public class StaminaForTweakers implements ModInitializer {
     public static final StatusEffect TIRELESSNESS = new TirelessnessStatusEffect();
     public static final Identifier BREATH_SCARED = new Identifier("staminafortweakers:breath_scared");
     public static SoundEvent ENTITY_PLAYER_PANT = SoundEvent.of(BREATH_SCARED);
-
+    public static Enchantment TRAVELING_ENCHANTMENT = new TravelingEnchantment();
 
     @Override
     public void onInitialize() {
@@ -60,6 +60,7 @@ public class StaminaForTweakers implements ModInitializer {
         Registry.register(Registries.STATUS_EFFECT, new Identifier("staminafortweakers", "fatigue"), FATIGUE);
         Registry.register(Registries.STATUS_EFFECT, new Identifier("staminafortweakers", "tirelessness"), TIRELESSNESS);
         Registry.register(Registries.SOUND_EVENT, StaminaForTweakers.BREATH_SCARED, ENTITY_PLAYER_PANT);
+        Registry.register(Registries.ENCHANTMENT, new Identifier(MOD_ID, "traveling"), TRAVELING_ENCHANTMENT);
         StaminaPotions.registerPotions();
         StaminaPotions.registerPotionRecipes();
 

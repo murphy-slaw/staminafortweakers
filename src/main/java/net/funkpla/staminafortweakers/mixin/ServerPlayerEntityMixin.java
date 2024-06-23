@@ -4,10 +4,13 @@ import net.funkpla.staminafortweakers.Climber;
 import net.funkpla.staminafortweakers.RecoveryDelayTimer;
 import net.funkpla.staminafortweakers.StaminaConfig;
 import net.funkpla.staminafortweakers.StaminaForTweakers;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
 import net.minecraft.util.math.Vec3d;
@@ -41,6 +44,30 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
 
     private Vec3d lastPos = new Vec3d(0, 0, 0);
 
+    private int getTravelingLevel() {
+        return EnchantmentHelper.getEquipmentLevel(StaminaForTweakers.TRAVELING_ENCHANTMENT, this);
+    }
+
+    private boolean hasTraveling() {
+        return getTravelingLevel() > 0;
+    }
+
+    private float getTravelingModifier() {
+        return 1.0F - (getTravelingLevel() / 3.0F);
+    }
+
+
+    private void maybeDamageArmor(EquipmentSlot slot) {
+        if (hasTraveling() && this.getRandom().nextFloat() < 0.04f) {
+            ItemStack itemStack = this.getEquippedStack(slot);
+            itemStack.damage(1, this, player -> player.sendEquipmentBreakStatus(slot));
+        }
+    }
+
+    private void maybeDamageLeggings() {
+        maybeDamageArmor(EquipmentSlot.LEGS);
+    }
+
     @Inject(method = "tick", at = @At("TAIL"))
     public void updateStamina(CallbackInfo ci) {
         if (isCreative() || isSpectator()) return;
@@ -49,9 +76,13 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
         if (hasStatusEffect(StaminaForTweakers.TIRELESSNESS)) {
             if (canRecover()) doRecovery();
         } else if (isSwimming()) depleteStamina(config.depletionPerTickSwimming);
-        else if (isSprinting()) depleteStamina(config.depletionPerTickSprinting);
-        else if (config.depletionPerJump > 0 && hasJumped()) depleteStamina(config.depletionPerJump);
-        else if (config.depletionPerTickClimbing > 0 && isClimbing() && ySpeed > 0 && !isOnGround() && !isHoldingOntoLadder())
+        else if (isSprinting()) {
+            depleteStamina(config.depletionPerTickSprinting * getTravelingModifier());
+            maybeDamageLeggings();
+        } else if (config.depletionPerJump > 0 && hasJumped()) {
+            depleteStamina(config.depletionPerJump * getTravelingModifier());
+            maybeDamageLeggings();
+        } else if (config.depletionPerTickClimbing > 0 && isClimbing() && ySpeed > 0 && !isOnGround() && !isHoldingOntoLadder())
             depleteStamina(config.depletionPerTickClimbing);
         else if (config.depletionPerAttack > 0 && isMining()) {
             depleteStamina(config.depletionPerAttack);
@@ -65,7 +96,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
     private void makeSlow(int amplifier) {
         addStatusEffect(new StatusEffectInstance(StaminaForTweakers.FATIGUE, 3, amplifier, true, true));
     }
-
 
     @Unique
     private void doExhaustion() {
