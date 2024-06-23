@@ -4,15 +4,22 @@ import net.funkpla.staminafortweakers.Climber;
 import net.funkpla.staminafortweakers.RecoveryDelayTimer;
 import net.funkpla.staminafortweakers.StaminaConfig;
 import net.funkpla.staminafortweakers.StaminaForTweakers;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
@@ -22,6 +29,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.Optional;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implements Climber {
@@ -36,6 +45,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
     @Final
     public ServerPlayerInteractionManager interactionManager;
 
+    @Shadow
+    public abstract void travel(Vec3d movementInput);
+
     protected ServerPlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -45,7 +57,10 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
     private Vec3d lastPos = new Vec3d(0, 0, 0);
 
     private int getTravelingLevel() {
-        return EnchantmentHelper.getEquipmentLevel(StaminaForTweakers.TRAVELING_ENCHANTMENT, this);
+        RegistryKey<Enchantment> providerKey = RegistryKey.of(RegistryKeys.ENCHANTMENT, Identifier.of("staminafortweakers:traveling"));
+        DynamicRegistryManager registryManager = getWorld().getRegistryManager();
+        Optional<RegistryEntry.Reference<Enchantment>> traveling = registryManager.get(RegistryKeys.ENCHANTMENT).getEntry(providerKey);
+        return traveling.map(enchantmentReference -> EnchantmentHelper.getEquipmentLevel(enchantmentReference, this)).orElse(0);
     }
 
     private boolean hasTraveling() {
@@ -56,11 +71,11 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
         return 1.0F - (getTravelingLevel() / 3.0F);
     }
 
-
     private void maybeDamageArmor(EquipmentSlot slot) {
         if (hasTraveling() && this.getRandom().nextFloat() < 0.04f) {
             ItemStack itemStack = this.getEquippedStack(slot);
-            itemStack.damage(1, this, player -> player.sendEquipmentBreakStatus(slot));
+            Item item = itemStack.getItem();
+            itemStack.damage(1, this, slot);
         }
     }
 

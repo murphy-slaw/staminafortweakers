@@ -11,8 +11,8 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +57,7 @@ public class StaminaForTweakers implements ModInitializer {
 
     public static RegistryEntry<StatusEffect> FATIGUE;
     public static RegistryEntry<StatusEffect> TIRELESSNESS;
-    public static Enchantment TRAVELING_ENCHANTMENT;
+    public static RegistryEntry<Enchantment> TRAVELING_ENCHANTMENT;
 
 
     @Override
@@ -69,7 +69,6 @@ public class StaminaForTweakers implements ModInitializer {
         TIRELESSNESS = Registry.registerReference(Registries.STATUS_EFFECT, Identifier.of("staminafortweakers", "tirelessness"),
                 new TirelessnessStatusEffect()
         );
-        TRAVELING_ENCHANTMENT = Registry.registerReference(Registries.ENCHANTMENT, Identifier.of(MOD_ID, "traveling"), new TravelingEnchantment());
         Registry.register(Registries.SOUND_EVENT, StaminaForTweakers.BREATH_SCARED, ENTITY_PLAYER_PANT);
         StaminaPotions.registerPotions();
         StaminaPotions.registerPotionRecipes();

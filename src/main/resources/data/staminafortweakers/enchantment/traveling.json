@@ -1,0 +1,21 @@
+{
+  "description": {
+    "translate": "enchantment.staminafortweakers.traveling"
+  },
+  "supported_items": "#minecraft:enchantable/leg_armor",
+  "weight": 2,
+  "max_level": 3,
+  "anvil_cost": 8,
+  "exclusive_set": "#minecraft:exclusive_set/leg_armor",
+  "max_cost": {
+    "base": 65,
+    "per_level_above_first": 9
+  },
+  "min_cost": {
+    "base": 15,
+    "per_level_above_first": 9
+  },
+  "slots": [
+    "legs"
+  ]
+}
