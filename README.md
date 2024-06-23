@@ -30,6 +30,13 @@ So many knobs to tweak!
   * Position
   * Colors
   * Orientation (horizontal or vertical)
+* New Potions
+  * Fatigue - brewed with a Thick Potion and a Clay Ball
+  * Tirelessness - completely prevents stamina depletion, brewed with a Thick Potion and a Cocoa Bean
+* Traveling enchantment
+  * Reduces stamina depletion for sprinting and jumping.
+  * Three levels, completely nullifies stamina depletion from movement at level III.
+  * Exclusive to leggings, conflicts with Swift Sneak.
 
 With all these options, you can make stamina management anything from a mild annoyance to a nearly crippling impediment! Good times.
 
