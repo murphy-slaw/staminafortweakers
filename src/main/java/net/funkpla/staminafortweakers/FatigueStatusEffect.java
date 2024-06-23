@@ -17,6 +17,7 @@ public class FatigueStatusEffect extends StatusEffect {
         );
         this.addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED, Identifier.of(MOD_ID, "fatigue.speed"), -0.15f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
                 .addAttributeModifier(StaminaForTweakers.CLIMB_SPEED, Identifier.of(MOD_ID, "fatigue.climb_speed"), -0.15f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
-                .addAttributeModifier(AdditionalEntityAttributes.WATER_SPEED, Identifier.of(MOD_ID, "fatigue.water_speed"), -0.15f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+                .addAttributeModifier(AdditionalEntityAttributes.WATER_SPEED, Identifier.of(MOD_ID, "fatigue.water_speed"), -0.15f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+                .addAttributeModifier(EntityAttributes.GENERIC_ATTACK_SPEED, Identifier.of(MOD_ID, "fatigue.attack_speed"), -0.1f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     }
 }
