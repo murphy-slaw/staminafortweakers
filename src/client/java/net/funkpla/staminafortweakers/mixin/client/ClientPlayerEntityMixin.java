@@ -3,12 +3,12 @@ package net.funkpla.staminafortweakers.mixin.client;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.funkpla.staminafortweakers.StaminaConfig;
 import net.funkpla.staminafortweakers.StaminaForTweakers;
-import net.funkpla.staminafortweakers.mixin.PlayerEntityMixin;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.world.World;
+import net.funkpla.staminafortweakers.mixin.PlayerMixin;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,11 +16,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ClientPlayerEntity.class)
-public abstract class ClientPlayerEntityMixin extends PlayerEntityMixin {
+@Mixin(LocalPlayer.class)
+public abstract class ClientPlayerEntityMixin extends PlayerMixin {
     private final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
 
-    protected ClientPlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
+    protected ClientPlayerEntityMixin(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -32,7 +32,7 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntityMixin {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void doExhaustionSounds(CallbackInfo ci) {
-        if (isSubmergedInWater()) return;
+        if (isUnderWater()) return;
         double pct = getExhaustionPct();
         if (!config.exhaustionSounds) return;
 
@@ -47,7 +47,7 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntityMixin {
     }
 
     @Inject(
-            method = "canSprint()Z",
+            method = "canStartSprinting()Z",
             at = @At("HEAD"),
             cancellable = true)
     private void canSprint(CallbackInfoReturnable<Boolean> cir) {
@@ -55,7 +55,7 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntityMixin {
         double max_stamina = this.getAttributeValue(StaminaForTweakers.MAX_STAMINA);
         boolean isNotExhausted = ((stamina / max_stamina) * 100) <= config.exhaustedPercentage;
         cir.setReturnValue(
-                isNotExhausted || this.hasVehicle() || (float) this.getHungerManager().getFoodLevel() > 6.0F || this.getAbilities().allowFlying
+                isNotExhausted || this.isPassenger() || (float) this.getFoodData().getFoodLevel() > 6.0F || this.getAbilities().mayfly
         );
     }
 

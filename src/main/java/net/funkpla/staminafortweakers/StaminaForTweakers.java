@@ -4,16 +4,16 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.attribute.ClampedEntityAttribute;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.enchantment.Enchantment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,50 +26,50 @@ public class StaminaForTweakers implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 
-    public static RegistryEntry<EntityAttribute> STAMINA = registerAttribute(
+    public static Holder<Attribute> STAMINA = registerAttribute(
             "generic.stamina",
             100,
             0,
             1024
     );
-    public static RegistryEntry<EntityAttribute> MAX_STAMINA = registerAttribute(
+    public static Holder<Attribute> MAX_STAMINA = registerAttribute(
             "generic.max_stamina",
             100,
             0,
             1024
     );
-    public static RegistryEntry<EntityAttribute> CLIMB_SPEED = registerAttribute(
+    public static Holder<Attribute> CLIMB_SPEED = registerAttribute(
             "generic.climb_speed",
             0,
             -1,
             1
     );
 
-    private static RegistryEntry<EntityAttribute> registerAttribute(final String name, double base, double min, double max) {
-        Identifier id = Identifier.of(MOD_ID, name);
-        EntityAttribute attribute = new ClampedEntityAttribute("attribute.name." + MOD_ID + '.' + name, base, min, max).setTracked(true);
-        Registry.register(Registries.ATTRIBUTE, id, attribute);
-        return Registries.ATTRIBUTE.getEntry(attribute);
+    private static Holder<Attribute> registerAttribute(final String name, double base, double min, double max) {
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
+        Attribute attribute = new RangedAttribute("attribute.name." + MOD_ID + '.' + name, base, min, max).setSyncable(true);
+        Registry.register(BuiltInRegistries.ATTRIBUTE, id, attribute);
+        return BuiltInRegistries.ATTRIBUTE.wrapAsHolder(attribute);
     }
 
-    public static final Identifier BREATH_SCARED = Identifier.of("staminafortweakers:breath_scared");
-    public static SoundEvent ENTITY_PLAYER_PANT = SoundEvent.of(BREATH_SCARED);
+    public static final ResourceLocation BREATH_SCARED = ResourceLocation.parse("staminafortweakers:breath_scared");
+    public static SoundEvent ENTITY_PLAYER_PANT = SoundEvent.createVariableRangeEvent(BREATH_SCARED);
 
-    public static RegistryEntry<StatusEffect> FATIGUE;
-    public static RegistryEntry<StatusEffect> TIRELESSNESS;
-    public static RegistryEntry<Enchantment> TRAVELING_ENCHANTMENT;
+    public static Holder<MobEffect> FATIGUE;
+    public static Holder<MobEffect> TIRELESSNESS;
+    public static Holder<Enchantment> TRAVELING_ENCHANTMENT;
 
 
     @Override
     public void onInitialize() {
         AutoConfig.register(StaminaConfig.class, JanksonConfigSerializer::new);
-        FATIGUE = Registry.registerReference(Registries.STATUS_EFFECT, Identifier.of("staminafortweakers", "fatigue"),
+        FATIGUE = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, ResourceLocation.fromNamespaceAndPath("staminafortweakers", "fatigue"),
                 new FatigueStatusEffect()
         );
-        TIRELESSNESS = Registry.registerReference(Registries.STATUS_EFFECT, Identifier.of("staminafortweakers", "tirelessness"),
+        TIRELESSNESS = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, ResourceLocation.fromNamespaceAndPath("staminafortweakers", "tirelessness"),
                 new TirelessnessStatusEffect()
         );
-        Registry.register(Registries.SOUND_EVENT, StaminaForTweakers.BREATH_SCARED, ENTITY_PLAYER_PANT);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, StaminaForTweakers.BREATH_SCARED, ENTITY_PLAYER_PANT);
         StaminaPotions.registerPotions();
         StaminaPotions.registerPotionRecipes();
 
@@ -78,8 +78,8 @@ public class StaminaForTweakers implements ModInitializer {
          */
 
         EntitySleepEvents.ALLOW_SLEEPING.register((player, sleepingPos) -> {
-            if (player.hasStatusEffect(TIRELESSNESS)) {
-                return PlayerEntity.SleepFailureReason.OTHER_PROBLEM;
+            if (player.hasEffect(TIRELESSNESS)) {
+                return Player.BedSleepingProblem.OTHER_PROBLEM;
             }
             return null;
         });

@@ -4,15 +4,15 @@ import me.shedaniel.autoconfig.AutoConfig;
 import net.funkpla.staminafortweakers.Climber;
 import net.funkpla.staminafortweakers.StaminaConfig;
 import net.funkpla.staminafortweakers.StaminaForTweakers;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.player.HungerManager;
-import net.minecraft.entity.player.PlayerAbilities;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.player.Abilities;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -22,11 +22,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
-@Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity implements Climber {
+@Mixin(Player.class)
+public abstract class PlayerMixin extends LivingEntity implements Climber {
 
-    @Inject(method = "createPlayerAttributes()Lnet/minecraft/entity/attribute/DefaultAttributeContainer$Builder;", require = 1, allow = 1, at = @At("RETURN"))
-    private static void staminafortweakers$addPlayerAttributes(final CallbackInfoReturnable<DefaultAttributeContainer.Builder> info) {
+    @Inject(method = "Lnet/minecraft/world/entity/player/Player;createAttributes()Lnet/minecraft/world/entity/ai/attributes/AttributeSupplier$Builder;", require = 1, allow = 1, at = @At("RETURN"))
+    private static void staminafortweakers$addPlayerAttributes(final CallbackInfoReturnable<AttributeSupplier.Builder> info) {
         info.getReturnValue().add(StaminaForTweakers.STAMINA);
         info.getReturnValue().add(StaminaForTweakers.MAX_STAMINA);
     }
@@ -38,24 +38,24 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Climber 
     private boolean jumped;
 
 
-    protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
+    protected PlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     @Shadow
-    public abstract HungerManager getHungerManager();
+    public abstract FoodData getFoodData();
 
     @Shadow
-    public abstract PlayerAbilities getAbilities();
+    public abstract Abilities getAbilities();
 
     @Shadow
-    public abstract void jump();
+    public abstract void jumpFromGround();
 
     @Shadow
-    public abstract float getMovementSpeed();
+    public abstract float getSpeed();
 
     @Shadow
-    protected boolean isSubmergedInWater;
+    protected boolean wasUnderwater;
 
     @Unique
     public double getExhaustionPct() {
@@ -74,7 +74,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Climber 
 
     @Unique
     public void setStamina(double stamina) {
-        getAttributeInstance(StaminaForTweakers.STAMINA).setBaseValue(stamina);
+        getAttribute(StaminaForTweakers.STAMINA).setBaseValue(stamina);
     }
 
 
@@ -87,7 +87,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Climber 
         jumped = false;
     }
 
-    @Inject(method = "jump", at = @At("TAIL"))
+    @Inject(method = "jumpFromGround", at = @At("TAIL"))
     private void setJumpedFlag(CallbackInfo ci) {
         jumped = true;
     }
@@ -96,7 +96,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Climber 
      * Inject into LivingEntity.jump() to block jumping according to config.
      */
 
-    @Inject(method = "jump", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "jumpFromGround", at = @At("HEAD"), cancellable = true)
     private void blockJumping(CallbackInfo ci) {
         if (config.canJumpWhileExhausted) return;
         if (getExhaustionPct() <= config.exhaustedPercentage) ci.cancel();
@@ -107,10 +107,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Climber 
         return jumped;
     }
 
-    public Vec3d getClimbSpeed(Vec3d original) {
-        EntityAttributeInstance climbSpeed = getAttributeInstance(StaminaForTweakers.CLIMB_SPEED);
-        if (climbSpeed == null || original.y <= 0 || (jumping && !isClimbing())) return original;
+    public Vec3 getClimbSpeed(Vec3 original) {
+        AttributeInstance climbSpeed = getAttribute(StaminaForTweakers.CLIMB_SPEED);
+        if (climbSpeed == null || original.y <= 0 || (jumping && !onClimbable())) return original;
         climbSpeed.setBaseValue(original.y);
-        return new Vec3d(original.x, climbSpeed.getValue(), original.z);
+        return new Vec3(original.x, climbSpeed.getValue(), original.z);
     }
 }

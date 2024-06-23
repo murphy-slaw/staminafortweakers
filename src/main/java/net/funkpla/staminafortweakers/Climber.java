@@ -1,7 +1,7 @@
 package net.funkpla.staminafortweakers;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.phys.Vec3;
 
 public interface Climber {
-    Vec3d getClimbSpeed(Vec3d original);
+    Vec3 getClimbSpeed(Vec3 original);
 }

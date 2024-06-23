@@ -1,12 +1,12 @@
 package net.funkpla.staminafortweakers;
 
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 
-public class TirelessnessStatusEffect extends StatusEffect {
+public class TirelessnessStatusEffect extends MobEffect {
     public TirelessnessStatusEffect() {
         super(
-                StatusEffectCategory.BENEFICIAL,
+                MobEffectCategory.BENEFICIAL,
                 0xFF5C1D0B
         );
     }
