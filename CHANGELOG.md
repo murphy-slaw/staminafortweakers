@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] 2024-06-23
+
+A magical update!
+
+### Added
+
+- Added two new potions: Fatigue and Tirelessness
+    - Fatigue gives the Fatigue effect and is brewed with a Thick Potion and a Clay Ball.
+    - Tirelessness completely prevents stamina depletion and is brewed with a Thick Potion and a Cocoa Bean.
+- Added a new enchantment for Leggings, Traveling
+    - Reduces stamina depletion from sprinting and jumping.
+    - Three levels, at level III completely prevents stamina depletion from sprinting and jumping.
+
 ## [1.0.9] 2024-06-21
 
 ### Fixed
