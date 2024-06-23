@@ -1,13 +1,13 @@
 package net.funkpla.staminafortweakers;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.item.enchantment.Enchantments;
 
 public class TravelingEnchantment extends Enchantment {
     protected TravelingEnchantment() {
-        super(Rarity.RARE, EnchantmentTarget.ARMOR_LEGS, new EquipmentSlot[]{EquipmentSlot.LEGS});
+        super(Rarity.RARE, EnchantmentCategory.ARMOR_LEGS, new EquipmentSlot[]{EquipmentSlot.LEGS});
     }
 
     @Override
@@ -16,18 +16,18 @@ public class TravelingEnchantment extends Enchantment {
     }
 
     @Override
-    public int getMinPower(int level) {
+    public int getMinCost(int level) {
         return level * 10;
     }
 
     @Override
-    public int getMaxPower(int level) {
-        return this.getMinPower(level) + 15;
+    public int getMaxCost(int level) {
+        return this.getMinCost(level) + 15;
     }
 
     @Override
-    protected boolean canAccept(Enchantment other) {
-        return super.canAccept(other) && other != Enchantments.SWIFT_SNEAK;
+    protected boolean checkCompatibility(Enchantment other) {
+        return super.checkCompatibility(other) && other != Enchantments.SWIFT_SNEAK;
     }
 }
 

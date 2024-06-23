@@ -2,9 +2,9 @@ package net.funkpla.staminafortweakers;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.LocalPlayer;
 
 public class StaminaHudOverlay implements HudRenderCallback {
     private final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
@@ -12,12 +12,12 @@ public class StaminaHudOverlay implements HudRenderCallback {
 
 
     @Override
-    public void onHudRender(DrawContext context, float tickDelta) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        int width = client.getWindow().getScaledWidth();
-        int height = client.getWindow().getScaledHeight();
+    public void onHudRender(GuiGraphics context, float tickDelta) {
+        Minecraft client = Minecraft.getInstance();
+        int width = client.getWindow().getGuiScaledWidth();
+        int height = client.getWindow().getGuiScaledHeight();
 
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        LocalPlayer player = Minecraft.getInstance().player;
         if (player.isCreative() || player.isSpectator()) return;
         float scaledStamina = (float) (player.getAttributeValue(StaminaForTweakers.STAMINA) / player.getAttributeValue(StaminaForTweakers.MAX_STAMINA));
         float pct = scaledStamina * 100;
@@ -71,10 +71,10 @@ public class StaminaHudOverlay implements HudRenderCallback {
             context.fill(x1, y1, (int) (x1 + (barWidth * scaledStamina)), y2, color);
         else context.fill(x1, y2, x2, y2 - (int) (barHeight * scaledStamina), color);
 
-        context.drawBorder(x1, y1, barWidth, barHeight, opaque + config.staminaBarOutlineColor);
+        context.renderOutline(x1, y1, barWidth, barHeight, opaque + config.staminaBarOutlineColor);
 
-        if (player.hasStatusEffect(StaminaForTweakers.TIRELESSNESS)) {
-            context.drawBorder(x1 - 1, y1 - 1, barWidth + 2, barHeight + 2, opaque + config.staminaBarTirelessColor);
+        if (player.hasEffect(StaminaForTweakers.TIRELESSNESS)) {
+            context.renderOutline(x1 - 1, y1 - 1, barWidth + 2, barHeight + 2, opaque + config.staminaBarTirelessColor);
         }
 
         //context.drawTexture(FILLED_STAMINA, x, y1, 0, 0, (int) (BAR_LENGTH * scaledStamina), BAR_HEIGHT, BAR_LENGTH, BAR_HEIGHT);

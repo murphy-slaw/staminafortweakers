@@ -4,17 +4,17 @@ import net.funkpla.staminafortweakers.Climber;
 import net.funkpla.staminafortweakers.RecoveryDelayTimer;
 import net.funkpla.staminafortweakers.StaminaConfig;
 import net.funkpla.staminafortweakers.StaminaForTweakers;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.network.ServerPlayerInteractionManager;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerPlayerGameMode;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,8 +23,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ServerPlayerEntity.class)
-public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implements Climber {
+@Mixin(ServerPlayer.class)
+public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
 
     @Shadow
     public abstract boolean isCreative();
@@ -34,18 +34,18 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
 
     @Shadow
     @Final
-    public ServerPlayerInteractionManager interactionManager;
+    public ServerPlayerGameMode gameMode;
 
-    protected ServerPlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
+    protected ServerPlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     private RecoveryDelayTimer timer = new RecoveryDelayTimer(config.recoveryDelayTicks);
 
-    private Vec3d lastPos = new Vec3d(0, 0, 0);
+    private Vec3 lastPos = new Vec3(0, 0, 0);
 
     private int getTravelingLevel() {
-        return EnchantmentHelper.getEquipmentLevel(StaminaForTweakers.TRAVELING_ENCHANTMENT, this);
+        return EnchantmentHelper.getEnchantmentLevel(StaminaForTweakers.TRAVELING_ENCHANTMENT, this);
     }
 
     private boolean hasTraveling() {
@@ -59,8 +59,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
 
     private void maybeDamageArmor(EquipmentSlot slot) {
         if (hasTraveling() && this.getRandom().nextFloat() < 0.04f) {
-            ItemStack itemStack = this.getEquippedStack(slot);
-            itemStack.damage(1, this, player -> player.sendEquipmentBreakStatus(slot));
+            ItemStack itemStack = this.getItemBySlot(slot);
+            itemStack.hurtAndBreak(1, this, player -> player.broadcastBreakEvent(slot));
         }
     }
 
@@ -71,9 +71,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
     @Inject(method = "tick", at = @At("TAIL"))
     public void updateStamina(CallbackInfo ci) {
         if (isCreative() || isSpectator()) return;
-        double ySpeed = getPos().getY() - lastPos.getY();
+        double ySpeed = position().y() - lastPos.y();
 
-        if (hasStatusEffect(StaminaForTweakers.TIRELESSNESS)) {
+        if (hasEffect(StaminaForTweakers.TIRELESSNESS)) {
             if (canRecover()) doRecovery();
         } else if (isSwimming()) depleteStamina(config.depletionPerTickSwimming);
         else if (isSprinting()) {
@@ -82,19 +82,19 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
         } else if (config.depletionPerJump > 0 && hasJumped()) {
             depleteStamina(config.depletionPerJump * getTravelingModifier());
             maybeDamageLeggings();
-        } else if (config.depletionPerTickClimbing > 0 && isClimbing() && ySpeed > 0 && !isOnGround() && !isHoldingOntoLadder())
+        } else if (config.depletionPerTickClimbing > 0 && onClimbable() && ySpeed > 0 && !onGround() && !isSuppressingSlidingDownLadder())
             depleteStamina(config.depletionPerTickClimbing);
         else if (config.depletionPerAttack > 0 && isMining()) {
             depleteStamina(config.depletionPerAttack);
         } else if (canRecover()) doRecovery();
         doExhaustion();
-        lastPos = getPos();
+        lastPos = position();
         timer.tickDown();
     }
 
     @Unique
     private void makeSlow(int amplifier) {
-        addStatusEffect(new StatusEffectInstance(StaminaForTweakers.FATIGUE, 3, amplifier, true, true));
+        addEffect(new MobEffectInstance(StaminaForTweakers.FATIGUE, 3, amplifier, true, true));
     }
 
     @Unique
@@ -102,10 +102,10 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
         double pct = getExhaustionPct();
         if (pct <= config.exhaustedPercentage) {
             if (config.exhaustionBlackout) {
-                addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 60, 1, true, false));
+                addEffect(new MobEffectInstance(MobEffects.DARKNESS, 60, 1, true, false));
             }
             if (config.exhaustionSlowsMining) {
-                addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, 20, 1, true, true));
+                addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 20, 1, true, true));
             }
             makeSlow(4);
             setSprinting(false);
@@ -119,10 +119,10 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
 
     @Unique
     private void doRecovery() {
-        if (horizontalSpeed - prevHorizontalSpeed <= 0.01) {
+        if (walkDist - walkDistO <= 0.01) {
             recoverStamina(getBaseRecovery() * config.recoveryRestBonusMultiplier);
         } else if (config.recoverWhileWalking ||
-                (config.recoverWhileSneaking && isSneaking())) {
+                (config.recoverWhileSneaking && isShiftKeyDown())) {
             recoverStamina(getBaseRecovery());
         }
     }
@@ -154,7 +154,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
     }
 
     private boolean isStandingStill() {
-        return ((horizontalSpeed - prevHorizontalSpeed) <= 0.1);
+        return ((walkDist - walkDistO) <= 0.1);
     }
 
     @Unique
@@ -162,17 +162,17 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
         return timer.expired() &&
                 (config.recoverWhenHungry || isNotHungry())
                 && (config.recoverWhileWalking || isStandingStill())
-                && (config.recoverWhileAirborne || isOnGround())
-                && (config.recoverUnderwater || !isSubmergedInWater())
-                && (config.recoverWhileBreathless || getAir() > 0);
+                && (config.recoverWhileAirborne || onGround())
+                && (config.recoverUnderwater || !isUnderWater())
+                && (config.recoverWhileBreathless || getAirSupply() > 0);
     }
 
     @Unique
     private boolean isNotHungry() {
-        return getHungerManager().getFoodLevel() >= 6;
+        return getFoodData().getFoodLevel() >= 6;
     }
 
     private boolean isMining() {
-        return ((ServerPlayerInteractionManagerMixin) interactionManager).getMining();
+        return ((ServerPlayerGameModeMixin) gameMode).getIsDestroyingBlock();
     }
 }
