@@ -92,7 +92,7 @@ public class StaminaConfig implements ConfigData {
      * Recovery rules
      */
 
-    @Comment("Stamina points recovered per tick.")
+    @Comment("% of max stamina recovered per tick.")
     @ConfigEntry.Category("Recovery")
     public float recoveryPerTick = 0.25F;
 

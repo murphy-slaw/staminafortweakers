@@ -140,7 +140,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
 
     @Unique
     public void recoverStamina(double recoveryAmount) {
-        setStamina(getStamina() + recoveryAmount);
+        setStamina(getStamina() + (getMaxStamina() * recoveryAmount / 100));
         if (getStamina() > getMaxStamina()) {
             setStamina(getMaxStamina());
         }
