@@ -32,6 +32,11 @@ public class StaminaConfig implements ConfigData {
         LOGARITHMIC
     }
 
+    public enum HudMode {
+        BAR,
+        ICON
+    }
+
     /*
      * Exhaustion rules
      */
@@ -156,18 +161,29 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.Category("HUD")
     public int hudOffsetY = 41;
 
-    @Comment("Width of stamina bar")
-    @ConfigEntry.Category("HUD")
-    public int hudLongSide = 81;
-
-    @Comment("Height of stamina bar")
-    @ConfigEntry.Category("HUD")
-    public int hudShortSide = 6;
-
-    @Comment("Stamina bar orientation")
+    @Comment("HUD Display Mode")
     @ConfigEntry.Category("HUD")
     @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
-    public Orientation orientation = Orientation.HORIZONTAL;
+    public HudMode hudMode = HudMode.BAR;
+
+    @Comment("Stamina Bar Settings")
+    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+    @ConfigEntry.Category("HUD")
+    StaminaBarConfig staminaBarConfig = new StaminaBarConfig();
+
+    static class StaminaBarConfig {
+        @Comment("Stamina bar orientation")
+        @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
+        public Orientation orientation = Orientation.HORIZONTAL;
+
+        @Comment("Height of stamina bar")
+        @ConfigEntry.Category("HUD")
+        public int hudShortSide = 6;
+
+        @Comment("Width of stamina bar")
+        @ConfigEntry.Category("HUD")
+        public int hudLongSide = 81;
+    }
 
     /*
      * Stamina bar colors.
