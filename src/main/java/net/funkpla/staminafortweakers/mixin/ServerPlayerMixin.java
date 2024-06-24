@@ -90,7 +90,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
         if (hasEffect(StaminaForTweakers.TIRELESSNESS)) {
             if (canRecover()) doRecovery();
         } else if (isSwimming()) depleteStamina(config.depletionPerTickSwimming);
-        else if (isSprinting()) {
+        else if (isSprinting() && !isPassenger()) {
             depleteStamina(config.depletionPerTickSprinting * getTravelingModifier());
             maybeDamageLeggings();
         } else if (config.depletionPerJump > 0 && hasJumped()) {
