@@ -3,7 +3,7 @@
 	"package": "net.funkpla.staminafortweakers.mixin.client",
 	"compatibilityLevel": "JAVA_17",
 	"client": [
-		"ClientPlayerEntityMixin"
+		"LocalPlayerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

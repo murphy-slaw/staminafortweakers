@@ -32,6 +32,11 @@ public class StaminaConfig implements ConfigData {
         LOGARITHMIC
     }
 
+    public enum HudMode {
+        BAR,
+        ICON
+    }
+
     /*
      * Exhaustion rules
      */
@@ -148,26 +153,50 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
     public AlignmentH alignH = AlignmentH.CENTER;
 
-    @Comment("HUD vertical offset")
-    @ConfigEntry.Category("HUD")
-    public int hudOffsetX = 51;
 
-    @Comment("HUD horizontal offset")
-    @ConfigEntry.Category("HUD")
-    public int hudOffsetY = 41;
-
-    @Comment("Width of stamina bar")
-    @ConfigEntry.Category("HUD")
-    public int hudLongSide = 81;
-
-    @Comment("Height of stamina bar")
-    @ConfigEntry.Category("HUD")
-    public int hudShortSide = 6;
-
-    @Comment("Stamina bar orientation")
+    @Comment("HUD Display Mode")
     @ConfigEntry.Category("HUD")
     @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
-    public Orientation orientation = Orientation.HORIZONTAL;
+    public HudMode hudMode = HudMode.ICON;
+
+
+    @Comment("Icon Settings")
+    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+    @ConfigEntry.Category("HUD")
+    IconConfig icon = new IconConfig();
+
+    static class IconConfig {
+        @Comment("Hud Icon Height")
+        @ConfigEntry.BoundedDiscrete(max = 320)
+        public int height = 22;
+        @Comment("Horizontal offset")
+        public int offsetY = 1;
+        @Comment("Vertical offset")
+        public int offsetX = 105;
+    }
+
+    @Comment("Stamina Bar Settings")
+    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+    @ConfigEntry.Category("HUD")
+    StaminaBarConfig bar = new StaminaBarConfig();
+
+    static class StaminaBarConfig {
+        @Comment("Stamina bar orientation")
+        @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
+        public Orientation orientation = Orientation.HORIZONTAL;
+
+        @Comment("Short side (pixels)")
+        public int shortSide = 2;
+
+        @Comment("Long side (pixels)")
+        public int longSide = 180;
+
+        @Comment("Horizontal offset")
+        public int offsetY = 22;
+
+        @Comment("Vertical offset")
+        public int offsetX = 0;
+    }
 
     /*
      * Stamina bar colors.
