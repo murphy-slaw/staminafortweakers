@@ -50,17 +50,17 @@ public class StaminaForTweakers implements ModInitializer {
 
     public static final MobEffect FATIGUE = new FatigueStatusEffect();
     public static final MobEffect TIRELESSNESS = new TirelessnessStatusEffect();
-    public static final ResourceLocation BREATH_SCARED = new ResourceLocation("staminafortweakers:breath_scared");
+    public static final ResourceLocation BREATH_SCARED = resourceLocationOf("breath_scared");
     public static SoundEvent ENTITY_PLAYER_PANT = SoundEvent.createVariableRangeEvent(BREATH_SCARED);
     public static Enchantment TRAVELING_ENCHANTMENT = new TravelingEnchantment();
 
     @Override
     public void onInitialize() {
         AutoConfig.register(StaminaConfig.class, JanksonConfigSerializer::new);
-        Registry.register(BuiltInRegistries.MOB_EFFECT, new ResourceLocation("staminafortweakers", "fatigue"), FATIGUE);
-        Registry.register(BuiltInRegistries.MOB_EFFECT, new ResourceLocation("staminafortweakers", "tirelessness"), TIRELESSNESS);
+        Registry.register(BuiltInRegistries.MOB_EFFECT, resourceLocationOf("fatigue"), FATIGUE);
+        Registry.register(BuiltInRegistries.MOB_EFFECT, resourceLocationOf("tirelessness"), TIRELESSNESS);
         Registry.register(BuiltInRegistries.SOUND_EVENT, StaminaForTweakers.BREATH_SCARED, ENTITY_PLAYER_PANT);
-        Registry.register(BuiltInRegistries.ENCHANTMENT, new ResourceLocation(MOD_ID, "traveling"), TRAVELING_ENCHANTMENT);
+        Registry.register(BuiltInRegistries.ENCHANTMENT, resourceLocationOf("traveling"), TRAVELING_ENCHANTMENT);
         StaminaPotions.registerPotions();
         StaminaPotions.registerPotionRecipes();
 
@@ -74,6 +74,10 @@ public class StaminaForTweakers implements ModInitializer {
             }
             return null;
         });
+    }
+
+    public static ResourceLocation resourceLocationOf(String path) {
+        return new ResourceLocation(MOD_ID, path);
     }
 
 }

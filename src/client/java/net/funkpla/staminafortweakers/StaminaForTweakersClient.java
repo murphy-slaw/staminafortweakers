@@ -11,21 +11,25 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
+import org.joml.Vector2i;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class StaminaForTweakersClient implements ClientModInitializer {
-    public static final ResourceLocation CUSTOM_TEXTURE = new ResourceLocation(StaminaForTweakers.MOD_ID, "textures/stamina/filled_stamina.png");
-    private static int CUSTOM_HEIGHT;
-    private static int CUSTOM_WIDTH;
-
+    private static final HashMap<ResourceLocation, Vector2i> ICON_SIZES = new HashMap<>();
 
     @Override
     public void onInitializeClient() {
         Minecraft client = Minecraft.getInstance();
         HudRenderCallback.EVENT.register(new StaminaHudOverlay());
+
+        ArrayList<ResourceLocation> icons = new ArrayList<>();
+        icons.add(StaminaForTweakers.resourceLocationOf("textures/stamina/walk.png"));
+        icons.add(StaminaForTweakers.resourceLocationOf("textures/stamina/sprint.png"));
 
         ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
@@ -35,28 +39,28 @@ public class StaminaForTweakersClient implements ClientModInitializer {
 
             @Override
             public void onResourceManagerReload(ResourceManager resourceManager) {
-                SimpleTexture customTexture = (SimpleTexture) client.getTextureManager().getTexture(CUSTOM_TEXTURE);
-
-                try {
-                    Resource resource = resourceManager.getResourceOrThrow(CUSTOM_TEXTURE);
-                    try (InputStream inputStream = resource.open();) {
-                        NativeImage nativeImage = NativeImage.read(inputStream);
-                        CUSTOM_HEIGHT = nativeImage.getHeight();
-                        CUSTOM_WIDTH = nativeImage.getWidth();
-                    } catch (IOException e) {
+                for (ResourceLocation icon : icons) {
+                    SimpleTexture customTexture = (SimpleTexture) client.getTextureManager().getTexture(icon);
+                    try {
+                        Resource resource = resourceManager.getResourceOrThrow(icon);
+                        try (InputStream inputStream = resource.open()) {
+                            NativeImage nativeImage = NativeImage.read(inputStream);
+                            ICON_SIZES.put(icon, new Vector2i(nativeImage.getWidth(), nativeImage.getHeight()));
+                        } catch (IOException e) {
+                            StaminaForTweakers.LOGGER.warn("Unable to read icon texture {}", icon);
+                        }
+                    } catch (FileNotFoundException e) {
+                        StaminaForTweakers.LOGGER.warn("Icon texture '{}' not found", icon);
                     }
-                } catch (FileNotFoundException e) {
                 }
             }
         });
 
     }
 
-    public static int getCustomHeight() {
-        return CUSTOM_HEIGHT;
+    public static Vector2i getIconSize(ResourceLocation rl) {
+        return ICON_SIZES.get(rl);
     }
 
-    public static int getCustomWidth() {
-        return CUSTOM_WIDTH;
-    }
+
 }
