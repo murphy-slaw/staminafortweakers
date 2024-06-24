@@ -56,7 +56,6 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
         return 1.0F - (getTravelingLevel() / 3.0F);
     }
 
-
     private void maybeDamageArmor(EquipmentSlot slot) {
         if (hasTraveling() && this.getRandom().nextFloat() < 0.04f) {
             ItemStack itemStack = this.getItemBySlot(slot);
@@ -76,7 +75,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
         if (hasEffect(StaminaForTweakers.TIRELESSNESS)) {
             if (canRecover()) doRecovery();
         } else if (isSwimming()) depleteStamina(config.depletionPerTickSwimming);
-        else if (isSprinting()) {
+        else if (isSprinting() && !isPassenger()) {
             depleteStamina(config.depletionPerTickSprinting * getTravelingModifier());
             maybeDamageLeggings();
         } else if (config.depletionPerJump > 0 && hasJumped()) {
