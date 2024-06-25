@@ -1,7 +1,7 @@
 package net.funkpla.staminafortweakers.mixin;
 
 import net.funkpla.staminafortweakers.Climber;
-import net.funkpla.staminafortweakers.StaminaForTweakers;
+import net.funkpla.staminafortweakers.registry.Attributes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.phys.Vec3;
@@ -19,7 +19,7 @@ public abstract class LivingEntityMixin implements Climber {
             require = 1, allow = 1, at = @At("RETURN")
     )
     private static void staminafortweakers$addPlayerAttributes(final CallbackInfoReturnable<AttributeSupplier.Builder> info) {
-        info.getReturnValue().add(StaminaForTweakers.CLIMB_SPEED);
+        info.getReturnValue().add(Attributes.CLIMB_SPEED);
     }
 
     @ModifyVariable(

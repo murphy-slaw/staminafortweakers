@@ -1,4 +1,4 @@
-package net.funkpla.staminafortweakers;
+package net.funkpla.staminafortweakers.enchantment;
 
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -6,7 +6,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 
 public class TravelingEnchantment extends Enchantment {
-    protected TravelingEnchantment() {
+    public TravelingEnchantment() {
         super(Rarity.RARE, EnchantmentCategory.ARMOR_LEGS, new EquipmentSlot[]{EquipmentSlot.LEGS});
     }
 

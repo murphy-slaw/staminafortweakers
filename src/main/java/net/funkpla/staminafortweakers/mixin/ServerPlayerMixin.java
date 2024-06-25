@@ -1,9 +1,10 @@
 package net.funkpla.staminafortweakers.mixin;
 
 import net.funkpla.staminafortweakers.Climber;
-import net.funkpla.staminafortweakers.RecoveryDelayTimer;
 import net.funkpla.staminafortweakers.StaminaConfig;
-import net.funkpla.staminafortweakers.StaminaForTweakers;
+import net.funkpla.staminafortweakers.registry.Enchantments;
+import net.funkpla.staminafortweakers.registry.StatusEffects;
+import net.funkpla.staminafortweakers.util.Timer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerPlayerGameMode;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -40,12 +41,12 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
         super(entityType, world);
     }
 
-    private RecoveryDelayTimer timer = new RecoveryDelayTimer(config.recoveryDelayTicks);
+    private Timer timer = new Timer(config.recoveryDelayTicks);
 
     private Vec3 lastPos = new Vec3(0, 0, 0);
 
     private int getTravelingLevel() {
-        return EnchantmentHelper.getEnchantmentLevel(StaminaForTweakers.TRAVELING_ENCHANTMENT, this);
+        return EnchantmentHelper.getEnchantmentLevel(Enchantments.TRAVELING_ENCHANTMENT, this);
     }
 
     private boolean hasTraveling() {
@@ -72,7 +73,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
         if (isCreative() || isSpectator()) return;
         double ySpeed = position().y() - lastPos.y();
 
-        if (hasEffect(StaminaForTweakers.TIRELESSNESS)) {
+        if (hasEffect(StatusEffects.TIRELESSNESS)) {
             if (canRecover()) doRecovery();
         } else if (isSwimming()) depleteStamina(config.depletionPerTickSwimming);
         else if (isSprinting() && !isPassenger()) {
@@ -93,7 +94,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
 
     @Unique
     private void makeSlow(int amplifier) {
-        addEffect(new MobEffectInstance(StaminaForTweakers.FATIGUE, 3, amplifier, true, true));
+        addEffect(new MobEffectInstance(StatusEffects.FATIGUE, 3, amplifier, true, true));
     }
 
     @Unique
@@ -109,7 +110,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
             makeSlow(4);
             setSprinting(false);
             if (timer.expired()) {
-                timer = new RecoveryDelayTimer(config.recoveryDelayTicks);
+                timer = new Timer(config.recoveryDelayTicks);
             }
         } else if (pct <= config.windedPercentage) makeSlow(2);
         else if (pct <= config.fatiguedPercentage) makeSlow(0);

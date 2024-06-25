@@ -2,8 +2,9 @@ package net.funkpla.staminafortweakers.mixin.client;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import net.funkpla.staminafortweakers.StaminaConfig;
-import net.funkpla.staminafortweakers.StaminaForTweakers;
 import net.funkpla.staminafortweakers.mixin.PlayerMixin;
+import net.funkpla.staminafortweakers.registry.Attributes;
+import net.funkpla.staminafortweakers.registry.SoundEvents;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
@@ -43,7 +44,7 @@ public abstract class LocalPlayerMixin extends PlayerMixin {
         if (breathCount >= BREATH_TICKS) breathCount = 0;
         if (pct <= config.windedPercentage) {
             if (breathCount == 0) {
-                this.playSound(StaminaForTweakers.ENTITY_PLAYER_PANT, 0.8f, (float) (Math.random() * 0.25f) + 0.875f);
+                this.playSound(SoundEvents.ENTITY_PLAYER_PANT, 0.8f, (float) (Math.random() * 0.25f) + 0.875f);
             }
         }
 
@@ -54,8 +55,8 @@ public abstract class LocalPlayerMixin extends PlayerMixin {
             at = @At("HEAD"),
             cancellable = true)
     private void canSprint(CallbackInfoReturnable<Boolean> cir) {
-        double stamina = this.getAttributeValue(StaminaForTweakers.STAMINA);
-        double max_stamina = this.getAttributeValue(StaminaForTweakers.MAX_STAMINA);
+        double stamina = this.getAttributeValue(Attributes.STAMINA);
+        double max_stamina = this.getAttributeValue(Attributes.MAX_STAMINA);
         boolean isNotExhausted = ((stamina / max_stamina) * 100) <= config.exhaustedPercentage;
         cir.setReturnValue(
                 isNotExhausted || this.isPassenger() || (float) this.getFoodData().getFoodLevel() > 6.0F || this.getAbilities().mayfly
