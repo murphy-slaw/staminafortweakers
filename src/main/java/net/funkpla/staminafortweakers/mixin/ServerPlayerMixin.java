@@ -34,6 +34,11 @@ import java.util.Optional;
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
 
+    /**
+     * A small cooldown to prevent stamina from bouncing around while mining.
+     */
+    private static final int MINING_COOLDOWN = 10;
+
     @Shadow
     public abstract boolean isCreative();
 
@@ -51,7 +56,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
         super(entityType, world);
     }
 
-    private Timer timer = new Timer(config.recoveryDelayTicks);
+    private Timer recoveryCooldown = new Timer(config.recoveryDelayTicks);
 
     private Vec3 lastPos = new Vec3(0, 0, 0);
 
@@ -100,10 +105,13 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
             depleteStamina(config.depletionPerTickClimbing);
         else if (config.depletionPerAttack > 0 && isMining()) {
             depleteStamina(config.depletionPerAttack);
+            if (recoveryCooldown.expired()) {
+                recoveryCooldown = new Timer(MINING_COOLDOWN);
+            }
         } else if (canRecover()) doRecovery();
         doExhaustion();
         lastPos = position();
-        timer.tickDown();
+        recoveryCooldown.tickDown();
     }
 
     @Unique
@@ -124,8 +132,8 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
             }
             makeSlow(4);
             setSprinting(false);
-            if (timer.expired()) {
-                timer = new Timer(config.recoveryDelayTicks);
+            if (recoveryCooldown.expired()) {
+                recoveryCooldown = new Timer(config.recoveryDelayTicks);
             }
         } else if (pct <= config.windedPercentage) makeSlow(2);
         else if (pct <= config.fatiguedPercentage) makeSlow(0);
@@ -175,7 +183,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
 
     @Unique
     private boolean canRecover() {
-        return timer.expired() &&
+        return recoveryCooldown.expired() &&
                 (config.recoverWhenHungry || isNotHungry())
                 && (config.recoverWhileWalking || isStandingStill())
                 && (config.recoverWhileAirborne || onGround())
