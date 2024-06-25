@@ -117,7 +117,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
         double pct = getExhaustionPct();
         if (pct <= config.exhaustedPercentage) {
             if (config.exhaustionBlackout) {
-                addEffect(new MobEffectInstance(MobEffects.DARKNESS, 60, 1, true, false));
+                addEffect(new MobEffectInstance(MobEffects.DARKNESS, 60, 0, true, false));
             }
             if (config.exhaustionSlowsMining) {
                 addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 20, 1, true, true));
@@ -128,8 +128,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
                 timer = new RecoveryDelayTimer(config.recoveryDelayTicks);
             }
         } else if (pct <= config.windedPercentage) makeSlow(2);
-        else if (pct <= config.fatiguedPercentage) makeSlow(1);
-
+        else if (pct <= config.fatiguedPercentage) makeSlow(0);
     }
 
     @Unique
@@ -149,14 +148,16 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
     }
 
     private double calcLogRecovery() {
-        return Math.log(Math.pow((getMaxStamina() - getStamina() + 1), (double) 1 / 3))
+        double r = Math.log(Math.pow((getMaxStamina() - getStamina() + 1), (double) 1 / 3))
                 / Math.log(3)
                 * config.recoveryPerTick;
+        return Math.max(0.01d, r);
     }
 
     @Unique
     public void recoverStamina(double recoveryAmount) {
-        setStamina(getStamina() + (getMaxStamina() * recoveryAmount / 100));
+        double s = (getMaxStamina() * recoveryAmount / 100);
+        setStamina(getStamina() + s);
         if (getStamina() > getMaxStamina()) {
             setStamina(getMaxStamina());
         }
