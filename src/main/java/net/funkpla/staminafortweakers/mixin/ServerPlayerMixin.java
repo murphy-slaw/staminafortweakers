@@ -31,6 +31,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
      * A small cooldown to prevent stamina from bouncing around while mining.
      */
     private static final int MINING_COOLDOWN = 10;
+    private static final double MIN_RECOVERY = 0.25d;
 
     @Shadow
     public abstract boolean isCreative();
@@ -144,7 +145,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
         double r = Math.log(Math.pow((getMaxStamina() - getStamina() + 1), (double) 1 / 3))
                 / Math.log(3)
                 * config.recoveryPerTick;
-        return Math.max(0.01d, r);
+        return Math.max(MIN_RECOVERY, r);
     }
 
     @Unique
