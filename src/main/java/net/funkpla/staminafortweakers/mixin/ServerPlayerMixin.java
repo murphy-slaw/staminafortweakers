@@ -188,6 +188,6 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
     }
 
     private boolean isMining() {
-        return ((ServerPlayerGameMode) gameMode).getIsDestroyingBlock();
+        return ((ServerPlayerGameModeMixin) gameMode).getIsDestroyingBlock();
     }
 }

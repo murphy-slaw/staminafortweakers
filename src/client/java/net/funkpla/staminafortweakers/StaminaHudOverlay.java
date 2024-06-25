@@ -2,6 +2,7 @@ package net.funkpla.staminafortweakers;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
@@ -14,7 +15,7 @@ public class StaminaHudOverlay implements HudRenderCallback {
 
 
     @Override
-        public void onHudRender(GuiGraphics context, DeltaTracker tickCounter) {
+    public void onHudRender(GuiGraphics context, DeltaTracker tickCounter) {
         int width = context.guiWidth();
         int height = context.guiHeight();
         Minecraft client = Minecraft.getInstance();

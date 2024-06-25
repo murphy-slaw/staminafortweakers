@@ -86,7 +86,7 @@ public class StaminaForTweakers implements ModInitializer {
     }
 
     public static ResourceLocation resourceLocationOf(String path) {
-        return new ResourceLocation(MOD_ID, path);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 
 }

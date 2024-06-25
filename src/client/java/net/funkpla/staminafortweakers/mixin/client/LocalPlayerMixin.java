@@ -17,10 +17,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LocalPlayer.class)
-public abstract class ClientPlayerEntityMixin extends PlayerMixin {
+public abstract class LocalPlayerMixin extends PlayerMixin {
     private final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
 
-    protected ClientPlayerEntityMixin(EntityType<? extends LivingEntity> entityType, Level world) {
+    protected LocalPlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
     }
 

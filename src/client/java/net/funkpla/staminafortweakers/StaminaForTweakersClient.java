@@ -34,7 +34,7 @@ public class StaminaForTweakersClient implements ClientModInitializer {
         ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
             public ResourceLocation getFabricId() {
-                return new ResourceLocation(StaminaForTweakers.MOD_ID, "resources");
+                return ResourceLocation.fromNamespaceAndPath(StaminaForTweakers.MOD_ID, "resources");
             }
 
             @Override
