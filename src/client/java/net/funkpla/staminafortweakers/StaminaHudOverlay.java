@@ -2,6 +2,8 @@ package net.funkpla.staminafortweakers;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.funkpla.staminafortweakers.registry.Attributes;
+import net.funkpla.staminafortweakers.registry.StatusEffects;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -23,7 +25,7 @@ public class StaminaHudOverlay implements HudRenderCallback {
 
         LocalPlayer player = Minecraft.getInstance().player;
         if (player.isCreative() || player.isSpectator()) return;
-        float scaledStamina = (float) (player.getAttributeValue(StaminaForTweakers.STAMINA) / player.getAttributeValue(StaminaForTweakers.MAX_STAMINA));
+        float scaledStamina = (float) (player.getAttributeValue(Attributes.STAMINA) / player.getAttributeValue(Attributes.MAX_STAMINA));
         float pct = scaledStamina * 100;
 
         int color = getColor(pct);
@@ -69,7 +71,7 @@ public class StaminaHudOverlay implements HudRenderCallback {
             else context.fill(x1, y2, x2, y2 - (int) (barHeight * scaledStamina), -1, color);
 
 
-            if (player.hasEffect(StaminaForTweakers.TIRELESSNESS)) {
+            if (player.hasEffect(StatusEffects.TIRELESSNESS)) {
                 context.renderOutline(x1 - 2, y1 - 2, barWidth + 4, barHeight + 4, opaque + config.staminaBarTirelessColor);
             }
 
@@ -78,13 +80,13 @@ public class StaminaHudOverlay implements HudRenderCallback {
             ResourceLocation icon;
             ResourceLocation bgIcon;
             if (player.isSprinting()) {
-                icon = StaminaForTweakers.resourceLocationOf("textures/stamina/sprint.png");
-                bgIcon = StaminaForTweakers.resourceLocationOf("textures/stamina/sprint_background.png");
+                icon = StaminaMod.locate("textures/stamina/sprint.png");
+                bgIcon = StaminaMod.locate("textures/stamina/sprint_background.png");
             } else {
-                icon = StaminaForTweakers.resourceLocationOf("textures/stamina/walk.png");
-                bgIcon = StaminaForTweakers.resourceLocationOf("textures/stamina/walk_background.png");
+                icon = StaminaMod.locate("textures/stamina/walk.png");
+                bgIcon = StaminaMod.locate("textures/stamina/walk_background.png");
             }
-            Vector2i iconDimensions = StaminaForTweakersClient.getIconSize(icon);
+            Vector2i iconDimensions = StaminaClientMod.getIconSize(icon);
 
             int iconHeight = config.icon.height;
             int imageWidth = iconDimensions.x;
@@ -117,7 +119,7 @@ public class StaminaHudOverlay implements HudRenderCallback {
 
             int cutout = (int) (iconHeight * scaledStamina);
             int remainder = iconHeight - cutout;
-            if (player.hasEffect(StaminaForTweakers.TIRELESSNESS)) {
+            if (player.hasEffect(StatusEffects.TIRELESSNESS)) {
                 color = config.staminaBarTirelessColor;
             }
 

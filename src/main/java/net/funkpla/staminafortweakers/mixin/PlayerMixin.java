@@ -3,7 +3,7 @@ package net.funkpla.staminafortweakers.mixin;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.funkpla.staminafortweakers.Climber;
 import net.funkpla.staminafortweakers.StaminaConfig;
-import net.funkpla.staminafortweakers.StaminaForTweakers;
+import net.funkpla.staminafortweakers.registry.Attributes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -27,8 +27,8 @@ public abstract class PlayerMixin extends LivingEntity implements Climber {
 
     @Inject(method = "Lnet/minecraft/world/entity/player/Player;createAttributes()Lnet/minecraft/world/entity/ai/attributes/AttributeSupplier$Builder;", require = 1, allow = 1, at = @At("RETURN"))
     private static void staminafortweakers$addPlayerAttributes(final CallbackInfoReturnable<AttributeSupplier.Builder> info) {
-        info.getReturnValue().add(StaminaForTweakers.STAMINA);
-        info.getReturnValue().add(StaminaForTweakers.MAX_STAMINA);
+        info.getReturnValue().add(Attributes.STAMINA);
+        info.getReturnValue().add(Attributes.MAX_STAMINA);
     }
 
     @Unique
@@ -64,17 +64,17 @@ public abstract class PlayerMixin extends LivingEntity implements Climber {
 
     @Unique
     public double getMaxStamina() {
-        return getAttributeBaseValue(StaminaForTweakers.MAX_STAMINA);
+        return getAttributeBaseValue(Attributes.MAX_STAMINA);
     }
 
     @Unique
     public double getStamina() {
-        return getAttributeBaseValue(StaminaForTweakers.STAMINA);
+        return getAttributeBaseValue(Attributes.STAMINA);
     }
 
     @Unique
     public void setStamina(double stamina) {
-        getAttribute(StaminaForTweakers.STAMINA).setBaseValue(stamina);
+        getAttribute(Attributes.STAMINA).setBaseValue(stamina);
     }
 
 
@@ -108,7 +108,7 @@ public abstract class PlayerMixin extends LivingEntity implements Climber {
     }
 
     public Vec3 getClimbSpeed(Vec3 original) {
-        AttributeInstance climbSpeed = getAttribute(StaminaForTweakers.CLIMB_SPEED);
+        AttributeInstance climbSpeed = getAttribute(Attributes.CLIMB_SPEED);
         if (climbSpeed == null || original.y <= 0 || (jumping && !onClimbable())) return original;
         climbSpeed.setBaseValue(original.y);
         return new Vec3(original.x, climbSpeed.getValue(), original.z);
