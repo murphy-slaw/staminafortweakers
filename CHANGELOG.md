@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] 2024-06-25
+
+A nice update to the HUD, and some tweaks.
+
+### Added
+
+- Option to display stamina in the hud as an icon (that also indicates sprint status)
+- Better control over placement of HUD element
+- Icon texture can be overridden by resource packs by overriding:
+
+ ```
+assets/staminafortweakers/textures/stamina/sprint.png
+assets/staminafortweakers/textures/stamina/sprint_background.png
+assets/staminafortweakers/textures/stamina/walk.png
+assets/staminafortweakers/textures/stamina/walk_background.png
+```
+
+### Changed
+
+- Added a small cooldown on stamina recovery while mining to keep the stamina display from "bouncing"
+- Tweaked exhaustion effects slightly - now Fatigued only inflicts Fatigue I (was previously Fatigue II)
+- Added a minimum recovery factor to the Logarithmic recovery formula to make waiting for the last bit of stamina less
+  frustrating
+- Extensively reorganized the codebase in ways that should have no effect on behavior, I hope.
+
 ## [1.1.1] 2024-06-23
 
 Well, this is embarassing.

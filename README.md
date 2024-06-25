@@ -26,10 +26,12 @@ So many knobs to tweak!
   * Fatigue (like Slowness but affects climbing and swimming)
   * Darkness when completely exhausted (optional)
   * Mining fatigue (optional)
-* Configurable stamina bar in the HUD
+* Configurable HUD Element
+  * Display as
+    * Icon (indicates stamina and sprinting status)
+    * Stamina Bar (horizontal or vertical)
   * Position
   * Colors
-  * Orientation (horizontal or vertical)
 * New Potions
   * Fatigue - brewed with a Thick Potion and a Clay Ball
   * Tirelessness - completely prevents stamina depletion, brewed with a Thick Potion and a Cocoa Bean
@@ -46,3 +48,12 @@ Even more ridiculous options! Suggestions welcome on the [issues page](https://g
 ## Acknowledgements
 ### Sounds:
 Breath_Scared_18.wav by LittleRobotSoundFactory -- https://freesound.org/s/270496/ -- License: Attribution 4.0
+
+### Graphics
+
+Walking by Zach Hainsworth
+from <a href="https://thenounproject.com/browse/icons/term/walking/" target="_blank" title="Walking Icons">Noun
+Project</a> (CC BY 3.0)
+Running by mungang kim
+from <a href="https://thenounproject.com/browse/icons/term/running/" target="_blank" title="Running Icons">Noun
+Project</a> (CC BY 3.0)
