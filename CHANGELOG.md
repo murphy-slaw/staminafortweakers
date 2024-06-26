@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] 2024-06-25
+
+Have little a bugfix, as a treat.
+
+### Fixed
+
+Fixed an error introduced when switching from Yarn to Mojang mappings, which caused the player to start sprinting
+on a single tap of the `w` key. (#15)
+
 ## [1.2.0] 2024-06-25
 
 A nice update to the HUD, and some tweaks.
