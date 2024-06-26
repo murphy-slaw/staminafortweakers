@@ -51,7 +51,7 @@ public abstract class LocalPlayerMixin extends PlayerMixin {
     }
 
     @Inject(
-            method = "canStartSprinting()Z",
+            method = "hasEnoughFoodToStartSprinting()Z",
             at = @At("HEAD"),
             cancellable = true)
     private void canSprint(CallbackInfoReturnable<Boolean> cir) {
