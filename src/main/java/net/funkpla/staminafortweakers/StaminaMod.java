@@ -4,6 +4,7 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
+import net.funkpla.staminafortweakers.packet.C2SRecievers;
 import net.funkpla.staminafortweakers.registry.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -23,6 +24,7 @@ public class StaminaMod implements ModInitializer {
         StatusEffects.register();
         SoundEvents.register();
         Potions.register();
+        C2SRecievers.registerPackets();
 
         /*
          * TOO MUCH COFFEE

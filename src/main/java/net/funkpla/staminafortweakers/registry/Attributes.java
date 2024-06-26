@@ -8,19 +8,19 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 
 public class Attributes {
-    public static Attribute STAMINA = registerAttribute(
+    public static final Attribute STAMINA = registerAttribute(
             "generic.stamina",
             100,
             0,
             1024
     );
-    public static Attribute MAX_STAMINA = registerAttribute(
+    public static final Attribute MAX_STAMINA = registerAttribute(
             "generic.max_stamina",
             100,
             0,
             1024
     );
-    public static Attribute CLIMB_SPEED = registerAttribute(
+    public static final Attribute CLIMB_SPEED = registerAttribute(
             "generic.climb_speed",
             0,
             -1,

@@ -1,6 +1,7 @@
 package net.funkpla.staminafortweakers.mixin;
 
 import net.funkpla.staminafortweakers.Climber;
+import net.funkpla.staminafortweakers.Swimmer;
 import net.funkpla.staminafortweakers.registry.Attributes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -9,13 +10,16 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin implements Climber {
+public abstract class LivingEntityMixin implements Climber, Swimmer {
+
+    public boolean swimUp;
 
     @Inject(
-            method = "Lnet/minecraft/world/entity/LivingEntity;createLivingAttributes()Lnet/minecraft/world/entity/ai/attributes/AttributeSupplier$Builder;",
+            method = "createLivingAttributes()Lnet/minecraft/world/entity/ai/attributes/AttributeSupplier$Builder;",
             require = 1, allow = 1, at = @At("RETURN")
     )
     private static void staminafortweakers$addPlayerAttributes(final CallbackInfoReturnable<AttributeSupplier.Builder> info) {
@@ -23,7 +27,7 @@ public abstract class LivingEntityMixin implements Climber {
     }
 
     @ModifyVariable(
-            method = "Lnet/minecraft/world/entity/LivingEntity;handleOnClimbable(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;",
+            method = "handleOnClimbable(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;",
             at = @At("HEAD"),
             ordinal = 0,
             argsOnly = true
@@ -34,5 +38,23 @@ public abstract class LivingEntityMixin implements Climber {
 
     public Vec3 getClimbSpeed(Vec3 original) {
         return original;
+    }
+
+    public boolean swamUp() {
+        return swimUp;
+    }
+
+    public void setSwimUp(boolean b) {
+        swimUp = b;
+    }
+
+    @Inject(method = "jumpInLiquid", at = @At("TAIL"))
+    protected void setSwimUpFlag(CallbackInfo ci) {
+        setSwimUp(true);
+    }
+
+    @Inject(method = "tick", at = @At("HEAD"))
+    protected void clearSwimUpFlag(CallbackInfo ci) {
+        setSwimUp(false);
     }
 }

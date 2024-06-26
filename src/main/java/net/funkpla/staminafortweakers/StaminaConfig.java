@@ -7,6 +7,7 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.EnumHandler.EnumDispla
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 
+@SuppressWarnings("CanBeFinal")
 @Config(name = "staminafortweakers")
 public class StaminaConfig implements ConfigData {
 
@@ -165,6 +166,7 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.Category("HUD")
     IconConfig icon = new IconConfig();
 
+    @SuppressWarnings("CanBeFinal")
     static class IconConfig {
         @Comment("Hud Icon Height")
         @ConfigEntry.BoundedDiscrete(max = 320)
@@ -180,6 +182,7 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.Category("HUD")
     StaminaBarConfig bar = new StaminaBarConfig();
 
+    @SuppressWarnings("CanBeFinal")
     static class StaminaBarConfig {
         @Comment("Stamina bar orientation")
         @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
