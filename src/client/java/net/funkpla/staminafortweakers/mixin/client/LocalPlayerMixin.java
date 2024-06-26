@@ -2,7 +2,9 @@ package net.funkpla.staminafortweakers.mixin.client;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import net.funkpla.staminafortweakers.StaminaConfig;
+import net.funkpla.staminafortweakers.Swimmer;
 import net.funkpla.staminafortweakers.mixin.PlayerMixin;
+import net.funkpla.staminafortweakers.packet.client.C2SSenders;
 import net.funkpla.staminafortweakers.registry.Attributes;
 import net.funkpla.staminafortweakers.registry.SoundEvents;
 import net.minecraft.client.player.LocalPlayer;
@@ -18,8 +20,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LocalPlayer.class)
-public abstract class LocalPlayerMixin extends PlayerMixin {
+public abstract class LocalPlayerMixin extends PlayerMixin implements Swimmer {
+    private static final int BREATH_TICKS = 40;
     private final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
+    private int breathCount = 0;
 
     protected LocalPlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
@@ -28,8 +32,8 @@ public abstract class LocalPlayerMixin extends PlayerMixin {
     @Shadow
     public abstract void playSound(SoundEvent event, float volume, float pitch);
 
-    private int breathCount = 0;
-    private static final int BREATH_TICKS = 40;
+    @Shadow
+    public abstract boolean isUnderWater();
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void doExhaustionSounds(CallbackInfo ci) {
@@ -47,10 +51,14 @@ public abstract class LocalPlayerMixin extends PlayerMixin {
 
     }
 
-    @Inject(
-            method = "hasEnoughFoodToStartSprinting()Z",
-            at = @At("HEAD"),
-            cancellable = true)
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void sendSwimPacket(CallbackInfo ci) {
+        if (swamUp()) {
+            C2SSenders.sendSwimPacket();
+        }
+    }
+
+    @Inject(method = "hasEnoughFoodToStartSprinting()Z", at = @At("HEAD"), cancellable = true)
     private void canSprint(CallbackInfoReturnable<Boolean> cir) {
         double stamina = this.getAttributeValue(Attributes.STAMINA);
         double max_stamina = this.getAttributeValue(Attributes.MAX_STAMINA);

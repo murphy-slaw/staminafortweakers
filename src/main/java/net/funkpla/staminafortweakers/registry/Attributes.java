@@ -10,19 +10,19 @@ import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import static net.funkpla.staminafortweakers.StaminaMod.MOD_ID;
 
 public class Attributes {
-    public static Holder<Attribute> STAMINA = registerAttribute(
+    public static final Holder<Attribute> STAMINA = registerAttribute(
             "generic.stamina",
             100,
             0,
             1024
     );
-    public static Holder<Attribute> MAX_STAMINA = registerAttribute(
+    public static final Holder<Attribute> MAX_STAMINA = registerAttribute(
             "generic.max_stamina",
             100,
             0,
             1024
     );
-    public static Holder<Attribute> CLIMB_SPEED = registerAttribute(
+    public static final Holder<Attribute> CLIMB_SPEED = registerAttribute(
             "generic.climb_speed",
             0,
             -1,

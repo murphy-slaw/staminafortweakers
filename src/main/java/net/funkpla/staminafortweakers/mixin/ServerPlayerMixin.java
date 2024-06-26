@@ -2,6 +2,7 @@ package net.funkpla.staminafortweakers.mixin;
 
 import net.funkpla.staminafortweakers.Climber;
 import net.funkpla.staminafortweakers.StaminaConfig;
+import net.funkpla.staminafortweakers.Swimmer;
 import net.funkpla.staminafortweakers.registry.StatusEffects;
 import net.funkpla.staminafortweakers.util.Timer;
 import net.minecraft.core.Holder;
@@ -10,6 +11,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerPlayerGameMode;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -32,34 +34,29 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Optional;
 
 @Mixin(ServerPlayer.class)
-public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
+public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, Swimmer {
 
     /**
      * A small cooldown to prevent stamina from bouncing around while mining.
      */
     private static final int MINING_COOLDOWN = 10;
     private static final double MIN_RECOVERY = 0.25d;
+    @Shadow
+    @Final
+    public ServerPlayerGameMode gameMode;
+    private Timer recoveryCooldown = new Timer(config.recoveryDelayTicks);
+    private Vec3 lastPos = new Vec3(0, 0, 0);
+    private boolean swimUp;
+
+    protected ServerPlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
+        super(entityType, world);
+    }
 
     @Shadow
     public abstract boolean isCreative();
 
     @Shadow
     public abstract boolean isSpectator();
-
-    @Shadow
-    @Final
-    public net.minecraft.server.level.ServerPlayerGameMode gameMode;
-
-    @Shadow
-    public abstract void travel(Vec3 movementInput);
-
-    protected ServerPlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
-        super(entityType, world);
-    }
-
-    private Timer recoveryCooldown = new Timer(config.recoveryDelayTicks);
-
-    private Vec3 lastPos = new Vec3(0, 0, 0);
 
     private int getTravelingLevel() {
         ResourceKey<Enchantment> providerKey = ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.parse("staminafortweakers:traveling"));
@@ -88,14 +85,22 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
         maybeDamageArmor(EquipmentSlot.LEGS);
     }
 
+    public void setSwamUp(boolean b) {
+        swimUp = b;
+    }
+
+    public boolean swamUp() {
+        return swimUp;
+    }
+
     @Inject(method = "tick", at = @At("TAIL"))
     public void updateStamina(CallbackInfo ci) {
         if (isCreative() || isSpectator()) return;
         double ySpeed = position().y() - lastPos.y();
 
         if (hasEffect(StatusEffects.TIRELESSNESS)) {
-            if (canRecover()) doRecovery();
-        } else if (isSwimming()) depleteStamina(config.depletionPerTickSwimming);
+            if (canRecover()) recover();
+        } else if (isSwimming() || swamUp()) depleteStamina(config.depletionPerTickSwimming);
         else if (isSprinting() && !isPassenger()) {
             depleteStamina(config.depletionPerTickSprinting * getTravelingModifier());
             maybeDamageLeggings();
@@ -109,10 +114,11 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
             if (recoveryCooldown.expired()) {
                 recoveryCooldown = new Timer(MINING_COOLDOWN);
             }
-        } else if (canRecover()) doRecovery();
-        doExhaustion();
+        } else if (canRecover()) recover();
+        exhaust();
         lastPos = position();
         recoveryCooldown.tickDown();
+        setSwamUp(false);
     }
 
     @Unique
@@ -120,9 +126,8 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
         addEffect(new MobEffectInstance(StatusEffects.FATIGUE, 3, amplifier, true, true));
     }
 
-
     @Unique
-    private void doExhaustion() {
+    private void exhaust() {
         double pct = getExhaustionPct();
         if (pct <= config.exhaustedPercentage) {
             if (config.exhaustionBlackout) {
@@ -141,7 +146,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber {
     }
 
     @Unique
-    private void doRecovery() {
+    private void recover() {
         if (walkDist - walkDistO <= 0.01) {
             recoverStamina(getBaseRecovery() * config.recoveryRestBonusMultiplier);
         } else if (config.recoverWhileWalking ||

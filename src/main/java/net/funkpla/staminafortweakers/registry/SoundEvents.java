@@ -8,7 +8,7 @@ import net.minecraft.sounds.SoundEvent;
 
 public class SoundEvents {
     public static final ResourceLocation BREATH_SCARED = StaminaMod.locate("breath_scared");
-    public static net.minecraft.sounds.SoundEvent ENTITY_PLAYER_PANT = registerSoundEvent(
+    public static final net.minecraft.sounds.SoundEvent ENTITY_PLAYER_PANT = registerSoundEvent(
             BREATH_SCARED,
             net.minecraft.sounds.SoundEvent.createVariableRangeEvent(BREATH_SCARED));
 
