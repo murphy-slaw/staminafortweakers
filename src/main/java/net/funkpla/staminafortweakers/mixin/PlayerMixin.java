@@ -8,7 +8,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.level.Level;
@@ -38,13 +37,9 @@ public abstract class PlayerMixin extends LivingEntity implements Climber {
     @Unique
     private boolean jumped;
 
-
     protected PlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
     }
-
-    @Shadow
-    public abstract Abilities getAbilities();
 
     @Shadow
     public abstract void jumpFromGround();
@@ -56,8 +51,22 @@ public abstract class PlayerMixin extends LivingEntity implements Climber {
     public abstract FoodData getFoodData();
 
     @Unique
-    public double getExhaustionPct() {
-        return getStamina() / getMaxStamina() * 100;
+    public int getExhaustionPct() {
+         return (int)(getStamina() / getMaxStamina() * 100);
+    }
+
+    @Unique
+    public boolean isExhausted(){
+        return getExhaustionPct() <= config.exhaustedPercentage;
+    }
+    @Unique
+    public boolean isWinded(){
+        return getExhaustionPct() <= config.windedPercentage;
+    }
+
+    @Unique
+    public boolean isFatigued(){
+        return getExhaustionPct() <= config.fatiguedPercentage;
     }
 
     @Unique
@@ -101,10 +110,12 @@ public abstract class PlayerMixin extends LivingEntity implements Climber {
     }
 
 
+    @Unique
     protected boolean hasJumped() {
         return jumped;
     }
 
+    @Unique
     public Vec3 getClimbSpeed(Vec3 original) {
         AttributeInstance climbSpeed = getAttribute(Attributes.CLIMB_SPEED);
         if (climbSpeed == null || original.y <= 0 || (jumping && !onClimbable())) return original;
