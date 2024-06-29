@@ -39,14 +39,21 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
     /**
      * A small cooldown to prevent stamina from bouncing around while mining.
      */
+    @Unique
     private static final int MINING_COOLDOWN = 10;
+    @Unique
     private static final double MIN_RECOVERY = 0.25d;
+
+    @Unique
+    private Timer recoveryCooldown = new Timer(config.recoveryDelayTicks);
+    @Unique
+    private Vec3 lastPos = new Vec3(0, 0, 0);
+    @Unique
+    private boolean swimUp;
+
     @Shadow
     @Final
     public ServerPlayerGameMode gameMode;
-    private Timer recoveryCooldown = new Timer(config.recoveryDelayTicks);
-    private Vec3 lastPos = new Vec3(0, 0, 0);
-    private boolean swimUp;
 
     protected ServerPlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
@@ -58,6 +65,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
     @Shadow
     public abstract boolean isSpectator();
 
+    @Unique
     private int getTravelingLevel() {
         ResourceKey<Enchantment> providerKey = ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.parse("staminafortweakers:traveling"));
         RegistryAccess registryManager = level().registryAccess();
@@ -65,30 +73,35 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
         return traveling.map(enchantmentReference -> EnchantmentHelper.getEnchantmentLevel(enchantmentReference, this)).orElse(0);
     }
 
+    @Unique
     private boolean hasTraveling() {
         return getTravelingLevel() > 0;
     }
 
+    @Unique
     private float getTravelingModifier() {
         return 1.0F - (getTravelingLevel() / 3.0F);
     }
 
+    @Unique
     private void maybeDamageArmor(EquipmentSlot slot) {
         if (hasTraveling() && this.getRandom().nextFloat() < 0.04f) {
             ItemStack itemStack = this.getItemBySlot(slot);
-            Item item = itemStack.getItem();
             itemStack.hurtAndBreak(1, this, slot);
         }
     }
 
+    @Unique
     private void maybeDamageLeggings() {
         maybeDamageArmor(EquipmentSlot.LEGS);
     }
 
+    @Unique
     public void setSwamUp(boolean b) {
         swimUp = b;
     }
 
+    @Unique
     public boolean swamUp() {
         return swimUp;
     }
@@ -128,8 +141,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
 
     @Unique
     private void exhaust() {
-        double pct = getExhaustionPct();
-        if (pct <= config.exhaustedPercentage) {
+        if (isExhausted()){
             if (config.exhaustionBlackout) {
                 addEffect(new MobEffectInstance(MobEffects.DARKNESS, 60, 0, true, false));
             }
@@ -141,8 +153,8 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
             if (recoveryCooldown.expired()) {
                 recoveryCooldown = new Timer(config.recoveryDelayTicks);
             }
-        } else if (pct <= config.windedPercentage) makeSlow(2);
-        else if (pct <= config.fatiguedPercentage) makeSlow(0);
+        } else if (isWinded()) makeSlow(2);
+        else if (isFatigued()) makeSlow(0);
     }
 
     @Unique
@@ -155,12 +167,14 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
         }
     }
 
+    @Unique
     private double getBaseRecovery() {
         if (config.formula == StaminaConfig.Formula.LOGARITHMIC) return calcLogRecovery();
         // Formula.LINEAR
         return config.recoveryPerTick;
     }
 
+    @Unique
     private double calcLogRecovery() {
         double r = Math.log(Math.pow((getMaxStamina() - getStamina() + 1), (double) 1 / 3))
                 / Math.log(3)
@@ -169,7 +183,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
     }
 
     @Unique
-    public void recoverStamina(double recoveryAmount) {
+    private void recoverStamina(double recoveryAmount) {
         double s = (getMaxStamina() * recoveryAmount / 100);
         setStamina(getStamina() + s);
         if (getStamina() > getMaxStamina()) {
@@ -178,11 +192,12 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
     }
 
     @Unique
-    public void depleteStamina(float depletionAmount) {
+    private void depleteStamina(float depletionAmount) {
         setStamina(getStamina() - depletionAmount);
         if (getStamina() < 0) setStamina(0);
     }
 
+    @Unique
     private boolean isStandingStill() {
         return ((walkDist - walkDistO) <= 0.1);
     }
@@ -202,6 +217,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
         return getFoodData().getFoodLevel() >= 6;
     }
 
+    @Unique
     private boolean isMining() {
         return ((ServerPlayerGameModeMixin) gameMode).getIsDestroyingBlock();
     }
