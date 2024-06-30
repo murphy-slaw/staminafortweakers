@@ -64,7 +64,7 @@ public class StaminaConfig implements ConfigData {
     @Comment("Percentage of total stamina making the player fatigued")
     @ConfigEntry.BoundedDiscrete(max = 100)
     @ConfigEntry.Category("Exhaustion")
-    public int fatiguedPercentage = 50;
+    public int fatiguedPercentage = 0;
 
     @ConfigEntry.Category("Exhaustion")
     @Comment("Stamina points depleted per tick while sprinting.")
@@ -72,7 +72,7 @@ public class StaminaConfig implements ConfigData {
 
     @ConfigEntry.Category("Exhaustion")
     @Comment("Stamina points depleted per tick while swimming.")
-    public float depletionPerTickSwimming = 1F;
+    public float depletionPerTickSwimming = 0.5F;
 
     @ConfigEntry.Category("Exhaustion")
     @Comment("Stamina points depleted per tick while climbing.")
@@ -100,7 +100,7 @@ public class StaminaConfig implements ConfigData {
 
     @Comment("% of max stamina recovered per tick.")
     @ConfigEntry.Category("Recovery")
-    public float recoveryPerTick = 0.25F;
+    public float recoveryPerTick = 0.5F;
 
     @Comment("Bonus recovery multiplier for not moving.")
     @ConfigEntry.Category("Recovery")
@@ -133,12 +133,12 @@ public class StaminaConfig implements ConfigData {
     @Comment("Delay in ticks before starting recovery from exhaustion")
     @ConfigEntry.BoundedDiscrete(max = 600)
     @ConfigEntry.Category("Recovery")
-    public int recoveryDelayTicks = 0;
+    public int recoveryDelayTicks = 40;
 
     @Comment("Which formula to use for recovery")
     @ConfigEntry.Category("Recovery")
     @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
-    public Formula formula = Formula.LINEAR;
+    public Formula formula = Formula.LOGARITHMIC;
 
     /*
      * Stamina bar configuration
