@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.2] 2024-06-30
+
+### Fixed
+
+- Swimming upward (jumping in water) now consumes stamina.
+- Cleaned up a bunch of ugly code.
+
+### Changed
+
+- Changed some default settings for a better out-of-the-box experience.
+  - Doubled default recovery.
+  - Reduced exhaustion cost for swimming by half.
+  - Disabled the "fatigued" exhaustion tier - players are unaffected by fatigue until they become "winded" at 25%
+  - Enabled a two-second recovery cooldown on exhaustion
+  - Made the logarithmic recovery function the default.
+
 ## [1.2.1] 2024-06-25
 
 Have little a bugfix, as a treat.
