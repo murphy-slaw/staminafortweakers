@@ -130,7 +130,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
 
     @Unique
     private void exhaust() {
-        if (isExhausted()){
+        if (isExhausted()) {
             if (config.exhaustionBlackout) {
                 addEffect(new MobEffectInstance(MobEffects.DARKNESS, 60, 0, true, false));
             }
