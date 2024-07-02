@@ -24,7 +24,7 @@ public class StaminaHudOverlay implements HudRenderCallback {
         double scale = client.getWindow().getGuiScale();
 
         LocalPlayer player = Minecraft.getInstance().player;
-        if (player.isCreative() || player.isSpectator()) return;
+        if (client.options.hideGui || player.isCreative() || player.isSpectator()) return;
         float scaledStamina = (float) (player.getAttributeValue(Attributes.STAMINA) / player.getAttributeValue(Attributes.MAX_STAMINA));
         float pct = scaledStamina * 100;
 
