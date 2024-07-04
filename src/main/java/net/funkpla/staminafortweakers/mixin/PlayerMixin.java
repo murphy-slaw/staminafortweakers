@@ -49,22 +49,26 @@ public abstract class PlayerMixin extends LivingEntity implements Climber {
     @Shadow
     public abstract FoodData getFoodData();
 
+    @Shadow
+    protected abstract int getFireImmuneTicks();
+
     @Unique
     public int getExhaustionPct() {
-         return (int)(getStamina() / getMaxStamina() * 100);
+        return (int) (getStamina() / getMaxStamina() * 100);
     }
 
     @Unique
-    public boolean isExhausted(){
+    public boolean isExhausted() {
         return getExhaustionPct() <= config.exhaustedPercentage;
     }
+
     @Unique
-    public boolean isWinded(){
+    public boolean isWinded() {
         return getExhaustionPct() <= config.windedPercentage;
     }
 
     @Unique
-    public boolean isFatigued(){
+    public boolean isFatigued() {
         return getExhaustionPct() <= config.fatiguedPercentage;
     }
 
