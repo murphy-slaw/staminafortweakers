@@ -46,6 +46,10 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.Category("Exhaustion")
     public float depletionPerAttack = 1F;
 
+    @Comment("Stamina points depleted per block broken")
+    @ConfigEntry.Category("Exhaustion")
+    public float depletionPerBlockBroken = 4F;
+
     @Comment("Exhaustion slows mining")
     @ConfigEntry.Category("Exhaustion")
     public boolean exhaustionSlowsMining = false;

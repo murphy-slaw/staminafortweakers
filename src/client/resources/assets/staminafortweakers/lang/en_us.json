@@ -8,6 +8,7 @@
   "text.autoconfig.staminafortweakers.option.depletionPerTickClimbing": "Stamina cost per tick of climbing",
   "text.autoconfig.staminafortweakers.option.depletionPerJump": "Stamina cost per jump",
   "text.autoconfig.staminafortweakers.option.depletionPerAttack": "Stamina cost per tick of mining",
+  "text.autoconfig.staminafortweakers.option.depletionPerBlockBroken": "Stamina cost per block broken",
   "text.autoconfig.staminafortweakers.option.canJumpWhileExhausted": "Can jump while exhausted",
   "text.autoconfig.staminafortweakers.option.exhaustionBlackout": "Exhaustion causes Darkness",
   "text.autoconfig.staminafortweakers.option.exhaustionSlowsMining": "Exhaustion slows mining",
@@ -47,5 +48,7 @@
   "text.autoconfig.staminafortweakers.option.staminaBarNearlyExhaustedColor": "Nearly exhausted color",
   "text.autoconfig.staminafortweakers.option.staminaBarTirelessColor": "Tirelessness color",
   "subtitles.staminafortweakers.breath_scared": "Exhausted panting",
-  "effect.staminafortweakers.fatigue": "Fatigue"
+  "effect.staminafortweakers.fatigue": "Fatigue",
+  "enchantment.staminafortweakers.untiring": "Untiring",
+  "enchantment.staminafortweakers.traveling": "Traveling"
 }

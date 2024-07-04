@@ -1,6 +1,7 @@
 package net.funkpla.staminafortweakers.mixin;
 
 import net.funkpla.staminafortweakers.Climber;
+import net.funkpla.staminafortweakers.Miner;
 import net.funkpla.staminafortweakers.StaminaConfig;
 import net.funkpla.staminafortweakers.Swimmer;
 import net.funkpla.staminafortweakers.registry.Enchantments;
@@ -26,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayer.class)
-public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, Swimmer {
+public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, Swimmer, Miner {
 
     /**
      * A small cooldown to prevent stamina from bouncing around while mining.
@@ -86,6 +87,31 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
     }
 
     @Unique
+    private int getUntiringLevel() {
+        return EnchantmentHelper.getEnchantmentLevel(Enchantments.UNTIRING_ENCHANTMENT, this);
+    }
+
+    @Unique
+    private float getUntiringModifier() {
+        return 1.0F - (getUntiringLevel() / 3.0F);
+    }
+
+    @Unique
+    private int getEfficiencyLevel() {
+        return EnchantmentHelper.getEnchantmentLevel(net.minecraft.world.item.enchantment.Enchantments.BLOCK_EFFICIENCY, this);
+    }
+
+    @Unique
+    private float getEfficiencyModifier() {
+        return 1.0F + (getEfficiencyLevel() * 0.1F);
+    }
+
+    @Unique
+    private float getMiningModifier() {
+        return getEfficiencyModifier() * getUntiringModifier();
+    }
+
+    @Unique
     public void setSwamUp(boolean b) {
         swimUp = b;
     }
@@ -112,7 +138,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
         } else if (config.depletionPerTickClimbing > 0 && onClimbable() && ySpeed > 0 && !onGround() && !isSuppressingSlidingDownLadder())
             depleteStamina(config.depletionPerTickClimbing);
         else if (config.depletionPerAttack > 0 && isMining()) {
-            depleteStamina(config.depletionPerAttack);
+            depleteStamina(config.depletionPerAttack * getMiningModifier());
             if (recoveryCooldown.expired()) {
                 recoveryCooldown = new Timer(MINING_COOLDOWN);
             }
@@ -209,5 +235,9 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
     @Unique
     private boolean isMining() {
         return ((ServerPlayerGameModeMixin) gameMode).getIsDestroyingBlock();
+    }
+
+    public void depleteStaminaForBlockBreak() {
+        depleteStamina(config.depletionPerBlockBroken * getMiningModifier());
     }
 }
