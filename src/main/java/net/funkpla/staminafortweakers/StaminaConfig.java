@@ -141,7 +141,12 @@ public class StaminaConfig implements ConfigData {
     @Comment("Delay in ticks before starting recovery from exhaustion")
     @ConfigEntry.BoundedDiscrete(max = 600)
     @ConfigEntry.Category("Recovery")
-    public int recoveryDelayTicks = 40;
+    public int recoveryExhaustDelayTicks = 40;
+
+    @Comment("Delay in ticks before starting recovery after depletion")
+    @ConfigEntry.BoundedDiscrete(max = 600)
+    @ConfigEntry.Category("Recovery")
+    public int recoveryDelayTicks = 0;
 
     @Comment("Which formula to use for recovery")
     @ConfigEntry.Category("Recovery")

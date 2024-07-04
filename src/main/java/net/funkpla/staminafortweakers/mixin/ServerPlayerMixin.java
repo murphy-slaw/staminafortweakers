@@ -38,11 +38,13 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
     private static final double MIN_RECOVERY = 0.25d;
 
     @Unique
-    private Timer recoveryCooldown = new Timer(config.recoveryDelayTicks);
+    private Timer recoveryCooldown = new Timer(config.recoveryExhaustDelayTicks);
     @Unique
     private Vec3 lastPos = new Vec3(0, 0, 0);
     @Unique
     private boolean swimUp;
+    @Unique
+    private boolean depleted;
 
     @Shadow
     @Final
@@ -128,6 +130,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
     public void updateStamina(CallbackInfo ci) {
         if (isCreative() || isSpectator()) return;
         double ySpeed = position().y() - lastPos.y();
+        depleted = false;
 
         if (hasEffect(StatusEffects.TIRELESSNESS)) {
             if (canRecover()) recover();
@@ -145,7 +148,11 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
             if (recoveryCooldown.expired()) {
                 recoveryCooldown = new Timer(MINING_COOLDOWN);
             }
-        } else if (canRecover()) recover();
+        }
+        if (depleted && config.recoveryDelayTicks > 0 && recoveryCooldown.expired()) {
+            recoveryCooldown = new Timer(config.recoveryDelayTicks);
+        }
+        if (canRecover()) recover();
         exhaust();
         lastPos = position();
         recoveryCooldown.tickDown();
@@ -169,7 +176,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
             makeSlow(4);
             setSprinting(false);
             if (recoveryCooldown.expired()) {
-                recoveryCooldown = new Timer(config.recoveryDelayTicks);
+                recoveryCooldown = new Timer(config.recoveryExhaustDelayTicks);
             }
         } else if (isWinded()) makeSlow(2);
         else if (isFatigued()) makeSlow(0);
@@ -213,6 +220,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
     private void depleteStamina(float depletionAmount) {
         setStamina(getStamina() - depletionAmount);
         if (getStamina() < 0) setStamina(0);
+        depleted = true;
     }
 
     @Unique
@@ -222,8 +230,9 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
 
     @Unique
     private boolean canRecover() {
-        return recoveryCooldown.expired() &&
-                (config.recoverWhenHungry || isNotHungry())
+        return !depleted
+                && recoveryCooldown.expired()
+                && (config.recoverWhenHungry || isNotHungry())
                 && (config.recoverWhileWalking || isStandingStill())
                 && (config.recoverWhileAirborne || onGround())
                 && (config.recoverUnderwater || !isUnderWater())
