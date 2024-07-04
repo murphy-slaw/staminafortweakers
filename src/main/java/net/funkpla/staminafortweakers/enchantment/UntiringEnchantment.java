@@ -6,7 +6,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class UntiringEnchantment extends Enchantment {
     public UntiringEnchantment() {
-        super(Rarity.RARE, EnchantmentCategory.DIGGER, new EquipmentSlot[]{EquipmentSlot.MAINHAND});
+        super(Rarity.UNCOMMON, EnchantmentCategory.DIGGER, new EquipmentSlot[]{EquipmentSlot.MAINHAND});
     }
 
     @Override
