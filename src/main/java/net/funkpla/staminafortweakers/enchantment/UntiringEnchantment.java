@@ -16,7 +16,7 @@ public class UntiringEnchantment extends Enchantment {
 
     @Override
     public int getMinCost(int level) {
-        return 15 + (level - 1) * 9;
+        return 5 + (level - 1) * 8;
     }
 
     @Override
