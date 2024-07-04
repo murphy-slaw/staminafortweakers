@@ -42,18 +42,6 @@ public class StaminaConfig implements ConfigData {
      * Exhaustion rules
      */
 
-    @Comment("Stamina points depleted per attack")
-    @ConfigEntry.Category("Exhaustion")
-    public float depletionPerAttack = 1F;
-
-    @Comment("Stamina points depleted per block broken")
-    @ConfigEntry.Category("Exhaustion")
-    public float depletionPerBlockBroken = 4F;
-
-    @Comment("Exhaustion slows mining")
-    @ConfigEntry.Category("Exhaustion")
-    public boolean exhaustionSlowsMining = false;
-
     @Comment("Percentage of total stamina triggering exhaustion")
     @ConfigEntry.BoundedDiscrete(max = 100)
     @ConfigEntry.Category("Exhaustion")
@@ -86,6 +74,18 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.Category("Exhaustion")
     public float depletionPerJump = 4.0F;
 
+    @Comment("Stamina points depleted per attack")
+    @ConfigEntry.Category("Exhaustion")
+    public float depletionPerAttack = 1F;
+
+    @Comment("Stamina points depleted per block broken")
+    @ConfigEntry.Category("Exhaustion")
+    public float depletionPerBlockBroken = 4F;
+
+    @Comment("Exhaustion slows mining")
+    @ConfigEntry.Category("Exhaustion")
+    public boolean exhaustionSlowsMining = false;
+
     @Comment("Can jump while exhausted")
     @ConfigEntry.Category("Exhaustion")
     public boolean canJumpWhileExhausted = true;
@@ -97,6 +97,10 @@ public class StaminaConfig implements ConfigData {
     @Comment("Exhaustion sounds")
     @ConfigEntry.Category("Exhaustion")
     public boolean exhaustionSounds = true;
+
+    @Comment("Efficiency increases exhaustion")
+    @ConfigEntry.Category("Exhaustion")
+    public boolean efficiencyExhausts = true;
 
     /*
      * Recovery rules

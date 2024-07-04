@@ -12,6 +12,7 @@
   "text.autoconfig.staminafortweakers.option.canJumpWhileExhausted": "Can jump while exhausted",
   "text.autoconfig.staminafortweakers.option.exhaustionBlackout": "Exhaustion causes Darkness",
   "text.autoconfig.staminafortweakers.option.exhaustionSlowsMining": "Exhaustion slows mining",
+  "text.autoconfig.staminafortweakers.option.efficiencyExhausts": "Efficiency increases mining exhaustion",
   "text.autoconfig.staminafortweakers.option.exhaustionSounds": "Play sounds when winded",
   "text.autoconfig.staminafortweakers.option.recoveryPerTick": "% of max stamina recovered per tick of rest",
   "text.autoconfig.staminafortweakers.option.recoverWhileWalking": "Recover while walking",

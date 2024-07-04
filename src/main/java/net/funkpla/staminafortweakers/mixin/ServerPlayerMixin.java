@@ -103,7 +103,10 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
 
     @Unique
     private float getEfficiencyModifier() {
-        return 1.0F + (getEfficiencyLevel() * 0.1F);
+        if (config.efficiencyExhausts) {
+            return 1.0F + (getEfficiencyLevel() * 0.1F);
+        }
+        return 1.0F;
     }
 
     @Unique
