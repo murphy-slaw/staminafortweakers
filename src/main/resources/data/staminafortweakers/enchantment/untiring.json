@@ -3,16 +3,16 @@
     "translate": "enchantment.staminafortweakers.untiring"
   },
   "supported_items": "#minecraft:enchantable/mining",
-  "weight": 10,
+  "weight": 5,
   "max_level": 3,
-  "anvil_cost": 4,
+  "anvil_cost": 2,
   "max_cost": {
-    "base": 65,
-    "per_level_above_first": 9
+    "base": 55,
+    "per_level_above_first": 8
   },
   "min_cost": {
-    "base": 15,
-    "per_level_above_first": 9
+    "base": 5,
+    "per_level_above_first": 8
   },
   "slots": [
     "mainhand"
