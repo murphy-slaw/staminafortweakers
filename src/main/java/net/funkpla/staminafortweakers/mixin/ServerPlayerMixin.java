@@ -4,7 +4,6 @@ import net.funkpla.staminafortweakers.Climber;
 import net.funkpla.staminafortweakers.Miner;
 import net.funkpla.staminafortweakers.StaminaConfig;
 import net.funkpla.staminafortweakers.Swimmer;
-import net.funkpla.staminafortweakers.registry.Enchantments;
 import net.funkpla.staminafortweakers.registry.StatusEffects;
 import net.funkpla.staminafortweakers.util.Timer;
 import net.minecraft.core.Holder;
@@ -67,11 +66,16 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
     public abstract boolean isSpectator();
 
     @Unique
-    private int getTravelingLevel() {
-        ResourceKey<Enchantment> providerKey = ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.parse("staminafortweakers:traveling"));
+    private int getEnchantmentLevel(String name) {
+        ResourceKey<Enchantment> providerKey = ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.parse(name));
         RegistryAccess registryManager = level().registryAccess();
-        Optional<Holder.Reference<Enchantment>> traveling = registryManager.registryOrThrow(Registries.ENCHANTMENT).getHolder(providerKey);
-        return traveling.map(enchantmentReference -> EnchantmentHelper.getEnchantmentLevel(enchantmentReference, this)).orElse(0);
+        Optional<Holder.Reference<Enchantment>> enchantment = registryManager.registryOrThrow(Registries.ENCHANTMENT).getHolder(providerKey);
+        return enchantment.map(enchantmentReference -> EnchantmentHelper.getEnchantmentLevel(enchantmentReference, this)).orElse(0);
+    }
+
+    @Unique
+    private int getTravelingLevel() {
+        return getEnchantmentLevel("staminafortweakers:traveling");
     }
 
     @Unique
@@ -99,7 +103,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
 
     @Unique
     private int getUntiringLevel() {
-        return EnchantmentHelper.getEnchantmentLevel(Enchantments.UNTIRING_ENCHANTMENT, this);
+        return getEnchantmentLevel("staminafortweakers:untiring");
     }
 
     @Unique
@@ -109,7 +113,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
 
     @Unique
     private int getEfficiencyLevel() {
-        return EnchantmentHelper.getEnchantmentLevel(net.minecraft.world.item.enchantment.Enchantments.BLOCK_EFFICIENCY, this);
+        return getEnchantmentLevel("minecraft:efficiency");
     }
 
     @Unique
