@@ -122,7 +122,7 @@ publishMods {
 		projectSlug = "stamina-for-tweakers" // Required for discord webhook
 		accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
 		minecraftVersions.add(project.minecraft_version)
-		javaVersions.add(JavaVersion.VERSION_17)
+		javaVersions.add(JavaVersion.VERSION_21)
 		clientRequired = true
 		serverRequired = true
 		requires("fabric-api")
