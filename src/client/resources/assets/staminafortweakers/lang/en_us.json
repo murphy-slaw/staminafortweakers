@@ -51,6 +51,7 @@
   "text.autoconfig.staminafortweakers.option.staminaBarTirelessColor": "Tirelessness color",
   "subtitles.staminafortweakers.breath_scared": "Exhausted panting",
   "effect.staminafortweakers.fatigue": "Fatigue",
+  "effect.staminafortweakers.tirelessness": "Tirelessness",
   "enchantment.staminafortweakers.untiring": "Untiring",
   "enchantment.staminafortweakers.traveling": "Traveling"
 }
