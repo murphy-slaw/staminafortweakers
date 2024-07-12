@@ -120,18 +120,16 @@ changelog {
 	lineSeparator = "\n"
 }
 
-publishMods.changelog =
-		changelog.renderItem(changelog
-				.getLatest()
-				.withHeader(false)
-				.withEmptySections(false),
-				org.jetbrains.changelog.Changelog.OutputType.MARKDOWN
-		)
-
 publishMods {
 	file = remapJar.archiveFile
 	type = STABLE
 	modLoaders.add("fabric")
+	changelog = project.changelog.renderItem(project.changelog
+			.getLatest()
+			.withHeader(false)
+			.withEmptySections(false),
+			org.jetbrains.changelog.Changelog.OutputType.MARKDOWN
+	)
 
 	curseforge {
 		projectId = "1040808"
