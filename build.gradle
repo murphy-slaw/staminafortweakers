@@ -113,6 +113,13 @@ jar {
 	}
 }
 
+changelog {
+	version = project.version
+	path = file("CHANGELOG.md").canonicalPath
+	groups = ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]
+	lineSeparator = "\n"
+}
+
 publishMods.changelog =
 		changelog.renderItem(changelog
 				.getLatest()
