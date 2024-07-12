@@ -1,9 +1,11 @@
 plugins {
 	id 'fabric-loom' version '1.6-SNAPSHOT'
 	id 'maven-publish'
-	id "com.modrinth.minotaur" version "2.+"
+	id 'org.jetbrains.changelog' version '2.2.1'
 	id "me.modmuss50.mod-publish-plugin" version "0.5.2"
 }
+apply plugin: 'org.jetbrains.changelog'
+
 
 version = "${project.mod_version}+${minecraft_version}"
 group = project.maven_group
@@ -112,11 +114,18 @@ jar {
 	}
 }
 
+publishMods.changelog =
+		changelog.renderItem(changelog
+				.getLatest()
+				.withHeader(false)
+				.withEmptySections(false),
+				org.jetbrains.changelog.Changelog.OutputType.MARKDOWN
+		)
+
 publishMods {
 	file = remapJar.archiveFile
 	type = STABLE
 	modLoaders.add("fabric")
-	changelog = ""
 
 	curseforge {
 		projectId = "1040808"
