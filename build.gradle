@@ -2,6 +2,7 @@ plugins {
 	id 'fabric-loom' version '1.6-SNAPSHOT'
 	id 'maven-publish'
 	id "com.modrinth.minotaur" version "2.+"
+	id "me.modmuss50.mod-publish-plugin" version "0.5.2"
 }
 
 version = "${project.mod_version}+${minecraft_version}"
@@ -110,6 +111,36 @@ jar {
 	}
 }
 
+publishMods {
+	file = remapJar.archiveFile
+	type = STABLE
+	modLoaders.add("fabric")
+	changelog = ""
+
+	curseforge {
+		projectId = "1040808"
+		projectSlug = "stamina-for-tweakers" // Required for discord webhook
+		accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+		minecraftVersions.add(project.minecraft_version)
+		javaVersions.add(JavaVersion.VERSION_17)
+		clientRequired = true
+		serverRequired = true
+		requires("fabric-api")
+		requires("cloth-config")
+		optional("modmenu")
+	}
+
+	modrinth {
+		projectId = "AejtfAlC"
+		accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+		minecraftVersions.add(project.minecraft_version)
+		requires("fabric-api")
+		requires("cloth-config")
+		requires("cardinal-components-api")
+		optional("modmenu")
+	}
+}
+
 // configure the maven publication
 publishing {
 	publications {
@@ -118,23 +149,6 @@ publishing {
 			from components.java
 		}
 	}
-	modrinth {
-		token = System.getenv("MODRINTH_TOKEN") // Remember to have the MODRINTH_TOKEN environment variable set or else this will fail - just make sure it stays private!
-		projectId = "stamina-for-tweakers" // This can be the project ID or the slug. Either will work!
-		versionType = "release" // This is the default -- can also be `beta` or `alpha`
-		uploadFile = remapJar // With Loom, this MUST be set to `remapJar` instead of `jar`!
-		gameVersions = ["${project.minecraft_version}"] // Must be an array, even with only one version
-		dependencies { // A special DSL for creating dependencies
-			// scope.type
-			// The scope can be `required`, `optional`, `incompatible`, or `embedded`
-			// The type can either be `project` or `version`
-			//incompatible.project "tectonic"
-			required.project "fabric-api"
-			required.project "cloth-config"
-			optional.project "modmenu"
-		}
-	}
-
 	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
 	repositories {
 		// Add repositories to publish to here.
