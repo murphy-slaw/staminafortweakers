@@ -1,11 +1,11 @@
+import org.jetbrains.changelog.Changelog
+
 plugins {
 	id 'fabric-loom' version '1.6-SNAPSHOT'
 	id 'maven-publish'
 	id 'org.jetbrains.changelog' version '2.2.1'
 	id "me.modmuss50.mod-publish-plugin" version "0.5.2"
 }
-apply plugin: 'org.jetbrains.changelog'
-
 
 version = "${project.mod_version}+${minecraft_version}"
 group = project.maven_group
@@ -129,7 +129,7 @@ publishMods {
 			.getLatest()
 			.withHeader(false)
 			.withEmptySections(false),
-			org.jetbrains.changelog.Changelog.OutputType.MARKDOWN
+			Changelog.OutputType.MARKDOWN
 	)
 
 	curseforge {
