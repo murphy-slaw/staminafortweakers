@@ -11,8 +11,10 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 
 public class Potions {
-    public static final Potion FATIGUE_POTION = registerPotion(StaminaMod.locate("fatigue_potion"), new FatiguePotion());
-    public static final Potion TIRELESSNESS_POTION = registerPotion(StaminaMod.locate("tirelessness_potion"), new TirelessnessPotion());
+    public static final Potion FATIGUE_POTION = registerPotion(StaminaMod.locate("fatigue_potion"), new FatiguePotion(3600, 2));
+    public static final Potion LONG_FATIGUE_POTION = registerPotion(StaminaMod.locate("long_fatigue_potion"), new FatiguePotion(9600, 2));
+    public static final Potion TIRELESSNESS_POTION = registerPotion(StaminaMod.locate("tirelessness_potion"), new TirelessnessPotion(3600));
+    public static final Potion LONG_TIRELESSNESS_POTION = registerPotion(StaminaMod.locate("long_tirelessness_potion"), new TirelessnessPotion(9600));
 
     private static Potion registerPotion(ResourceLocation id, Potion potion) {
         return Registry.register(BuiltInRegistries.POTION, id, potion);
@@ -20,7 +22,9 @@ public class Potions {
 
     private static void registerPotionRecipes() {
         PotionBrewing.addMix(net.minecraft.world.item.alchemy.Potions.THICK, Items.CLAY_BALL, FATIGUE_POTION);
+        PotionBrewing.addMix(FATIGUE_POTION, Items.REDSTONE, LONG_FATIGUE_POTION);
         PotionBrewing.addMix(net.minecraft.world.item.alchemy.Potions.THICK, Items.COCOA_BEANS, TIRELESSNESS_POTION);
+        PotionBrewing.addMix(TIRELESSNESS_POTION, Items.REDSTONE, LONG_TIRELESSNESS_POTION);
     }
 
     public static void register() {
