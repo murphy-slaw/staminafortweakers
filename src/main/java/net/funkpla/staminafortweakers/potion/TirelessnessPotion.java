@@ -5,7 +5,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.alchemy.Potion;
 
 public class TirelessnessPotion extends Potion {
-    public TirelessnessPotion() {
-        super(new MobEffectInstance(StatusEffects.TIRELESSNESS, 3600, 0));
+    public TirelessnessPotion(int duration) {
+        super(new MobEffectInstance(StatusEffects.TIRELESSNESS, duration, 0));
     }
+
 }
