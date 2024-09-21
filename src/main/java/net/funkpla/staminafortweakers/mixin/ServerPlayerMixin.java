@@ -141,6 +141,12 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
         return swimUp;
     }
 
+    @Unique
+    public boolean isWading() {
+        Vec3 delta = position().subtract(lastPos);
+        return isInWater() && (delta.x != 0.0f || delta.z != 0.0f);
+    }
+
     @Inject(method = "tick", at = @At("TAIL"))
     public void updateStamina(CallbackInfo ci) {
         if (isCreative() || isSpectator()) return;
@@ -149,7 +155,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
 
         if (hasEffect(StatusEffects.TIRELESSNESS)) {
             if (canRecover()) recover();
-        } else if (isSwimming() || swamUp()) depleteStamina(config.depletionPerTickSwimming);
+        } else if (isSwimming() || swamUp() || isWading()) depleteStamina(config.depletionPerTickSwimming);
         else if (isSprinting() && !isPassenger()) {
             depleteStamina(config.depletionPerTickSprinting * getTravelingModifier());
             maybeDamageLeggings();
