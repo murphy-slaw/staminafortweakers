@@ -31,6 +31,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+
 import java.util.Optional;
 
 @Mixin(ServerPlayer.class)
@@ -81,6 +82,11 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
     }
 
     @Unique
+    private int getDepthStriderLevel() {
+        return getEnchantmentLevel("minecraft:depth_strider");
+    }
+
+    @Unique
     private boolean hasTraveling() {
         return getTravelingLevel() > 0;
     }
@@ -88,6 +94,11 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
     @Unique
     private float getTravelingModifier() {
         return 1.0F - (getTravelingLevel() / 3.0F);
+    }
+
+    @Unique
+    private float getDepthStriderModifier(){
+        return 1.0F - (getDepthStriderLevel() / 3.0F);
     }
 
     @Unique
@@ -155,7 +166,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
 
         if (hasEffect(StatusEffects.TIRELESSNESS)) {
             if (canRecover()) recover();
-        } else if (isSwimming() || swamUp() || isWading()) depleteStamina(config.depletionPerTickSwimming);
+        } else if (isSwimming() || swamUp() || isWading()) depleteStamina(config.depletionPerTickSwimming * getDepthStriderModifier());
         else if (isSprinting() && !isPassenger()) {
             depleteStamina(config.depletionPerTickSprinting * getTravelingModifier());
             maybeDamageLeggings();
