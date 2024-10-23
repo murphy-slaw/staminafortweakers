@@ -53,6 +53,8 @@ public abstract class PlayerMixin extends LivingEntity implements Climber {
     @Shadow
     protected abstract int getFireImmuneTicks();
 
+    @Shadow protected abstract boolean isStayingOnGroundSurface();
+
     @Unique
     public int getExhaustionPct() {
         return (int) (getStamina() / getMaxStamina() * 100);

@@ -9,5 +9,9 @@ public class C2SRecievers {
             boolean s = buf.readBoolean();
             ((Swimmer) player).setSwamUp(s);
         }));
+        ServerPlayNetworking.registerGlobalReceiver(C2SPackets.MOVEMENT_INPUT_PACKET_ID, ((server, player, handler, buf, responseSender) -> {
+            boolean s = buf.readBoolean();
+            ((Swimmer) player).setHasMovementInput(s);
+        }));
     }
 }

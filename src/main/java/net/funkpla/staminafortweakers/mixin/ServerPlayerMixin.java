@@ -46,6 +46,8 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
     @Unique
     private boolean swimUp;
     @Unique
+    private boolean hasMovementInput;
+    @Unique
     private boolean depleted;
 
     @Shadow
@@ -129,14 +131,22 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
     }
 
     @Unique
+    public void setHasMovementInput(boolean b){
+        hasMovementInput = b;
+    }
+
+    @Unique
     public boolean swamUp() {
         return swimUp;
     }
 
+    public boolean hasMovementInput() {
+        return hasMovementInput;
+    }
+
     @Unique
     public boolean isWading() {
-        Vec3 delta = position().subtract(lastPos);
-        return isInWater() && (delta.x != 0.0f || delta.z != 0.0f);
+        return isInWater() && hasMovementInput();
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -170,6 +180,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
         lastPos = position();
         recoveryCooldown.tickDown();
         setSwamUp(false);
+        setHasMovementInput(false);
     }
 
     @Unique
@@ -197,7 +208,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
 
     @Unique
     private void recover() {
-        if (walkDist - walkDistO <= 0.01) {
+        if (isStandingStill()){
             recoverStamina(getBaseRecovery() * config.recoveryRestBonusMultiplier);
         } else if (config.recoverWhileWalking ||
                 (config.recoverWhileSneaking && isShiftKeyDown())) {
@@ -238,7 +249,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
 
     @Unique
     private boolean isStandingStill() {
-        return ((walkDist - walkDistO) <= 0.1);
+        return !hasMovementInput();
     }
 
     @Unique
