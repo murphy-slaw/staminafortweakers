@@ -147,7 +147,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
         } else if (config.depletionPerJump > 0 && hasJumped()) {
             depleteStamina(config.depletionPerJump * getTravelingModifier());
             maybeDamageLeggings();
-        } else if (config.depletionPerTickClimbing > 0 && onClimbable() && ySpeed > 0 && !onGround() && !isSuppressingSlidingDownLadder())
+        } else if (config.depletionPerTickClimbing > 0 && onClimbable() && ySpeed > 0 && !onGround())
             depleteStamina(config.depletionPerTickClimbing);
         else if (config.depletionPerAttack > 0 && isMining()) {
             depleteStamina(config.depletionPerAttack * getMiningModifier());
