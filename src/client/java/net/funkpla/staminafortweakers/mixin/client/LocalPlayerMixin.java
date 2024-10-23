@@ -56,6 +56,13 @@ public abstract class LocalPlayerMixin extends PlayerMixin implements Swimmer {
         }
     }
 
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void sendMovementInputPacket(CallbackInfo ci) {
+        if (zza != 0 || xxa != 0){
+            C2SSenders.sendMovementInputPacket();
+        }
+    }
+
     @Inject(method = "canStartSprinting", at = @At("HEAD"), cancellable = true)
     private void canSprint(CallbackInfoReturnable<Boolean> cir) {
         if(isExhausted()){

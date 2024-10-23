@@ -118,7 +118,7 @@ public abstract class PlayerMixin extends LivingEntity implements Climber {
         return jumped;
     }
 
-    @Unique
+    @Override
     public Vec3 getClimbSpeed(Vec3 original) {
         AttributeInstance climbSpeed = getAttribute(Attributes.CLIMB_SPEED);
         if (climbSpeed == null || original.y <= 0 || (jumping && !onClimbable())) return original;

@@ -137,7 +137,6 @@ public class StaminaHudOverlay implements HudRenderCallback {
     }
 
     private static RGBA splitColor(int color) {
-        float alpha = ((float) (color >> 24 & 0x0ff) / 255);
         float red = ((float) (color >> 16 & 0x0ff) / 255);
         float green = ((float) (color >> 8 & 0x0ff) / 255);
         float blue = ((float) (color & 0x0ff) / 255);

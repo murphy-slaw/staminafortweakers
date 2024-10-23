@@ -5,8 +5,6 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
@@ -24,7 +22,6 @@ public class StaminaClientMod implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        Minecraft client = Minecraft.getInstance();
         HudRenderCallback.EVENT.register(new StaminaHudOverlay());
 
         ArrayList<ResourceLocation> icons = new ArrayList<>();
@@ -40,7 +37,6 @@ public class StaminaClientMod implements ClientModInitializer {
             @Override
             public void onResourceManagerReload(ResourceManager resourceManager) {
                 for (ResourceLocation icon : icons) {
-                    SimpleTexture customTexture = (SimpleTexture) client.getTextureManager().getTexture(icon);
                     try {
                         Resource resource = resourceManager.getResourceOrThrow(icon);
                         try (InputStream inputStream = resource.open()) {

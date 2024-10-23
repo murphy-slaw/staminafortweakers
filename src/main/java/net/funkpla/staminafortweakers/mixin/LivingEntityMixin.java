@@ -38,7 +38,7 @@ public abstract class LivingEntityMixin implements Climber, Swimmer {
         return getClimbSpeed(original);
     }
 
-    @Unique
+    @Override
     public Vec3 getClimbSpeed(Vec3 original) {
         return original;
     }
