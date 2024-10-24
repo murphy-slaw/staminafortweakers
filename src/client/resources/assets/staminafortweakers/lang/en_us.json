@@ -53,5 +53,7 @@
   "effect.staminafortweakers.fatigue": "Fatigue",
   "effect.staminafortweakers.tirelessness": "Tirelessness",
   "enchantment.staminafortweakers.untiring": "Untiring",
-  "enchantment.staminafortweakers.traveling": "Traveling"
+  "enchantment.staminafortweakers.untiring.desc": "Reduces stamina depletion when mining.",
+  "enchantment.staminafortweakers.traveling": "Traveling",
+  "enchantment.staminafortweakers.traveling.desc": "Reduces stamina depletion when sprinting."
 }
