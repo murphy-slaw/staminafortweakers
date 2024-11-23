@@ -38,7 +38,9 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
     private static final int MINING_COOLDOWN = 10;
     @Unique
     private static final double MIN_RECOVERY = 0.25d;
-
+    @Shadow
+    @Final
+    public ServerPlayerGameMode gameMode;
     @Unique
     private Timer recoveryCooldown = new Timer(config.recoveryExhaustDelayTicks);
     @Unique
@@ -49,10 +51,6 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
     private boolean hasMovementInput;
     @Unique
     private boolean depleted;
-
-    @Shadow
-    @Final
-    public ServerPlayerGameMode gameMode;
 
     protected ServerPlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
@@ -80,7 +78,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
     }
 
     @Unique
-    private float getDepthStriderModifier(){
+    private float getDepthStriderModifier() {
         return 1.0F - (getDepthStrider(this) / 3.0F);
     }
 
@@ -131,7 +129,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
     }
 
     @Unique
-    public void setHasMovementInput(boolean b){
+    public void setHasMovementInput(boolean b) {
         hasMovementInput = b;
     }
 
@@ -155,21 +153,24 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
         double ySpeed = position().y() - lastPos.y();
         depleted = false;
 
-        if (hasEffect(StatusEffects.TIRELESSNESS)) {
-            if (canRecover()) recover();
-        } else if (isSwimming() || swamUp() || isWading()) depleteStamina(config.depletionPerTickSwimming * getDepthStriderModifier());
-        else if (isSprinting() && !isPassenger()) {
-            depleteStamina(config.depletionPerTickSprinting * getTravelingModifier());
-            maybeDamageLeggings();
-        } else if (config.depletionPerJump > 0 && hasJumped()) {
-            depleteStamina(config.depletionPerJump * getTravelingModifier());
-            maybeDamageLeggings();
-        } else if (config.depletionPerTickClimbing > 0 && onClimbable() && ySpeed > 0 && !onGround())
-            depleteStamina(config.depletionPerTickClimbing);
-        else if (config.depletionPerAttack > 0 && isMining()) {
-            depleteStamina(config.depletionPerAttack * getMiningModifier());
-            if (recoveryCooldown.expired()) {
-                recoveryCooldown = new Timer(MINING_COOLDOWN);
+        if (!hasEffect(StatusEffects.TIRELESSNESS)) {
+            if (isSwimming() || swamUp() || isWading()) {
+                depleteStamina(config.depletionPerTickSwimming * getDepthStriderModifier());
+            } else if (isSprinting() && !isPassenger()) {
+                depleteStamina(config.depletionPerTickSprinting * getTravelingModifier());
+                maybeDamageLeggings();
+            }
+            if (config.depletionPerJump > 0 && hasJumped()) {
+                depleteStamina(config.depletionPerJump * getTravelingModifier());
+                maybeDamageLeggings();
+            }
+            if (config.depletionPerTickClimbing > 0 && onClimbable() && ySpeed > 0 && !onGround())
+                depleteStamina(config.depletionPerTickClimbing);
+            if (config.depletionPerAttack > 0 && isMining()) {
+                depleteStamina(config.depletionPerAttack * getMiningModifier());
+                if (recoveryCooldown.expired()) {
+                    recoveryCooldown = new Timer(MINING_COOLDOWN);
+                }
             }
         }
         if (depleted && config.recoveryDelayTicks > 0 && recoveryCooldown.expired()) {
@@ -208,7 +209,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
 
     @Unique
     private void recover() {
-        if (isStandingStill()){
+        if (isStandingStill()) {
             recoverStamina(getBaseRecovery() * config.recoveryRestBonusMultiplier);
         } else if (config.recoverWhileWalking ||
                 (config.recoverWhileSneaking && isShiftKeyDown())) {
