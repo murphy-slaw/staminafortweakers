@@ -1,6 +1,5 @@
 package net.funkpla.staminafortweakers.mixin;
 
-import net.funkpla.staminafortweakers.Climber;
 import net.funkpla.staminafortweakers.Miner;
 import net.funkpla.staminafortweakers.StaminaConfig;
 import net.funkpla.staminafortweakers.Swimmer;
@@ -29,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static net.minecraft.world.item.enchantment.EnchantmentHelper.getDepthStrider;
 
 @Mixin(ServerPlayer.class)
-public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, Swimmer, Miner {
+public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, Miner {
 
     /**
      * A small cooldown to prevent stamina from bouncing around while mining.
@@ -153,7 +152,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Climber, 
         double ySpeed = position().y() - lastPos.y();
         depleted = false;
 
-        if (!hasEffect(StatusEffects.TIRELESSNESS)) {
+        if (shouldExhaust()) {
             if (isSwimming() || swamUp() || isWading()) {
                 depleteStamina(config.depletionPerTickSwimming * getDepthStriderModifier());
             } else if (isSprinting() && !isPassenger()) {

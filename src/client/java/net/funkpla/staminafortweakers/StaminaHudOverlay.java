@@ -11,12 +11,19 @@ import net.minecraft.resources.ResourceLocation;
 import org.joml.Vector2i;
 
 public class StaminaHudOverlay implements HudRenderCallback {
-    private final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
     private static final int opaque = 0xFF000000;
+    private final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
 
+    private static RGBA splitColor(int color) {
+        float red = ((float) (color >> 16 & 0x0ff) / 255);
+        float green = ((float) (color >> 8 & 0x0ff) / 255);
+        float blue = ((float) (color & 0x0ff) / 255);
+        return new RGBA(red, green, blue, 1.0F);
+    }
 
     @Override
     public void onHudRender(GuiGraphics context, float tickDelta) {
+        if ((int)tickDelta % 10 != 0) return;
         int width = context.guiWidth();
         int height = context.guiHeight();
         Minecraft client = Minecraft.getInstance();
@@ -69,8 +76,7 @@ public class StaminaHudOverlay implements HudRenderCallback {
                 context.fill(x1, y1, (int) (x1 + (barWidth * scaledStamina)), y2, -1, color);
             else context.fill(x1, y2, x2, y2 - (int) (barHeight * scaledStamina), -1, color);
 
-
-            if (player.hasEffect(StatusEffects.TIRELESSNESS)) {
+            if (!((Exhaustible)player).shouldExhaust()) {
                 context.renderOutline(x1 - 2, y1 - 2, barWidth + 4, barHeight + 4, opaque + config.staminaBarTirelessColor);
             }
 
@@ -135,17 +141,6 @@ public class StaminaHudOverlay implements HudRenderCallback {
         }
     }
 
-    private static RGBA splitColor(int color) {
-        float alpha = ((float) (color >> 24 & 0x0ff) / 255);
-        float red = ((float) (color >> 16 & 0x0ff) / 255);
-        float green = ((float) (color >> 8 & 0x0ff) / 255);
-        float blue = ((float) (color & 0x0ff) / 255);
-        return new RGBA(red, green, blue, 1.0F);
-    }
-
-    private record RGBA(float red, float green, float blue, float alpha) {
-    }
-
     private int getColor(float pct) {
         int color = opaque;
         if (pct <= Math.max(config.windedPercentage / 2.0F, 10F)) {
@@ -158,5 +153,8 @@ public class StaminaHudOverlay implements HudRenderCallback {
             color += config.staminaBarColor;
         }
         return color;
+    }
+
+    private record RGBA(float red, float green, float blue, float alpha) {
     }
 }
