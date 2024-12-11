@@ -2,8 +2,11 @@ package net.funkpla.staminafortweakers.mixin;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import net.funkpla.staminafortweakers.Climber;
+import net.funkpla.staminafortweakers.Exhaustible;
 import net.funkpla.staminafortweakers.StaminaConfig;
+import net.funkpla.staminafortweakers.compat.ModIntegrations;
 import net.funkpla.staminafortweakers.registry.Attributes;
+import net.funkpla.staminafortweakers.registry.StatusEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -22,13 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
 @Mixin(Player.class)
-public abstract class PlayerMixin extends LivingEntity implements Climber {
-
-    @Inject(method = "createAttributes()Lnet/minecraft/world/entity/ai/attributes/AttributeSupplier$Builder;", require = 1, allow = 1, at = @At("RETURN"))
-    private static void staminafortweakers$addPlayerAttributes(final CallbackInfoReturnable<AttributeSupplier.Builder> info) {
-        info.getReturnValue().add(Attributes.STAMINA);
-        info.getReturnValue().add(Attributes.MAX_STAMINA);
-    }
+public abstract class PlayerMixin extends LivingEntity implements Climber, Exhaustible {
 
     @Unique
     protected final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
@@ -38,6 +35,12 @@ public abstract class PlayerMixin extends LivingEntity implements Climber {
 
     protected PlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
+    }
+
+    @Inject(method = "createAttributes()Lnet/minecraft/world/entity/ai/attributes/AttributeSupplier$Builder;", require = 1, allow = 1, at = @At("RETURN"))
+    private static void staminafortweakers$addPlayerAttributes(final CallbackInfoReturnable<AttributeSupplier.Builder> info) {
+        info.getReturnValue().add(Attributes.STAMINA);
+        info.getReturnValue().add(Attributes.MAX_STAMINA);
     }
 
     @Shadow
@@ -124,5 +127,17 @@ public abstract class PlayerMixin extends LivingEntity implements Climber {
         if (climbSpeed == null || original.y <= 0 || (jumping && !onClimbable())) return original;
         climbSpeed.setBaseValue(original.y);
         return new Vec3(original.x, climbSpeed.getValue(), original.z);
+    }
+
+    @Override
+    public boolean shouldExhaust() {
+        boolean result = true;
+        var nourished = ModIntegrations.maybeNourished();
+        if (nourished.isPresent()) {
+            if (hasEffect(nourished.get())) result = false;
+        } else {
+            result = !hasEffect(StatusEffects.TIRELESSNESS);
+        }
+        return result;
     }
 }

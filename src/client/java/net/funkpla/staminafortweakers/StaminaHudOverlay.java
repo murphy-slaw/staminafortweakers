@@ -12,8 +12,8 @@ import net.minecraft.resources.ResourceLocation;
 import org.joml.Vector2i;
 
 public class StaminaHudOverlay implements HudRenderCallback {
-    private final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
     private static final int opaque = 0xFF000000;
+    private final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
 
 
     @Override
@@ -70,8 +70,7 @@ public class StaminaHudOverlay implements HudRenderCallback {
                 context.fill(x1, y1, (int) (x1 + (barWidth * scaledStamina)), y2, -1, color);
             else context.fill(x1, y2, x2, y2 - (int) (barHeight * scaledStamina), -1, color);
 
-
-            if (player.hasEffect(StatusEffects.TIRELESSNESS)) {
+            if (!((Exhaustible)player).shouldExhaust()) {
                 context.renderOutline(x1 - 2, y1 - 2, barWidth + 4, barHeight + 4, opaque + config.staminaBarTirelessColor);
             }
 
