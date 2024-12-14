@@ -17,7 +17,6 @@ public class SimpleEffectConfig implements INamedEffect {
     private String id;
 
     public Optional<Holder.Reference<MobEffect>> getEffect() {
-        var m = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.bySeparator(this.id, ':'));
-        return m;
+        return BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.bySeparator(this.id, ':'));
     }
 }
