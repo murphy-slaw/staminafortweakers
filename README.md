@@ -22,10 +22,11 @@ So many knobs to tweak!
   * Underwater
   * Suffocating
 * Recovery formula (linear or logarithmic)
-* Exhaustion effects with configurable thresholds
+* Customizable exhaustion effects with configurable thresholds
   * Fatigue (like Slowness but affects climbing and swimming)
   * Darkness when completely exhausted (optional)
   * Mining fatigue (optional)
+  * Or any effect from Minecraft or any installed mod
 * Configurable HUD Element
   * Display as
     * Icon (indicates stamina and sprinting status)
