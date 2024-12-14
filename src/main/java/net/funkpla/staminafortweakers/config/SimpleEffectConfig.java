@@ -13,14 +13,11 @@ import java.util.Optional;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SimpleEffectConfig implements INamedEffect{
+public class SimpleEffectConfig implements INamedEffect {
     private String id;
 
-public Optional<Holder.Reference<MobEffect>> getEffect(){
-    var m = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.bySeparator(this.id, ':'));
-    if (m.isPresent()){
+    public Optional<Holder.Reference<MobEffect>> getEffect() {
+        var m = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.bySeparator(this.id, ':'));
         return m;
     }
-    return Optional.empty();
-}
 }
