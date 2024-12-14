@@ -4,8 +4,9 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import net.funkpla.staminafortweakers.compat.ModIntegrations;
+import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.packet.C2SRecievers;
 import net.funkpla.staminafortweakers.registry.*;
 import net.minecraft.resources.ResourceLocation;
@@ -16,31 +17,34 @@ import org.slf4j.LoggerFactory;
 
 public class StaminaMod implements ModInitializer {
     public static final String MOD_ID = "staminafortweakers";
-    public static final String FD_MOD_ID = "farmersdelight";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public static ResourceLocation locate(String path) {
         return new ResourceLocation(MOD_ID, path);
     }
 
+
     @Override
     public void onInitialize() {
-        AutoConfig.register(StaminaConfig.class, JanksonConfigSerializer::new);
         Attributes.register();
         Enchantments.register();
         StatusEffects.register();
         SoundEvents.register();
         Potions.register();
         C2SRecievers.registerPackets();
+        AutoConfig.register(StaminaConfig.class, JanksonConfigSerializer::new);
 
-        ModIntegrations.register();
+        ServerLifecycleEvents.SERVER_STARTING.register(server ->{
+            StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
+            config.validatePostStart();
+        });
 
         PlayerBlockBreakEvents.AFTER.register((level, player, pos, state, entity) -> {
             if (level.isClientSide() || player.isCreative() || player.isSpectator()) return;
             ((Miner) player).depleteStaminaForBlockBreak();
         });
 
-        /*
+       /*
          * TOO MUCH COFFEE
          */
 

@@ -3,10 +3,11 @@ package net.funkpla.staminafortweakers.mixin;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.funkpla.staminafortweakers.Climber;
 import net.funkpla.staminafortweakers.Exhaustible;
-import net.funkpla.staminafortweakers.StaminaConfig;
-import net.funkpla.staminafortweakers.compat.ModIntegrations;
+import net.funkpla.staminafortweakers.config.SimpleEffectConfig;
+import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.registry.Attributes;
 import net.funkpla.staminafortweakers.registry.StatusEffects;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -22,6 +23,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Optional;
 
 
 @Mixin(Player.class)
@@ -130,13 +133,14 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
 
     @Override
     public boolean shouldExhaust() {
-        boolean result = true;
-        var nourished = ModIntegrations.maybeNourished();
-        if (nourished.isPresent()) {
-            if (hasEffect(nourished.get())) result = false;
-        } else {
-            result = !hasEffect(StatusEffects.TIRELESSNESS);
+        for (SimpleEffectConfig s : config.untiringEquivalentEffects){
+            Optional<MobEffect> m = s.getEffect();
+            if (m.isPresent()){
+                if (hasEffect(m.get())){
+                    return false;
+                }
+            }
         }
-        return result;
+        return !hasEffect(StatusEffects.TIRELESSNESS);
     }
 }

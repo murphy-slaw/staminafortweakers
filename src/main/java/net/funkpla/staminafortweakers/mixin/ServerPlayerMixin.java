@@ -1,15 +1,14 @@
 package net.funkpla.staminafortweakers.mixin;
 
 import net.funkpla.staminafortweakers.Miner;
-import net.funkpla.staminafortweakers.StaminaConfig;
 import net.funkpla.staminafortweakers.Swimmer;
+import net.funkpla.staminafortweakers.config.EffectConfig;
+import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.registry.Enchantments;
-import net.funkpla.staminafortweakers.registry.StatusEffects;
 import net.funkpla.staminafortweakers.util.Timer;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerPlayerGameMode;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -60,6 +59,9 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
 
     @Shadow
     public abstract boolean isSpectator();
+
+    @Shadow
+    public abstract void addAdditionalSaveData(CompoundTag compound);
 
     @Unique
     private int getTravelingLevel() {
@@ -137,6 +139,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
         return swimUp;
     }
 
+    @Unique
     public boolean hasMovementInput() {
         return hasMovementInput;
     }
@@ -184,26 +187,30 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
     }
 
     @Unique
-    private void makeSlow(int amplifier) {
-        addEffect(new MobEffectInstance(StatusEffects.FATIGUE, 3, amplifier, true, true));
+    private void applyEffect(EffectConfig e){
+        var mobEffectInstance = e.getEffectInstance();
+        mobEffectInstance.ifPresent(this::addEffect);
     }
 
     @Unique
     private void exhaust() {
         if (isExhausted()) {
-            if (config.exhaustionBlackout) {
-                addEffect(new MobEffectInstance(MobEffects.DARKNESS, 60, 0, true, false));
+            for (EffectConfig e : config.exhaustedEffects) {
+                applyEffect(e);
             }
-            if (config.exhaustionSlowsMining) {
-                addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 20, 1, true, true));
-            }
-            makeSlow(4);
             setSprinting(false);
             if (recoveryCooldown.expired()) {
                 recoveryCooldown = new Timer(config.recoveryExhaustDelayTicks);
             }
-        } else if (isWinded()) makeSlow(2);
-        else if (isFatigued()) makeSlow(0);
+        } else if (isWinded()) {
+            for (EffectConfig e : config.windedEffects) {
+                applyEffect(e);
+            }
+        } else if (isFatigued()) {
+            for (EffectConfig e : config.windedEffects) {
+                applyEffect(e);
+            }
+        }
     }
 
     @Unique
@@ -273,7 +280,9 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
         return ((ServerPlayerGameModeMixin) gameMode).getIsDestroyingBlock();
     }
 
+    @Unique
     public void depleteStaminaForBlockBreak() {
         depleteStamina(config.depletionPerBlockBroken * getMiningModifier());
     }
+
 }
