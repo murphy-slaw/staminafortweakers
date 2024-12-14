@@ -1,10 +1,15 @@
-package net.funkpla.staminafortweakers;
+package net.funkpla.staminafortweakers.config;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.EnumHandler.EnumDisplayOption;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
+import net.funkpla.staminafortweakers.StaminaMod;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+
+import java.util.*;
 
 
 @SuppressWarnings("CanBeFinal")
@@ -82,17 +87,9 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.Category("Exhaustion")
     public float depletionPerBlockBroken = 4F;
 
-    @Comment("Exhaustion slows mining")
-    @ConfigEntry.Category("Exhaustion")
-    public boolean exhaustionSlowsMining = false;
-
     @Comment("Can jump while exhausted")
     @ConfigEntry.Category("Exhaustion")
     public boolean canJumpWhileExhausted = true;
-
-    @Comment("Exhaustion causes Darkness")
-    @ConfigEntry.Category("Exhaustion")
-    public boolean exhaustionBlackout = true;
 
     @Comment("Exhaustion sounds")
     @ConfigEntry.Category("Exhaustion")
@@ -177,10 +174,10 @@ public class StaminaConfig implements ConfigData {
     @Comment("Icon Settings")
     @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
     @ConfigEntry.Category("HUD")
-    IconConfig icon = new IconConfig();
+    public IconConfig icon = new IconConfig();
 
     @SuppressWarnings("CanBeFinal")
-    static class IconConfig {
+    public static class IconConfig {
         @Comment("Hud Icon Height")
         @ConfigEntry.BoundedDiscrete(max = 320)
         public int height = 22;
@@ -193,10 +190,10 @@ public class StaminaConfig implements ConfigData {
     @Comment("Stamina Bar Settings")
     @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
     @ConfigEntry.Category("HUD")
-    StaminaBarConfig bar = new StaminaBarConfig();
+    public StaminaBarConfig bar = new StaminaBarConfig();
 
     @SuppressWarnings("CanBeFinal")
-    static class StaminaBarConfig {
+    public static class StaminaBarConfig {
         @Comment("Stamina bar orientation")
         @ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
         public Orientation orientation = Orientation.HORIZONTAL;
@@ -252,4 +249,78 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.ColorPicker
     @ConfigEntry.Category("Colors")
     public int staminaBarTirelessColor = 0xFEB236;
+
+    /*
+    Customizable effects
+     */
+
+
+    @ConfigEntry.Gui.PrefixText
+    @Comment("Exhaustion effects")
+    @ConfigEntry.Category("Effects")
+    public List<EffectConfig> exhaustedEffects = new ArrayList<>();
+    @Comment("Winded effects")
+    @ConfigEntry.Category("Effects")
+    public List<EffectConfig> windedEffects = new ArrayList<>();
+    @Comment("Fatigued effects")
+    @ConfigEntry.Category("Effects")
+    public List<EffectConfig> fatiguedEffects = new ArrayList<>();
+    @Comment("Effects equivalent to Untiring")
+    @ConfigEntry.Category("Effects")
+    public List<SimpleEffectConfig> untiringEquivalentEffects = new ArrayList<>();
+
+
+    private boolean effectIdExists(INamedEffect e){
+        var b = BuiltInRegistries.MOB_EFFECT.containsKey(ResourceLocation.bySeparator(e.getId(), ':'));
+        if (!b) {
+            StaminaMod.LOGGER.warn("Effect {} not found in registry, removing.", e.getId());
+        }
+        return b;
+    }
+
+    private void validateEffectConfigs(List<EffectConfig> effects){
+        List<EffectConfig> missing = new ArrayList<>();
+        for (EffectConfig e: effects) {
+            if (!effectIdExists(e)){
+                missing.add(e);
+            }
+        }
+        effects.removeAll(missing);
+    }
+
+    private void validateSimpleEffectConfigs(List<SimpleEffectConfig> effects){
+        List<SimpleEffectConfig> missing = new ArrayList<>();
+        for (SimpleEffectConfig e: effects) {
+            if (!effectIdExists(e)){
+                missing.add(e);
+            }
+        }
+        effects.removeAll(missing);
+    }
+
+    @Override
+    public void validatePostLoad() {
+        if (exhaustedEffects.isEmpty()) {
+            exhaustedEffects.add(new EffectConfig("staminafortweakers:fatigue",3,4, true, true));
+            exhaustedEffects.add(new EffectConfig("minecraft:darkness",60,0, true, false));
+            exhaustedEffects.add(new EffectConfig("minecraft:mining_fatigue",20,1,true,true));
+        }
+        if (windedEffects.isEmpty()) {
+            windedEffects.add(new EffectConfig("staminafortweakers:fatigue",3,2, true, true));
+        }
+        if (fatiguedEffects.isEmpty()) {
+            fatiguedEffects.add(new EffectConfig("staminafortweakers:fatigue",3,0, true, true));
+        }
+    }
+
+    public void validatePostStart(){
+        StaminaMod.LOGGER.info("Validating Exhausted effects.");
+        validateEffectConfigs(exhaustedEffects);
+        StaminaMod.LOGGER.info("Validating Winded effects.");
+        validateEffectConfigs(windedEffects);
+        StaminaMod.LOGGER.info("Validating Fatigued effects.");
+        validateEffectConfigs(fatiguedEffects);
+        StaminaMod.LOGGER.info("Validating Untiring equivalent effects.");
+        validateSimpleEffectConfigs(untiringEquivalentEffects);
+    }
 }

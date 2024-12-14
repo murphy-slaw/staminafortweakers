@@ -66,6 +66,7 @@ loom {
 
 }
 
+
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -83,6 +84,8 @@ dependencies {
 	}
 	modApi("com.terraformersmc:modmenu:${project.modmenu_version}")
 	modImplementation include("maven.modrinth:AdditionalEntityAttributes:" + project.aea_version)
+	api("org.projectlombok:lombok:1.18.36")
+	annotationProcessor("org.projectlombok:lombok:1.18.36")
 }
 
 processResources {

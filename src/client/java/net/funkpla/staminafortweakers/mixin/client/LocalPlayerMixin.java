@@ -1,7 +1,7 @@
 package net.funkpla.staminafortweakers.mixin.client;
 
 import me.shedaniel.autoconfig.AutoConfig;
-import net.funkpla.staminafortweakers.StaminaConfig;
+import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.Swimmer;
 import net.funkpla.staminafortweakers.mixin.PlayerMixin;
 import net.funkpla.staminafortweakers.packet.client.C2SSenders;

@@ -4,8 +4,9 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import net.funkpla.staminafortweakers.compat.ModIntegrations;
+import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.packet.C2SRecievers;
 import net.funkpla.staminafortweakers.registry.Attributes;
 import net.funkpla.staminafortweakers.registry.Potions;
@@ -23,14 +24,17 @@ public class StaminaMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        AutoConfig.register(StaminaConfig.class, JanksonConfigSerializer::new);
         Attributes.register();
         StatusEffects.register();
         SoundEvents.register();
         Potions.register();
         C2SRecievers.registerPackets();
+        AutoConfig.register(StaminaConfig.class, JanksonConfigSerializer::new);
 
-        ModIntegrations.register();
+        ServerLifecycleEvents.SERVER_STARTING.register(server ->{
+            StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
+            config.validatePostStart();
+        });
 
         PlayerBlockBreakEvents.AFTER.register((level, player, pos, state, entity) -> {
             if (level.isClientSide() || player.isCreative() || player.isSpectator()) return;

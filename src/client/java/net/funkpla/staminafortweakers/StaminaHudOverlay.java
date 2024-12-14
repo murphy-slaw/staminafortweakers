@@ -2,6 +2,7 @@ package net.funkpla.staminafortweakers;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.registry.Attributes;
 import net.funkpla.staminafortweakers.registry.StatusEffects;
 import net.minecraft.client.DeltaTracker;
@@ -70,7 +71,7 @@ public class StaminaHudOverlay implements HudRenderCallback {
                 context.fill(x1, y1, (int) (x1 + (barWidth * scaledStamina)), y2, -1, color);
             else context.fill(x1, y2, x2, y2 - (int) (barHeight * scaledStamina), -1, color);
 
-            if (!((Exhaustible)player).shouldExhaust()) {
+            if (!((Exhaustible) player).shouldExhaust()) {
                 context.renderOutline(x1 - 2, y1 - 2, barWidth + 4, barHeight + 4, opaque + config.staminaBarTirelessColor);
             }
 
@@ -118,7 +119,7 @@ public class StaminaHudOverlay implements HudRenderCallback {
 
             int cutout = (int) (iconHeight * scaledStamina);
             int remainder = iconHeight - cutout;
-            if (player.hasEffect(StatusEffects.TIRELESSNESS)) {
+            if (!((Exhaustible) player).shouldExhaust()) {
                 color = config.staminaBarTirelessColor;
             }
 
