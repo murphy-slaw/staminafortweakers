@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] 2024-12-13
+
+### Added
+
+- Now exhaustion effects are completely configurable. The default configuration remains the same but you can replace, remove, or add any mob effect from Minecraft or any installed mod.
+- Set duration and level for each effect.
+
+### Changed
+
+- Configuration flags related to enabling effects have been removed.
+
 ## [1.3.5] 2024-11-23
 
 ### Fixed
