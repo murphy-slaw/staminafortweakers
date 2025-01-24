@@ -11,6 +11,6 @@ public class C2SRecievers {
         PayloadTypeRegistry.playC2S().register(SwimPacketPayload.TYPE, SwimPacketPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(MovementPacketPayload.TYPE, MovementPacketPayload.CODEC);
         ServerPlayNetworking.registerGlobalReceiver(SwimPacketPayload.TYPE, ((payload, context) -> ((Swimmer) context.player()).setSwamUp(payload.swamUp())));
-        ServerPlayNetworking.registerGlobalReceiver(MovementPacketPayload.TYPE, ((payload, context) -> ((Swimmer) context.player()).setSwamUp(payload.moving())));
+        ServerPlayNetworking.registerGlobalReceiver(MovementPacketPayload.TYPE, ((payload, context) -> ((Swimmer) context.player()).setHasMovementInput(payload.moving())));
     }
 }
