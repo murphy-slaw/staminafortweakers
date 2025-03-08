@@ -5,7 +5,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.funkpla.staminafortweakers.packet.client.S2CRecievers;
+import net.funkpla.staminafortweakers.packet.client.S2CReceivers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
@@ -28,7 +28,7 @@ public class StaminaClientMod implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         HudRenderCallback.EVENT.register(new StaminaHudOverlay());
-        S2CRecievers.registerC2SReceivers();
+        S2CReceivers.registerS2CReceivers();
 
         ArrayList<ResourceLocation> icons = new ArrayList<>();
         icons.add(StaminaMod.locate("textures/stamina/walk.png"));

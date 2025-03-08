@@ -3,7 +3,6 @@ package net.funkpla.staminafortweakers.mixin;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.funkpla.staminafortweakers.Climber;
 import net.funkpla.staminafortweakers.Exhaustible;
-import net.funkpla.staminafortweakers.StaminaMod;
 import net.funkpla.staminafortweakers.config.SimpleEffectConfig;
 import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.registry.Attributes;
@@ -156,6 +155,5 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
     @Unique @Override
     public void setShieldAllowed(boolean allowed) {
         shieldAllowed = allowed;
-        StaminaMod.LOGGER.info("goo");
     }
 }
