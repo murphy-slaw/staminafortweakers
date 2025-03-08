@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] 2025-03-07
+
+### Added
+
+- Configurable exhaustion for attacking with a weapon or using a shield. These are set to zero in the default config in order to not introduce unexpected behavior into existing setups.
+
 ## [1.4.2] 2025-02-27
 
 ### Changed

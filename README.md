@@ -14,6 +14,8 @@ So many knobs to tweak!
   * Jumping
   * Climbing
   * Mining blocks
+  * Attacking
+  * Shield use
 * Optional, somewhat upsetting panting noises when the player is winded.
 * Recovery under different conditions
   * Resting (not moving)
