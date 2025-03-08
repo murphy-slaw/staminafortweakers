@@ -81,11 +81,19 @@ public class StaminaConfig implements ConfigData {
 
     @Comment("Stamina points depleted per attack")
     @ConfigEntry.Category("Exhaustion")
-    public float depletionPerAttack = 1F;
+    public float depletionPerAttack = 0F;
+
+    @Comment("Stamina points depleted per tick while mining")
+    @ConfigEntry.Category("Exhaustion")
+    public float depletionPerMiningTick = 1F;
 
     @Comment("Stamina points depleted per block broken")
     @ConfigEntry.Category("Exhaustion")
     public float depletionPerBlockBroken = 4F;
+
+    @Comment("Stamina points depleted per tick while using a shield")
+    @ConfigEntry.Category("Exhaustion")
+    public float depletionPerShieldTick = 0;
 
     @Comment("Can jump while exhausted")
     @ConfigEntry.Category("Exhaustion")
@@ -144,6 +152,11 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.BoundedDiscrete(max = 600)
     @ConfigEntry.Category("Recovery")
     public int recoveryDelayTicks = 0;
+
+    @Comment("Delay in ticks before regaining shield use")
+    @ConfigEntry.BoundedDiscrete(max = 600)
+    @ConfigEntry.Category("Recovery")
+    public int shieldRecoveryDelayTicks = 40;
 
     @Comment("Which formula to use for recovery")
     @ConfigEntry.Category("Recovery")
@@ -270,18 +283,18 @@ public class StaminaConfig implements ConfigData {
     public List<SimpleEffectConfig> untiringEquivalentEffects = new ArrayList<>();
 
 
-    private boolean effectIdExists(INamedEffect e){
+    private boolean effectIdMissing(INamedEffect e){
         var b = BuiltInRegistries.MOB_EFFECT.containsKey(ResourceLocation.of(e.getId(), ':'));
         if (!b) {
             StaminaMod.LOGGER.warn("Effect {} not found in registry, removing.", e.getId());
         }
-        return b;
+        return !b;
     }
 
     private void validateEffectConfigs(List<EffectConfig> effects){
         List<EffectConfig> missing = new ArrayList<>();
         for (EffectConfig e: effects) {
-            if (!effectIdExists(e)){
+            if (effectIdMissing(e)){
                 missing.add(e);
             }
         }
@@ -291,7 +304,7 @@ public class StaminaConfig implements ConfigData {
     private void validateSimpleEffectConfigs(List<SimpleEffectConfig> effects){
         List<SimpleEffectConfig> missing = new ArrayList<>();
         for (SimpleEffectConfig e: effects) {
-            if (!effectIdExists(e)){
+            if (effectIdMissing(e)){
                 missing.add(e);
             }
         }
