@@ -5,7 +5,6 @@ import net.funkpla.staminafortweakers.Miner;
 import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.Swimmer;
 import net.funkpla.staminafortweakers.config.EffectConfig;
-import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.packet.S2CSenders;
 import net.funkpla.staminafortweakers.util.Timer;
 import net.minecraft.core.Holder;
