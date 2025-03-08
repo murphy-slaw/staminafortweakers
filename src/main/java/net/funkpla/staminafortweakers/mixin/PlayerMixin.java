@@ -33,6 +33,8 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
 
     @Unique
     protected final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
+    @Unique
+    protected boolean shieldAllowed = true;
 
     @Unique
     private boolean jumped;
@@ -41,7 +43,8 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
         super(entityType, world);
     }
 
-    @Inject(method = "createAttributes()Lnet/minecraft/world/entity/ai/attributes/AttributeSupplier$Builder;", require = 1, allow = 1, at = @At("RETURN"))
+    @Inject(method = "createAttributes()Lnet/minecraft/world/entity/ai/attributes/AttributeSupplier$Builder;",
+            require = 1, allow = 1, at = @At("RETURN"))
     private static void staminafortweakers$addPlayerAttributes(final CallbackInfoReturnable<AttributeSupplier.Builder> info) {
         info.getReturnValue().add(Attributes.STAMINA);
         info.getReturnValue().add(Attributes.MAX_STAMINA);
@@ -64,7 +67,7 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
         return (int) (getStamina() / getMaxStamina() * 100);
     }
 
-    @Unique
+    @Unique @Override
     public boolean isExhausted() {
         return getExhaustionPct() <= config.exhaustedPercentage;
     }
@@ -115,8 +118,10 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
 
     @Inject(method = "jumpFromGround", at = @At("HEAD"), cancellable = true)
     private void blockJumping(CallbackInfo ci) {
-        if (config.canJumpWhileExhausted) return;
-        if (getExhaustionPct() <= config.exhaustedPercentage) ci.cancel();
+        if (config.canJumpWhileExhausted)
+            return;
+        if (getExhaustionPct() <= config.exhaustedPercentage)
+            ci.cancel();
     }
 
 
@@ -128,7 +133,8 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
     @Override
     public Vec3 getClimbSpeed(Vec3 original) {
         AttributeInstance climbSpeed = getAttribute(Attributes.CLIMB_SPEED);
-        if (climbSpeed == null || original.y <= 0 || (jumping && !onClimbable())) return original;
+        if (climbSpeed == null || original.y <= 0 || (jumping && !onClimbable()))
+            return original;
         climbSpeed.setBaseValue(original.y);
         return new Vec3(original.x, climbSpeed.getValue(), original.z);
     }
@@ -144,5 +150,15 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
             }
         }
         return !hasEffect(StatusEffects.TIRELESSNESS);
+    }
+
+    @Unique @Override
+    public boolean isShieldAllowed() {
+        return shieldAllowed;
+    }
+
+    @Unique @Override
+    public void setShieldAllowed(boolean allowed) {
+        shieldAllowed = allowed;
     }
 }
