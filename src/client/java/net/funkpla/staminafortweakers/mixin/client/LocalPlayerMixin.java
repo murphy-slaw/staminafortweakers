@@ -58,7 +58,7 @@ public abstract class LocalPlayerMixin extends PlayerMixin implements Swimmer {
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void sendMovementInputPacket(CallbackInfo ci) {
-        if (zza != 0 || xxa != 0){
+        if (zza != 0.0f || xxa != 0.0f){
             C2SSenders.sendMovementInputPacket();
         }
     }
