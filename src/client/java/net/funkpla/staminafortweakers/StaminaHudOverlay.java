@@ -38,10 +38,17 @@ public class StaminaHudOverlay implements HudRenderCallback {
             return;
 
         float displayStamina = getDisplayStamina(player);
-        Color color = getColor(displayStamina * 100);
+        Color color;
+
+        if (((Exhaustible) player).shouldExhaust()) {
+            color = getColor(displayStamina * 100);
+        } else {
+            color = Color.ofOpaque(config.staminaBarTirelessColor);
+            displayStamina = 1.0f;
+        }
 
         if (config.hudMode == StaminaConfig.HudMode.BAR) {
-            renderStaminaBar(context, height, width, displayStamina, color, (Exhaustible) player);
+            renderStaminaBar(context, height, width, displayStamina, color);
         } else {
             renderStaminaIcon(context, player, scale, height, width, displayStamina, color);
         }
@@ -88,20 +95,13 @@ public class StaminaHudOverlay implements HudRenderCallback {
         int cutout = (int) Math.ceil(iconHeight * displayStamina);
         int remainder = iconHeight - cutout;
 
-        Color fillColor;
-        if (((Exhaustible) player).shouldExhaust()) {
-            fillColor = color;
-        } else {
-            fillColor = Color.ofOpaque(config.staminaBarTirelessColor);
-        }
 
-        context.setColor(fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue(), fillColor.getAlpha());
+        context.setColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
         context.blit(icon, x1, y1 + remainder, 0, remainder, iconWidth, cutout, iconWidth, iconHeight);
         context.setColor(1, 1, 1, 1);
     }
 
-    private void renderStaminaBar(GuiGraphics context, int height, int width, float displayStamina, Color color,
-                                  Exhaustible player) {
+    private void renderStaminaBar(GuiGraphics context, int height, int width, float displayStamina, Color color){
         int x1;
         int y1;
         int barWidth;
@@ -136,11 +136,6 @@ public class StaminaHudOverlay implements HudRenderCallback {
             context.fill(x1, y1, (int) Math.ceil(x1 + (barWidth * displayStamina)), y2, -1, color.getColor());
         else
             context.fill(x1, y2, x2, (int) Math.ceil(y2 - (barHeight * displayStamina)), -1, color.getColor());
-
-        if (!player.shouldExhaust()) {
-            context.renderOutline(x1 - 1, y1 - 1, barWidth + 2, barHeight + 2,
-                    Color.ofOpaque(config.staminaBarTirelessColor).getColor());
-        }
     }
 
     private @NotNull Color getColor(float pct) {
