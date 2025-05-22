@@ -240,11 +240,10 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
 
     @Unique
     private void recover() {
-        if (isStandingStill()) {
+        if (isStandingStill())
             recoverStamina(getBaseRecovery() * config.recoveryRestBonusMultiplier);
-        } else if (config.recoverWhileWalking || (config.recoverWhileSneaking && isShiftKeyDown())) {
+        else
             recoverStamina(getBaseRecovery());
-        }
     }
 
     @Unique
@@ -286,7 +285,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
 
     @Unique
     private boolean canRecover() {
-        return !depleted && recoveryCooldown.expired() && (config.recoverWhenHungry || isNotHungry()) && (config.recoverWhileWalking || isStandingStill()) && (config.recoverWhileAirborne || onGround()) && (config.recoverUnderwater || !isUnderWater()) && (config.recoverWhileBreathless || getAirSupply() > 0) && !isUsingShield();
+        return !depleted && recoveryCooldown.expired() && (config.recoverWhenHungry || isNotHungry()) && ((config.recoverWhileSneaking && isShiftKeyDown()) || (config.recoverWhileWalking || isStandingStill())) && (config.recoverWhileAirborne || onGround()) && (config.recoverUnderwater || !isUnderWater()) && (config.recoverWhileBreathless || getAirSupply() > 0) && !isUsingShield();
     }
 
     @Unique
