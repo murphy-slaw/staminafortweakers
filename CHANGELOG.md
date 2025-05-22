@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] 2025-05-22
+
+### Changed
+
+- Refactored (and drastically simplified) the code for stamina display update smoothing.
+
+### Fixed
+
+- Fixed an issue where the player could sometimes recover stamina while walking even when that option was disabled due to a janky numeric comparison.
+
 ## [1.5.0] 2025-03-07
 
 ### Added
