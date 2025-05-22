@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed an issue where the player could sometimes recover stamina while walking even when that option was disabled due to a janky numeric comparison.
+- Now accounts for the offhand item slot in the hotbar if using Centered icon alignment and the icon would overlap.
+- Fixed logic error that prevented recoverWhileSneaking from working.
 
 ## [1.5.0] 2025-03-07
 
