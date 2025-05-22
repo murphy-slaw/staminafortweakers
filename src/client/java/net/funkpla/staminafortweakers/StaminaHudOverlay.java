@@ -13,25 +13,16 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2i;
 
 import java.util.Objects;
-import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
 
 public class StaminaHudOverlay implements HudRenderCallback {
-    private static final int HistoryLength = 10;
-    private final static Queue<Float> history = new ArrayBlockingQueue<>(HistoryLength);
+    private static final int SmoothedTicks = 5;
+    private double smoothed = 0;
     private final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
 
-    private static float getDisplayStamina(LocalPlayer player) {
-        float scaledStamina =
-                (float) (player.getAttributeValue(Attributes.STAMINA) / player.getAttributeValue(Attributes.MAX_STAMINA));
-
-        if (!history.offer(scaledStamina)) {
-            history.poll();
-            history.add(scaledStamina);
-        }
-
-        return history.size() == HistoryLength ?
-                history.stream().reduce(Float::sum).orElse(scaledStamina) / HistoryLength : scaledStamina;
+    private float getDisplayStamina(LocalPlayer player) {
+        double curStamina = player.getAttributeValue(Attributes.STAMINA);
+        smoothed = ((smoothed * (SmoothedTicks - 1)) / SmoothedTicks) + curStamina / SmoothedTicks;
+        return (float) (smoothed / player.getAttributeValue(Attributes.MAX_STAMINA));
     }
 
     @Override
@@ -93,7 +84,7 @@ public class StaminaHudOverlay implements HudRenderCallback {
         context.setColor(bg.getRed(), bg.getGreen(), bg.getBlue(), bg.getAlpha());
         context.blit(bgIcon, x1, y1, 0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
 
-        int cutout = (int) (iconHeight * displayStamina);
+        int cutout = (int) Math.ceil(iconHeight * displayStamina);
         int remainder = iconHeight - cutout;
 
         Color fillColor;
@@ -141,9 +132,9 @@ public class StaminaHudOverlay implements HudRenderCallback {
         context.fill(x1, y1, x2, y2, -1, Color.ofOpaque(config.staminaBarBackgroundColor).getColor());
 
         if (config.bar.orientation == StaminaConfig.Orientation.HORIZONTAL)
-            context.fill(x1, y1, x1 + (int) (barWidth * displayStamina), y2, -1, color.getColor());
+            context.fill(x1, y1, (int) Math.ceil(x1 + (barWidth * displayStamina)), y2, -1, color.getColor());
         else
-            context.fill(x1, y2, x2, y2 - (int) (barHeight * displayStamina), -1, color.getColor());
+            context.fill(x1, y2, x2, (int) Math.ceil(y2 - (barHeight * displayStamina)), -1, color.getColor());
 
         if (!player.shouldExhaust()) {
             context.renderOutline(x1 - 1, y1 - 1, barWidth + 2, barHeight + 2,
