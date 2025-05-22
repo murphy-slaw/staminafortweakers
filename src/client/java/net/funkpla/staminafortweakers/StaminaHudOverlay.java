@@ -17,8 +17,8 @@ import java.util.Objects;
 
 public class StaminaHudOverlay implements HudRenderCallback {
     private static final int SmoothedTicks = 5;
-    private double smoothed = 0;
     private final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
+    private double smoothed = 0;
 
     private float getDisplayStamina(LocalPlayer player) {
         double curStamina = player.getAttributeValue(Attributes.STAMINA);
@@ -56,6 +56,7 @@ public class StaminaHudOverlay implements HudRenderCallback {
 
     private void renderStaminaIcon(GuiGraphics context, @NotNull LocalPlayer player, double scale, int height,
                                    int width, float displayStamina, Color color) {
+
         int y1;
         int x1;
         ResourceLocation icon;
@@ -83,9 +84,19 @@ public class StaminaHudOverlay implements HudRenderCallback {
 
         switch (config.alignH) {
             case LEFT -> x1 = (int) (config.icon.offsetX / scale);
-            case CENTER -> x1 = width / 2 - config.icon.offsetX - iconWidth / 2;
+            case CENTER -> {
+                boolean hasOffhandItem = !player.getOffhandItem().isEmpty();
+                int offset  = width / 2 - config.icon.offsetX - iconWidth / 2;
+                if (hasOffhandItem && config.icon.offsetY < 27 && offset + 27 > 90) {
+                    x1 = offset - 27;
+                } else {
+                    x1 = offset;
+                }
+            }
             default -> x1 = width - config.icon.offsetX - iconWidth;
+
         }
+
 
         Color bg = Color.ofOpaque(config.staminaBarBackgroundColor);
 
@@ -101,7 +112,7 @@ public class StaminaHudOverlay implements HudRenderCallback {
         context.setColor(1, 1, 1, 1);
     }
 
-    private void renderStaminaBar(GuiGraphics context, int height, int width, float displayStamina, Color color){
+    private void renderStaminaBar(GuiGraphics context, int height, int width, float displayStamina, Color color) {
         int x1;
         int y1;
         int barWidth;
