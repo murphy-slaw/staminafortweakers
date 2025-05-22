@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Refactored (and drastically simplified) the code for stamina display update smoothing.
+- Now the Tirelessness effect changes the color of the stamina bar rather than the bar outline. This works better on 
+  1.21.1 until I can do a complete refactor to account for differences in the HUD render layering.
 
 ### Fixed
 
