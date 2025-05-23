@@ -2,9 +2,9 @@ package net.funkpla.staminafortweakers.mixin;
 
 import net.funkpla.staminafortweakers.Attacker;
 import net.funkpla.staminafortweakers.Miner;
+import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.Swimmer;
 import net.funkpla.staminafortweakers.config.EffectConfig;
-import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.packet.S2CSenders;
 import net.funkpla.staminafortweakers.registry.Enchantments;
 import net.funkpla.staminafortweakers.util.Timer;
@@ -50,8 +50,6 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
     private Vec3 lastPos = new Vec3(0, 0, 0);
     @Unique
     private boolean swimUp;
-    @Unique
-    private boolean hasMovementInput;
     @Unique
     private boolean depleted;
     @Unique
@@ -136,19 +134,9 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
         swimUp = b;
     }
 
-    @Unique
-    public void setHasMovementInput(boolean b) {
-        hasMovementInput = b;
-    }
-
-    @Unique
+    @Override
     public boolean swamUp() {
         return swimUp;
-    }
-
-    @Unique
-    public boolean hasMovementInput() {
-        return hasMovementInput;
     }
 
     @Unique
@@ -201,7 +189,6 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
         if (shieldCooldown.expired())
             setShieldAllowed(true);
         setSwamUp(false);
-        setHasMovementInput(false);
         setAttacked(false);
     }
 
@@ -304,11 +291,6 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
     }
 
     @Unique
-    public void depleteStaminaForAttack() {
-        depleteStamina(config.depletionPerAttack);
-    }
-
-    @Unique
     public boolean isUsingShield() {
         return this.isUsingItem() && this.getItemInHand(this.getUsedItemHand()).getItem() == Items.SHIELD;
     }
@@ -316,6 +298,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
     @Unique
     @Override
     public void setShieldAllowed(boolean allowed) {
+        if (isShieldAllowed() == allowed) return;
         super.setShieldAllowed(allowed);
         S2CSenders.sendShieldAllowedPacket((ServerPlayer) (Object) this, allowed);
     }

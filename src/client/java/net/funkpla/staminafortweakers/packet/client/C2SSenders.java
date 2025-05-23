@@ -11,9 +11,9 @@ public class C2SSenders {
         buf.writeBoolean(true);
         ClientPlayNetworking.send(C2SPackets.SWIMMING_PACKET_ID, buf);
     }
-    public static void sendMovementInputPacket() {
+    public static void sendMovementInputPacket(boolean moving) {
         FriendlyByteBuf buf = PacketByteBufs.create();
-        buf.writeBoolean(true);
+        buf.writeBoolean(moving);
         ClientPlayNetworking.send(C2SPackets.MOVEMENT_INPUT_PACKET_ID, buf);
     }
 }

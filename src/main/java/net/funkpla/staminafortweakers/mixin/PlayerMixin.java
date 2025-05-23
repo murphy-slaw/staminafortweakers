@@ -35,6 +35,8 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
     @Unique
     protected boolean shieldAllowed = true;
     @Unique
+    protected boolean hasMovementInput = false;
+    @Unique
     private boolean jumped;
 
     protected PlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
@@ -65,7 +67,8 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
         return (int) (getStamina() / getMaxStamina() * 100);
     }
 
-    @Unique @Override
+    @Unique
+    @Override
     public boolean isExhausted() {
         return getExhaustionPct() <= config.exhaustedPercentage;
     }
@@ -128,7 +131,7 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
         return jumped;
     }
 
-    @Unique
+    @Override
     public Vec3 getClimbSpeed(Vec3 original) {
         AttributeInstance climbSpeed = getAttribute(Attributes.CLIMB_SPEED);
         if (climbSpeed == null || original.y <= 0 || (jumping && !onClimbable()))
@@ -147,12 +150,25 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
         return !hasEffect(StatusEffects.TIRELESSNESS);
     }
 
-    @Unique @Override
+    @Unique
+    public boolean hasMovementInput() {
+        return hasMovementInput;
+    }
+
+    @Unique
+    public void setHasMovementInput(boolean b) {
+        hasMovementInput = b;
+    }
+
+
+    @Unique
+    @Override
     public boolean isShieldAllowed() {
         return shieldAllowed;
     }
 
-    @Unique @Override
+    @Unique
+    @Override
     public void setShieldAllowed(boolean allowed) {
         shieldAllowed = allowed;
     }
