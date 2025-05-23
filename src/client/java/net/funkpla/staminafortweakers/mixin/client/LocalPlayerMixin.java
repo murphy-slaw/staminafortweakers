@@ -40,12 +40,15 @@ public abstract class LocalPlayerMixin extends PlayerMixin implements Swimmer {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void doExhaustionSounds(CallbackInfo ci) {
-        if (isUnderWater()) return;
-        if (!config.exhaustionSounds) return;
+        if (isUnderWater())
+            return;
+        if (!config.exhaustionSounds)
+            return;
         breathCount += this.random.nextInt(2);
         if (breathCount >= BREATH_TICKS) {
             breathCount = 0;
-            if (isWinded()) this.playSound(SoundEvents.ENTITY_PLAYER_PANT, 0.8f, (float) (Math.random() * 0.25f) + 0.875f);
+            if (isWinded())
+                this.playSound(SoundEvents.ENTITY_PLAYER_PANT, 0.8f, (float) (Math.random() * 0.25f) + 0.875f);
         }
     }
 
@@ -57,15 +60,17 @@ public abstract class LocalPlayerMixin extends PlayerMixin implements Swimmer {
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
-    private void sendMovementInputPacket(CallbackInfo ci) {
-        if (zza != 0.0f || xxa != 0.0f){
-            C2SSenders.sendMovementInputPacket();
+    private void updateHasMovementInput(CallbackInfo ci) {
+        boolean moved = (zza != 0.0f || xxa != 0.0f);
+        if (moved != hasMovementInput()) {
+            setHasMovementInput(moved);
+            C2SSenders.sendMovementInputPacket(moved);
         }
     }
 
     @Inject(method = "canStartSprinting", at = @At("HEAD"), cancellable = true)
     private void canSprint(CallbackInfoReturnable<Boolean> cir) {
-        if(isExhausted()){
+        if (isExhausted()) {
             cir.setReturnValue(false);
         }
     }

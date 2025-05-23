@@ -56,8 +56,6 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
     @Unique
     private boolean swimUp;
     @Unique
-    private boolean hasMovementInput;
-    @Unique
     private boolean depleted;
     @Unique
     private boolean attacked = false;
@@ -152,18 +150,8 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
     }
 
     @Override
-    public void setHasMovementInput(boolean b){
-        hasMovementInput = b;
-    }
-
-    @Override
     public boolean swamUp() {
         return swimUp;
-    }
-
-    @Override
-    public boolean hasMovementInput() {
-        return hasMovementInput;
     }
 
     @Unique
@@ -216,7 +204,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
         if (shieldCooldown.expired())
             setShieldAllowed(true);
         setSwamUp(false);
-        setHasMovementInput(false);
+        //setHasMovementInput(false);
         setAttacked(false);
     }
 
@@ -327,6 +315,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
     @Unique
     @Override
     public void setShieldAllowed(boolean allowed) {
+        if (isShieldAllowed() == allowed) return;
         super.setShieldAllowed(allowed);
         S2CSenders.sendShieldAllowedPacket((ServerPlayer) (Object) this, allowed);
     }

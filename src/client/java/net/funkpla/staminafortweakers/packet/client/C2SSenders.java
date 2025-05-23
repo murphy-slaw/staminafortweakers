@@ -8,7 +8,7 @@ public class C2SSenders {
     public static void sendSwimPacket() {
         ClientPlayNetworking.send(new SwimPacketPayload(true));
     }
-    public static void sendMovementInputPacket() {
-        ClientPlayNetworking.send(new MovementPacketPayload(true));
+    public static void sendMovementInputPacket(boolean moving) {
+        ClientPlayNetworking.send(new MovementPacketPayload(moving));
     }
 }

@@ -35,6 +35,8 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
     protected final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
     @Unique
     protected boolean shieldAllowed = true;
+    @Unique
+    protected boolean hasMovementInput = false;
 
     @Unique
     private boolean jumped;
@@ -155,6 +157,16 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
     @Unique @Override
     public boolean isShieldAllowed() {
         return shieldAllowed;
+    }
+
+    @Unique
+    public boolean hasMovementInput() {
+        return hasMovementInput;
+    }
+
+    @Unique
+    public void setHasMovementInput(boolean b){
+        hasMovementInput = b;
     }
 
     @Unique @Override
