@@ -2,9 +2,11 @@ package net.funkpla.staminafortweakers.mixin;
 
 import net.funkpla.staminafortweakers.Attacker;
 import net.funkpla.staminafortweakers.Miner;
-import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.Swimmer;
+import net.funkpla.staminafortweakers.compat.Mods;
+import net.funkpla.staminafortweakers.compat.vc_gliders.VCGlidersCompat;
 import net.funkpla.staminafortweakers.config.EffectConfig;
+import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.packet.S2CSenders;
 import net.funkpla.staminafortweakers.registry.Enchantments;
 import net.funkpla.staminafortweakers.util.Timer;
@@ -176,6 +178,11 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
             if (config.depletionPerShieldTick > 0 && isUsingShield()) {
                 depleteStamina(config.depletionPerShieldTick);
             }
+            if (Mods.VC_GLIDERS.isLoaded()) {
+                if (config.depletionPerGliderTick > 0 && VCGlidersCompat.isGliding(this)) {
+                    depleteStamina(config.depletionPerGliderTick);
+                }
+            }
         }
         if (depleted && config.recoveryDelayTicks > 0 && recoveryCooldown.expired()) {
             recoveryCooldown = new Timer(config.recoveryDelayTicks);
@@ -210,7 +217,8 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
                 stopUsingItem();
             if (shieldCooldown.expired())
                 shieldCooldown = new Timer(config.recoveryExhaustDelayTicks);
-
+            if (Mods.VC_GLIDERS.isLoaded())
+                VCGlidersCompat.crashGlider(this);
             if (recoveryCooldown.expired()) {
                 recoveryCooldown = new Timer(config.recoveryExhaustDelayTicks);
             }
@@ -298,14 +306,15 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
     @Unique
     @Override
     public void setShieldAllowed(boolean allowed) {
-        if (isShieldAllowed() == allowed) return;
+        if (isShieldAllowed() == allowed)
+            return;
         super.setShieldAllowed(allowed);
         S2CSenders.sendShieldAllowedPacket((ServerPlayer) (Object) this, allowed);
     }
 
     @Unique
     @Override
-    public boolean getAttacked(){
+    public boolean getAttacked() {
         return attacked;
     }
 
