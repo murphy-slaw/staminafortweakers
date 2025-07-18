@@ -45,6 +45,9 @@ So many knobs to tweak!
 * Untiring enchantment for tools
   * Reduces stamina depletion for mining
   * Three levels, completely nullifies stamina depletion from mining at level III.
+* Mod compat with [Gliders](https://github.com/Jeryn99/Gliders/)
+  * Set depletion per tick when using a glider
+  * When you're exhausted, you fall out of the sky. Be careful!
 
 With all these options, you can make stamina management anything from a mild annoyance to a nearly crippling impediment! Good times.
 
