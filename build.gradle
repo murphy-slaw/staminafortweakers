@@ -87,7 +87,7 @@ dependencies {
 	}
 	modApi("com.terraformersmc:modmenu:${project.modmenu_version}")
 	modImplementation include("maven.modrinth:AdditionalEntityAttributes:" + project.aea_version)
-	modCompileOnly include("maven.modrinth:gliders:${gliders_version}")
+	modCompileOnly("maven.modrinth:gliders:${gliders_version}")
 	modApi("net.threetag:PalladiumCore:${palladium_core_version}"){
 		exclude group: "net.minecraftforge"
 	}
