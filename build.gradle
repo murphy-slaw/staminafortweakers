@@ -89,7 +89,9 @@ dependencies {
 	modApi("com.terraformersmc:modmenu:${project.modmenu_version}")
 	modImplementation include("maven.modrinth:AdditionalEntityAttributes:" + project.aea_version)
 	modCompileOnly include("maven.modrinth:gliders:${gliders_version}")
-	modCompileOnly include("net.threetag:PalladiumCore:1.20-2.0.0.0")
+	modApi("net.threetag:PalladiumCore:${palladium_core_version}"){
+		exclude group: "net.minecraftforge"
+	}
 	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cca_version}"
 	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${cca_version}"
 
