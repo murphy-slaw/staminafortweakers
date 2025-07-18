@@ -95,6 +95,10 @@ public class StaminaConfig implements ConfigData {
     @ConfigEntry.Category("Exhaustion")
     public float depletionPerShieldTick = 0;
 
+    @Comment("Stamina points depleted per tick while using a glider")
+    @ConfigEntry.Category("Exhaustion")
+    public float depletionPerGliderTick = 0;
+
     @Comment("Can jump while exhausted")
     @ConfigEntry.Category("Exhaustion")
     public boolean canJumpWhileExhausted = true;
