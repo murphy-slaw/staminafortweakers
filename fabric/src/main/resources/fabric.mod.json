@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "staminafortweakers",
+  "version": "${version}",
+  "name": "Stamina For Tweakers",
+  "description": "A painfully configurable stamina mod.",
+  "authors": [
+    "murphy slaw"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/stamina-for-tweakers",
+    "sources": "https://github.com/murphy-slaw/staminafortweakers"
+  },
+  "license": "MIT",
+  "icon": "assets/staminafortweakers/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.funkpla.staminafortweakers.StaminaMod"
+    ],
+    "client": [
+      "net.funkpla.staminafortweakers.StaminaClientMod"
+    ],
+    "modmenu": [
+      "net.funkpla.staminafortweakers.ModMenuConfig"
+    ]
+  },
+  "mixins": [
+    "staminafortweakers.mixins.json",
+    {
+      "config": "staminafortweakers.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "accessWidener": "staminafortweakers.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
+    "fabric-api": "*",
+    "cloth-config": "*"
+  },
+  "suggests": {
+    "modmenu": "*"
+  }
+}
