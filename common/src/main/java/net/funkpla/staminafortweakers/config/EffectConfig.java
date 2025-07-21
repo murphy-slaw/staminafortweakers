@@ -3,7 +3,7 @@ package net.funkpla.staminafortweakers.config;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.funkpla.staminafortweakers.StaminaConstants;
+import net.funkpla.staminafortweakers.Constants;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -25,7 +25,7 @@ public class EffectConfig implements INamedEffect {
         if (mobEffect.isPresent()){
             return Optional.of(new MobEffectInstance(mobEffect.get(), this.duration, this.amplifier, this.ambient, this.visible));
         }
-        StaminaConstants.LOG.info("Effect {} not found in mob effect registry", this.id);
+        Constants.LOG.info("Effect {} not found in mob effect registry", this.id);
         return Optional.empty();
     }
 }

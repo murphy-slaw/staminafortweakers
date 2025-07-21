@@ -4,6 +4,7 @@ plugins {
 }
 
 legacyForge {
+    validateAccessTransformers = false
     mcpVersion = minecraft_version
     if (file("src/main/resources/META-INF/accesstransformer.cfg").exists()) {
         accessTransformers = ["src/main/resources/META-INF/accesstransformer.cfg"]
@@ -46,7 +47,6 @@ dependencies {
     modCompileOnly("maven.modrinth:gliders:${gliders_version}")
 
     modApi("net.threetag:PalladiumCore:${palladium_core_version}")
-    modImplementation ("maven.modrinth:AdditionalEntityAttributes-forge:" + project.aea_version)
 
     api("org.projectlombok:lombok:1.18.36")
     annotationProcessor("org.projectlombok:lombok:1.18.36")

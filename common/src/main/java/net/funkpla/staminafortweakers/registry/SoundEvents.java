@@ -1,21 +1,22 @@
 package net.funkpla.staminafortweakers.registry;
 
-import net.funkpla.staminafortweakers.StaminaCommon;
+import net.funkpla.staminafortweakers.Common;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
 public class SoundEvents {
-    public static final ResourceLocation BREATH_SCARED = StaminaCommon.locate("breath_scared");
-    public static final net.minecraft.sounds.SoundEvent ENTITY_PLAYER_PANT = registerSoundEvent(
-            BREATH_SCARED,
-            net.minecraft.sounds.SoundEvent.createVariableRangeEvent(BREATH_SCARED));
 
-    private static SoundEvent registerSoundEvent(ResourceLocation id, SoundEvent event) {
-        return Registry.register(BuiltInRegistries.SOUND_EVENT, id, event);
-    }
+  public static final String BREATH_SCARED = "breath_scared";
 
-    public static void register() {
-    }
+  public static final net.minecraft.sounds.SoundEvent ENTITY_PLAYER_PANT =
+      SoundEvent.createVariableRangeEvent(Common.locate(BREATH_SCARED));
+
+  private static void registerSoundEvent(String name, SoundEvent event) {
+    Registry.register(BuiltInRegistries.SOUND_EVENT, name, event);
+  }
+
+  public static void register() {
+    registerSoundEvent(BREATH_SCARED, ENTITY_PLAYER_PANT);
+  }
 }

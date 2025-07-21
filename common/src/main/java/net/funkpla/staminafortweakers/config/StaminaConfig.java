@@ -5,7 +5,7 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.EnumHandler.EnumDisplayOption;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
-import net.funkpla.staminafortweakers.StaminaConstants;
+import net.funkpla.staminafortweakers.Constants;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 
@@ -290,7 +290,7 @@ public class StaminaConfig implements ConfigData {
     private boolean effectIdMissing(INamedEffect e){
         var b = BuiltInRegistries.MOB_EFFECT.containsKey(ResourceLocation.bySeparator(e.getId(), ':'));
         if (!b) {
-            StaminaConstants.LOG.warn("Effect {} not found in registry, removing.", e.getId());
+            Constants.LOG.warn("Effect {} not found in registry, removing.", e.getId());
         }
         return !b;
     }
@@ -331,13 +331,13 @@ public class StaminaConfig implements ConfigData {
     }
 
     public void validatePostStart(){
-        StaminaConstants.LOG.info("Validating Exhausted effects.");
+        Constants.LOG.info("Validating Exhausted effects.");
         validateEffectConfigs(exhaustedEffects);
-        StaminaConstants.LOG.info("Validating Winded effects.");
+        Constants.LOG.info("Validating Winded effects.");
         validateEffectConfigs(windedEffects);
-        StaminaConstants.LOG.info("Validating Fatigued effects.");
+        Constants.LOG.info("Validating Fatigued effects.");
         validateEffectConfigs(fatiguedEffects);
-        StaminaConstants.LOG.info("Validating Untiring equivalent effects.");
+        Constants.LOG.info("Validating Untiring equivalent effects.");
         validateSimpleEffectConfigs(untiringEquivalentEffects);
     }
 }

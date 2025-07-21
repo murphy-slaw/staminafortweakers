@@ -26,11 +26,7 @@
     ]
   },
   "mixins": [
-    "staminafortweakers.mixins.json",
-    {
-      "config": "staminafortweakers.client.mixins.json",
-      "environment": "client"
-    }
+    "staminafortweakers.fabric.mixins.json"
   ],
   "accessWidener": "staminafortweakers.accesswidener",
   "depends": {
