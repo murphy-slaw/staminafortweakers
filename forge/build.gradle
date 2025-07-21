@@ -2,19 +2,20 @@ plugins {
     id 'multiloader-loader'
     id 'net.neoforged.moddev.legacyforge'
 }
-jarJar.enabled(true)
+jarJar.enabled(false)
 
 mixin {
     add(sourceSets.main, "${mod_id}.refmap.json")
 
     config("${mod_id}.mixins.json")
-    config("${mod_id}.forge.mixins.json")
 }
 
 legacyForge {
     version = "${minecraft_version}-${forge_version}"
 
-    validateAccessTransformers = true
+    // LOL Forge AT Validation doesn't work
+    validateAccessTransformers = false
+
 
     def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) {
@@ -72,11 +73,10 @@ dependencies {
     modApi("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}")
     modCompileOnly("maven.modrinth:gliders:${gliders_version}")
     modCompileOnly("net.threetag:PalladiumCore:${palladium_core_version}")
-    modImplementation ("maven.modrinth:AdditionalEntityAttributes-forge:" + project.aea_version)
     api("org.projectlombok:lombok:1.18.36")
     annotationProcessor("org.projectlombok:lombok:1.18.36")
-    jarJar(group: "maven.modrinth", name: "AdditionalEntityAttributes-forge", version: project.aea_version)
 }
+
 
 jar {
     finalizedBy('reobfJar')

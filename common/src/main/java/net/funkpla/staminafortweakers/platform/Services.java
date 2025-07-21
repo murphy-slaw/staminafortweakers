@@ -4,7 +4,8 @@ import java.util.ServiceLoader;
 
 import net.funkpla.staminafortweakers.platform.services.IPacketHelper;
 import net.funkpla.staminafortweakers.platform.services.IPlatformHelper;
-import net.funkpla.staminafortweakers.StaminaConstants;
+import net.funkpla.staminafortweakers.Constants;
+import net.funkpla.staminafortweakers.platform.services.IRegistryHelper;
 
 // Service loaders are a built-in Java feature that allow us to locate implementations of an interface that vary from one
 // environment to another. In the context of MultiLoader we use this feature to access a mock API in the common code that
@@ -16,6 +17,7 @@ public class Services {
     // mod is loaded.
     public static final IPlatformHelper PLATFORM = load(IPlatformHelper.class);
     public static final IPacketHelper PACKET = load(IPacketHelper.class);
+    public static final IRegistryHelper REGISTRY = load(IRegistryHelper.class);
 
     // This code is used to load a service for the current environment. Your implementation of the service must be defined
     // manually by including a text file in META-INF/services named with the fully qualified class name of the service.
@@ -26,7 +28,7 @@ public class Services {
         final T loadedService = ServiceLoader.load(clazz)
                 .findFirst()
                 .orElseThrow(() -> new NullPointerException("Failed to load service for " + clazz.getName()));
-        StaminaConstants.LOG.debug("Loaded {} for service {}", loadedService, clazz);
+        Constants.LOG.debug("Loaded {} for service {}", loadedService, clazz);
         return loadedService;
     }
 }

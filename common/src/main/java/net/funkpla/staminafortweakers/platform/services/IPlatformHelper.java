@@ -1,5 +1,7 @@
 package net.funkpla.staminafortweakers.platform.services;
 
+import net.minecraft.server.level.ServerPlayerGameMode;
+
 public interface IPlatformHelper {
 
     /**
@@ -33,4 +35,6 @@ public interface IPlatformHelper {
 
         return isDevelopmentEnvironment() ? "development" : "production";
     }
+
+    boolean isDestroyingBlock(ServerPlayerGameMode gameMode);
 }

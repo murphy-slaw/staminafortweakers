@@ -2,6 +2,7 @@ package net.funkpla.staminafortweakers.platform.services;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.funkpla.staminafortweakers.platform.services.IPlatformHelper;
+import net.minecraft.server.level.ServerPlayerGameMode;
 
 public class FabricPlatformHelper implements IPlatformHelper {
 
@@ -20,5 +21,10 @@ public class FabricPlatformHelper implements IPlatformHelper {
     public boolean isDevelopmentEnvironment() {
 
         return FabricLoader.getInstance().isDevelopmentEnvironment();
+    }
+
+    @Override
+    public boolean isDestroyingBlock(ServerPlayerGameMode gameMode) {
+        return gameMode.isDestroyingBlock;
     }
 }
