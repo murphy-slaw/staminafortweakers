@@ -1,6 +1,9 @@
+import org.jetbrains.changelog.Changelog
+
 plugins {
     id 'multiloader-loader'
     id 'net.neoforged.moddev.legacyforge'
+    id "me.modmuss50.mod-publish-plugin" version "0.8.4"
 }
 jarJar.enabled(false)
 
@@ -83,4 +86,58 @@ jar {
     manifest.attributes([
             "MixinConfigs": "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
     ])
+}
+
+publishMods {
+    type = STABLE
+    version = "${rootProject.version}+${minecraft_version}"
+    displayName = "Stamina for Tweakers ${rootProject.version}+${minecraft_version}"
+    file = jar.archiveFile
+    changelog = project(":common").changelog.renderItem(project(":common").changelog
+            .getLatest()
+            .withHeader(false)
+            .withEmptySections(false),
+            Changelog.OutputType.MARKDOWN
+    )
+
+    curseforge {
+        projectId = "1040808"
+        projectSlug = "stamina-for-tweakers" // Required for discord webhook
+        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+        minecraftVersions.add(minecraft_version)
+        javaVersions.add(JavaVersion.VERSION_17)
+        clientRequired = true
+        serverRequired = true
+        requires("cloth-config")
+        optional("modmenu")
+    }
+
+    def cfOptions = curseforgeOptions {
+        projectId = "1040808"
+        projectSlug = "stamina-for-tweakers" // Required for discord webhook
+        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+        minecraftVersions.add(minecraft_version)
+        javaVersions.add(JavaVersion.VERSION_17)
+        clientRequired = true
+        serverRequired = true
+        requires("cloth-config")
+    }
+
+    curseforge("curseforgeForge") {
+        from cfOptions
+        modLoaders.add("forge")
+    }
+
+    def mrOptions = modrinthOptions{
+        projectId = "AejtfAlC"
+        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+        minecraftVersions.add(minecraft_version)
+        requires("cloth-config")
+
+    }
+
+    modrinth("modrinthForge") {
+        from mrOptions
+        modLoaders.add("forge")
+    }
 }
