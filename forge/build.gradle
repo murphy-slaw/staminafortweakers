@@ -92,7 +92,7 @@ publishMods {
     type = STABLE
     version = "${rootProject.version}+${minecraft_version}"
     displayName = "Stamina for Tweakers ${rootProject.version}+${minecraft_version}"
-    file = jar.archiveFile
+    file.set(reobfJar.archiveFile)
     changelog = project(":common").changelog.renderItem(project(":common").changelog
             .getLatest()
             .withHeader(false)
