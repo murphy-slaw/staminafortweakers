@@ -39,17 +39,17 @@ public abstract class LivingEntityMixin implements Climber, Swimmer {
     }
 
    @Unique
-    public void setSwimUp(boolean b) {
+    public void setSwamUp(boolean b) {
         swimUp = b;
     }
 
     @Inject(method = "jumpInLiquid", at = @At("TAIL"))
     protected void setSwimUpFlag(CallbackInfo ci) {
-        setSwimUp(true);
+        setSwamUp(true);
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
     protected void clearSwimUpFlag(CallbackInfo ci) {
-        setSwimUp(false);
+        setSwamUp(false);
     }
 }
