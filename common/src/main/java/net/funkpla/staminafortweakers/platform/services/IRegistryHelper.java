@@ -6,19 +6,15 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 public interface IRegistryHelper {
-  Attribute getWaterSpeedAttribute();
+  Holder<Attribute> getWaterSpeedAttribute();
 
-  Attribute getStaminaAttribute();
+  Holder<Attribute> getStaminaAttribute();
 
-  Attribute getMaxStaminaAttribute();
+  Holder<Attribute> getMaxStaminaAttribute();
 
-  Attribute getClimbSpeedAttribute();
+  Holder<Attribute> getClimbSpeedAttribute();
 
-  MobEffect getTirelessnessEffect();
+  Holder<MobEffect> getTirelessnessEffect();
 
-  MobEffect getFatigueEffect();
-
-  Enchantment getTravelingEnchantment();
-
-  Enchantment getUntiringEnchantment();
+  Holder<MobEffect> getFatigueEffect();
 }

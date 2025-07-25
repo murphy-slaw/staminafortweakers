@@ -1,13 +1,14 @@
 plugins {
     id 'multiloader-common'
-    id 'net.neoforged.moddev.legacyforge'
+    id 'net.neoforged.moddev'
 }
 
-legacyForge {
-    validateAccessTransformers = false
-    mcpVersion = minecraft_version
-    if (file("src/main/resources/META-INF/accesstransformer.cfg").exists()) {
-        accessTransformers = ["src/main/resources/META-INF/accesstransformer.cfg"]
+neoForge {
+    neoFormVersion = neo_form_version
+    // Automatically enable AccessTransformers if the file exists
+    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
     }
     parchment {
         minecraftVersion = parchment_minecraft
@@ -41,16 +42,15 @@ dependencies {
     compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation 'org.jetbrains:annotations:25.0.0'
-    modApi("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}") {
+    api("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-    modCompileOnly("maven.modrinth:gliders:${gliders_version}")
+    compileOnly("maven.modrinth:gliders:${gliders_version}")
 
-    modApi("net.threetag:PalladiumCore:${palladium_core_version}")
+    //api("net.threetag:PalladiumCore:${palladium_core_version}")
 
     api("org.projectlombok:lombok:1.18.36")
     annotationProcessor("org.projectlombok:lombok:1.18.36")
-
 }
 
 configurations {

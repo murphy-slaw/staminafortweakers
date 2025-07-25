@@ -1,6 +1,6 @@
 package net.funkpla.staminafortweakers.platform.services;
 
-import net.funkpla.staminafortweakers.packet.C2SSenders;
+import net.funkpla.staminafortweakers.packet.client.C2SSenders;
 import net.funkpla.staminafortweakers.packet.S2CSenders;
 import net.minecraft.server.level.ServerPlayer;
 

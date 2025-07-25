@@ -11,6 +11,6 @@ public class Common {
   }
 
   public static ResourceLocation locate(String path) {
-    return new ResourceLocation(Constants.MOD_ID, path);
+    return  ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, path);
   }
 }

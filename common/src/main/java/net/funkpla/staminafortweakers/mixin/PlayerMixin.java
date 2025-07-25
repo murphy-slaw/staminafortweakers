@@ -7,11 +7,11 @@ import net.funkpla.staminafortweakers.Exhaustible;
 import net.funkpla.staminafortweakers.config.SimpleEffectConfig;
 import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.platform.Services;
+import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.level.Level;
@@ -22,7 +22,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
 public abstract class PlayerMixin extends LivingEntity implements Climber, Exhaustible {
@@ -33,24 +32,11 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
 
   @Unique protected boolean shieldAllowed = true;
   @Unique protected boolean hasMovementInput = false;
+
   @Unique private boolean jumped;
 
   protected PlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
     super(entityType, world);
-  }
-
-  @Inject(
-      method =
-          "createAttributes()Lnet/minecraft/world/entity/ai/attributes/AttributeSupplier$Builder;",
-      require = 1,
-      allow = 1,
-      at = @At("RETURN"))
-  private static void staminafortweakers$addPlayerAttributes(
-      final CallbackInfoReturnable<AttributeSupplier.Builder> info) {
-    if (Services.PLATFORM.getPlatformName().equals("Fabric")) {
-      info.getReturnValue().add(Services.REGISTRY.getStaminaAttribute());
-      info.getReturnValue().add(Services.REGISTRY.getMaxStaminaAttribute());
-    }
   }
 
   @Shadow
@@ -138,20 +124,14 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
   @Override
   public boolean shouldExhaust() {
     for (SimpleEffectConfig s : config.untiringEquivalentEffects) {
-      Optional<MobEffect> m = s.getEffect();
-      if (m.isPresent() && hasEffect(m.get())) return false;
+      Optional<Holder.Reference<MobEffect>> m = s.getEffect();
+      if (m.isPresent()) {
+        if (hasEffect(m.get())) {
+          return false;
+        }
+      }
     }
     return !hasEffect(Services.REGISTRY.getTirelessnessEffect());
-  }
-
-  @Unique
-  public boolean hasMovementInput() {
-    return hasMovementInput;
-  }
-
-  @Unique
-  public void setHasMovementInput(boolean b) {
-    hasMovementInput = b;
   }
 
   @Unique
@@ -164,5 +144,15 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
   @Override
   public void setShieldAllowed(boolean allowed) {
     shieldAllowed = allowed;
+  }
+
+    @Unique
+  public boolean hasMovementInput() {
+    return hasMovementInput;
+  }
+
+  @Unique
+  public void setHasMovementInput(boolean b) {
+    hasMovementInput = b;
   }
 }

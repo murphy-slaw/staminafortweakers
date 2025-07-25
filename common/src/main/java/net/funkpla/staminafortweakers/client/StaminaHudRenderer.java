@@ -30,7 +30,7 @@ public class StaminaHudRenderer {
         return (float) (this.smoothed / player.getAttributeValue(Services.REGISTRY.getMaxStaminaAttribute()));
     }
 
-   public void renderHud(GuiGraphics context, float ignoredTickDelta, Minecraft client) {
+   public void renderHud(GuiGraphics context, Minecraft client) {
         int width = context.guiWidth();
         int height = context.guiHeight();
         double scale = client.getWindow().getGuiScale();

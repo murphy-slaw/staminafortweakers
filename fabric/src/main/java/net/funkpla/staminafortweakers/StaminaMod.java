@@ -24,11 +24,9 @@ public class StaminaMod implements ModInitializer {
   public void onInitialize() {
     init();
     Attributes.register();
-    Enchantments.register();
     StatusEffects.register();
     SoundEvents.register();
     Potions.register();
-    PotionRecipes.register();
     C2SReceivers.registerPackets();
 
     ServerLifecycleEvents.SERVER_STARTING.register(

@@ -2,7 +2,7 @@ import org.jetbrains.changelog.Changelog
 
 plugins {
     id 'fabric-loom' version '1.9-SNAPSHOT' apply(false)
-    id 'net.neoforged.moddev.legacyforge' version '2.0.77' apply(false)
+    id 'net.neoforged.moddev' version '2.0.49-beta' apply false
     id 'org.jetbrains.changelog' version '2.2.1'
     id "me.modmuss50.mod-publish-plugin" version "0.8.4"
 }
@@ -12,48 +12,4 @@ changelog {
     path = file("CHANGELOG.md").canonicalPath
     groups = ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]
     lineSeparator = "\n"
-}
-
-publishMods {
-    type = STABLE
-    version = "${version}+${minecraft_version}"
-    changelog = project(":common").changelog.renderItem(project(":common").changelog
-            .getLatest()
-            .withHeader(false)
-            .withEmptySections(false),
-            Changelog.OutputType.MARKDOWN
-    )
-
-    curseforge {
-		projectId = "1040808"
-		projectSlug = "stamina-for-tweakers" // Required for discord webhook
-        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
-        minecraftVersions.add(minecraft_version)
-        javaVersions.add(JavaVersion.VERSION_17)
-        clientRequired = true
-        serverRequired = true
-        requires("cloth-config")
-        optional("modmenu")
-    }
-
-    def mrOptions = modrinthOptions{
-		projectId = "AejtfAlC"
-        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
-        minecraftVersions.add(project.minecraft_version)
-        requires("cloth-config")
-
-    }
-
-    modrinth("modrinthFabric") {
-        from mrOptions
-        file project(":fabric")
-        modLoaders.add("fabric")
-        optional("modmenu")
-    }
-
-    modrinth("modrinthForge") {
-        from mrOptions
-        file project(":forge")
-        modLoaders.add("forge")
-    }
 }
