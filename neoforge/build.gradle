@@ -1,6 +1,9 @@
+import org.jetbrains.changelog.Changelog
+
 plugins {
     id 'multiloader-loader'
     id 'net.neoforged.moddev'
+    id "me.modmuss50.mod-publish-plugin" version "0.8.4"
 }
 
 neoForge {
@@ -50,6 +53,41 @@ neoForge {
         compileOnly("maven.modrinth:gliders:${gliders_version}")
         api("org.projectlombok:lombok:1.18.36")
         annotationProcessor("org.projectlombok:lombok:1.18.36")
+    }
+}
+
+publishMods {
+    file = jar.archiveFile
+    type = STABLE
+    modLoaders.add("fabric")
+    changelog = project.changelog.renderItem(project.changelog
+            .getLatest()
+            .withHeader(false)
+            .withEmptySections(false),
+            Changelog.OutputType.MARKDOWN
+    )
+
+    curseforge {
+        projectId = "1040808"
+        projectSlug = "stamina-for-tweakers" // Required for discord webhook
+        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+        minecraftVersions.add(project.minecraft_version)
+        javaVersions.add(JavaVersion.VERSION_21)
+        clientRequired = true
+        serverRequired = true
+        requires("fabric-api")
+        requires("cloth-config")
+        optional("modmenu")
+    }
+
+    modrinth {
+        projectId = "AejtfAlC"
+        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+        minecraftVersions.add(project.minecraft_version)
+        requires("fabric-api")
+        requires("cloth-config")
+        requires("cardinal-components-api")
+        optional("modmenu")
     }
 }
 
