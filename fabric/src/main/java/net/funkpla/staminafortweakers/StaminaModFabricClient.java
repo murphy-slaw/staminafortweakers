@@ -18,7 +18,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class StaminaClientMod implements ClientModInitializer {
+public class StaminaModFabricClient implements ClientModInitializer {
     private static final HashMap<ResourceLocation, Vector2i> ICON_SIZES = new HashMap<>();
 
     @Override

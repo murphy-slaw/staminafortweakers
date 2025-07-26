@@ -42,7 +42,7 @@ public class StaminaHudRenderer {
         float displayStamina = getDisplayStamina(player);
         Color color;
 
-        if (((Exhaustible)(Object) player).shouldExhaust()) {
+        if (((Exhaustible) player).shouldExhaust()) {
             color = getColor(displayStamina * 100);
         } else {
             color = Color.ofOpaque(config.staminaBarTirelessColor);

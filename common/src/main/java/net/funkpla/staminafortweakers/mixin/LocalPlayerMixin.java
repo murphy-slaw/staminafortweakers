@@ -1,8 +1,8 @@
 package net.funkpla.staminafortweakers.mixin;
 
 import me.shedaniel.autoconfig.AutoConfig;
-import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.Swimmer;
+import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.platform.Services;
 import net.funkpla.staminafortweakers.registry.SoundEvents;
 import net.minecraft.client.player.LocalPlayer;

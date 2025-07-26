@@ -68,7 +68,7 @@ public class StaminaHudOverlay implements HudRenderCallback {
             icon = Common.locate("textures/stamina/walk.png");
             bgIcon = Common.locate("textures/stamina/walk_background.png");
         }
-        Vector2i iconDimensions = StaminaClientMod.getIconSize(icon);
+        Vector2i iconDimensions = StaminaModFabricClient.getIconSize(icon);
 
         int iconHeight = config.icon.height;
         int imageWidth = iconDimensions.x;

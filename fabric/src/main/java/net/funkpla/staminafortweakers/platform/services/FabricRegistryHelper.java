@@ -6,7 +6,6 @@ import net.funkpla.staminafortweakers.registry.StatusEffects;
 import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.item.enchantment.Enchantment;
 
 public class FabricRegistryHelper implements IRegistryHelper {
 

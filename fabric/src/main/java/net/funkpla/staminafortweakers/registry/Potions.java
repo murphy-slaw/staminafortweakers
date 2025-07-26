@@ -2,7 +2,6 @@ package net.funkpla.staminafortweakers.registry;
 
 import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistryBuilder;
 import net.funkpla.staminafortweakers.Common;
-import net.funkpla.staminafortweakers.StaminaMod;
 import net.funkpla.staminafortweakers.potion.FatiguePotion;
 import net.funkpla.staminafortweakers.potion.TirelessnessPotion;
 import net.minecraft.core.Holder;

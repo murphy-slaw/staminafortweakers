@@ -16,10 +16,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.funkpla.staminafortweakers.StaminaMod"
+      "net.funkpla.staminafortweakers.StaminaModFabric"
     ],
     "client": [
-      "net.funkpla.staminafortweakers.StaminaClientMod"
+      "net.funkpla.staminafortweakers.StaminaModFabricClient"
     ],
     "modmenu": [
       "net.funkpla.staminafortweakers.ModMenuConfig"

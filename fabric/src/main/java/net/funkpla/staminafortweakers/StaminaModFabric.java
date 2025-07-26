@@ -18,7 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-public class StaminaMod implements ModInitializer {
+public class StaminaModFabric implements ModInitializer {
 
   @Override
   public void onInitialize() {

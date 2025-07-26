@@ -11,6 +11,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import org.jetbrains.annotations.NotNull;
 
 @OnlyIn(Dist.CLIENT)
 public class HudOverlayHandler {
@@ -28,7 +29,7 @@ public class HudOverlayHandler {
 
   public static class StaminaOverlay implements LayeredDraw.Layer {
     @Override
-    public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
+    public void render(@NotNull GuiGraphics guiGraphics, @NotNull DeltaTracker deltaTracker) {
       renderer.renderHud(guiGraphics, Minecraft.getInstance());
     }
   }

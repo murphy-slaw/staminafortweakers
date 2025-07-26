@@ -1,21 +1,24 @@
 package net.funkpla.staminafortweakers;
 
+import net.funkpla.staminafortweakers.platform.services.PotionRecipes;
 import net.funkpla.staminafortweakers.registry.Attributes;
+import net.funkpla.staminafortweakers.registry.Potions;
 import net.funkpla.staminafortweakers.registry.StatusEffects;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
-import org.w3c.dom.Attr;
 
 @Mod(Constants.MOD_ID)
 public class StaminaModNeoForge {
 
   public StaminaModNeoForge(IEventBus modBus) {
+    IEventBus eventBus = NeoForge.EVENT_BUS;
     Common.init();
     Attributes.ATTRIBUTES.register(modBus);
     StatusEffects.MOB_EFFECTS.register(modBus);
+    Potions.POTIONS.register(modBus);
     modBus.register(Attributes.class);
     modBus.addListener(PacketHandler::registerPackets);
+    eventBus.register(PotionRecipes.class);
   }
 }
