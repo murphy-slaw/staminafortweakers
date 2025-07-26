@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2i;
 
 import java.io.FileNotFoundException;
@@ -37,7 +38,7 @@ public class StaminaModFabricClient implements ClientModInitializer {
             }
 
             @Override
-            public void onResourceManagerReload(ResourceManager resourceManager) {
+            public void onResourceManagerReload(@NotNull ResourceManager resourceManager) {
                 for (ResourceLocation icon : icons) {
                     try {
                         Resource resource = resourceManager.getResourceOrThrow(icon);

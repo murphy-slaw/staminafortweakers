@@ -10,6 +10,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -32,7 +33,7 @@ public abstract class LocalPlayerMixin extends PlayerMixin implements Swimmer {
     }
 
     @Shadow
-    public abstract void playSound(SoundEvent event, float volume, float pitch);
+    public abstract void playSound(@NotNull SoundEvent event, float volume, float pitch);
 
     @Shadow
     public abstract boolean isUnderWater();
