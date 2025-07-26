@@ -59,7 +59,7 @@ neoForge {
 publishMods {
     file = jar.archiveFile
     type = STABLE
-    modLoaders.add("fabric")
+    modLoaders.add("neoforge")
     changelog = project.changelog.renderItem(project.changelog
             .getLatest()
             .withHeader(false)
@@ -75,19 +75,14 @@ publishMods {
         javaVersions.add(JavaVersion.VERSION_21)
         clientRequired = true
         serverRequired = true
-        requires("fabric-api")
         requires("cloth-config")
-        optional("modmenu")
     }
 
     modrinth {
         projectId = "AejtfAlC"
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
         minecraftVersions.add(project.minecraft_version)
-        requires("fabric-api")
         requires("cloth-config")
-        requires("cardinal-components-api")
-        optional("modmenu")
     }
 }
 
