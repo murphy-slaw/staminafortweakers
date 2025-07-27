@@ -92,7 +92,7 @@ publishMods {
             Changelog.OutputType.MARKDOWN
     )
 
-    curseforge {
+    curseforge("curseforgeFabric") {
         projectId = "1040808"
         projectSlug = "stamina-for-tweakers" // Required for discord webhook
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
@@ -100,25 +100,11 @@ publishMods {
         javaVersions.add(JavaVersion.VERSION_17)
         clientRequired = true
         serverRequired = true
+        modLoaders.add("fabric")
         requires("cloth-config")
         optional("modmenu")
     }
 
-    def cfOptions = curseforgeOptions {
-        projectId = "1040808"
-        projectSlug = "stamina-for-tweakers" // Required for discord webhook
-        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
-        minecraftVersions.add(minecraft_version)
-        javaVersions.add(JavaVersion.VERSION_17)
-        clientRequired = true
-        serverRequired = true
-        requires("cloth-config")
-    }
-
-    curseforge("curseforgeFabric") {
-        from cfOptions
-        modLoaders.add("fabric")
-    }
 
     def mrOptions = modrinthOptions {
         projectId = "AejtfAlC"
