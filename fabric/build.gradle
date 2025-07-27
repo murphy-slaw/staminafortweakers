@@ -73,6 +73,8 @@ publishMods {
     file = remapJar.archiveFile
     type = STABLE
     modLoaders.add("fabric")
+    version = "${rootProject.version}+${minecraft_version}"
+    displayName = "Stamina for Tweakers ${rootProject.version}+${minecraft_version}"
     changelog = project.changelog.renderItem(project.changelog
             .getLatest()
             .withHeader(false)

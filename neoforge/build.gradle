@@ -60,6 +60,8 @@ publishMods {
     file = jar.archiveFile
     type = STABLE
     modLoaders.add("neoforge")
+    version = "${rootProject.version}+${minecraft_version}"
+    displayName = "Stamina for Tweakers ${rootProject.version}+${minecraft_version}"
     changelog = project.changelog.renderItem(project.changelog
             .getLatest()
             .withHeader(false)
