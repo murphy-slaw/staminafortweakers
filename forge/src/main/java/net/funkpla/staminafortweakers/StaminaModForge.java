@@ -21,4 +21,5 @@ public class StaminaModForge {
     DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientSetup::new);
     modBus.addListener(Attributes::addLivingEntityAttributes);
   }
+
 }

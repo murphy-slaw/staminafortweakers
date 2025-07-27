@@ -57,10 +57,7 @@ public class StaminaMod implements ModInitializer {
           ItemStack stack = player.getItemInHand(hand);
           if (!(player.isCreative() || player.isSpectator())) {
             if (stack.getItem() == Items.SHIELD) {
-              if (((Exhaustible) player).isExhausted()
-                  || !((Exhaustible) player).isShieldAllowed()) {
-                return InteractionResultHolder.fail(stack);
-              }
+              if (((Exhaustible) player).isExhausted()) return InteractionResultHolder.fail(stack);
             }
           }
           return InteractionResultHolder.pass(stack);

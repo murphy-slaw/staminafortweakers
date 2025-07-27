@@ -5,5 +5,4 @@ public interface Exhaustible {
     boolean isExhausted();
     boolean isWinded();
     boolean isShieldAllowed();
-    void setShieldAllowed(boolean allowed);
 }

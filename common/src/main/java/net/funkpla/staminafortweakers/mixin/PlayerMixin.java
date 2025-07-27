@@ -159,10 +159,4 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
   public boolean isShieldAllowed() {
     return shieldAllowed;
   }
-
-  @Unique
-  @Override
-  public void setShieldAllowed(boolean allowed) {
-    shieldAllowed = allowed;
-  }
 }

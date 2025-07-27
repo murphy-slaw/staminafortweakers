@@ -28,20 +28,11 @@ public class PacketHandler {
 
   public static void registerPackets() {
     INSTANCE.registerMessage(
-        messageId++,
-        ShieldAllowedPacket.class,
-        ShieldAllowedPacket::encoder,
-        ShieldAllowedPacket::new,
-        ShieldAllowedPacket::handle);
-    INSTANCE.registerMessage(
         messageId++, SwimPacket.class, SwimPacket::encoder, SwimPacket::new, SwimPacket::handle);
     INSTANCE.registerMessage(
             messageId++, MovementInputPacket.class, MovementInputPacket::encoder, MovementInputPacket::new, MovementInputPacket::handle);
   }
 
-  public static void sendShieldAllowedPacket(ServerPlayer player, boolean allowed) {
-    INSTANCE.send(PacketDistributor.PLAYER.with(()->player), new ShieldAllowedPacket(allowed));
-  }
   public static void sendSwimPacket(){
     INSTANCE.sendToServer(new SwimPacket(true));
   }
@@ -60,31 +51,6 @@ public class PacketHandler {
     ctx.get().setPacketHandled(true);
   }
 
-  public static void handle(ShieldAllowedPacket msg, Supplier<NetworkEvent.Context> ctx) {
-    ctx.get()
-        .enqueueWork(
-            () -> {
-              // Make sure it's only executed on the physical client
-              DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> handleShieldAllowedPacket(msg, ctx));
-            });
-    ctx.get().setPacketHandled(true);
-  }
-
-  public static void handleShieldAllowedPacket(
-      ShieldAllowedPacket packet, Supplier<NetworkEvent.Context> ctx) {
-    PacketListener listener = ctx.get().getNetworkManager().getPacketListener();
-    if (listener instanceof ClientPacketListener) {
-      Minecraft client = Minecraft.getInstance();
-      if (client.player != null) {
-        ItemStack stack = client.player.getUseItem();
-        if (!packet.allowed && !stack.isEmpty() && stack.getItem() == Items.SHIELD) {
-          client.player.stopUsingItem();
-        }
-        ((Exhaustible) client.player).setShieldAllowed(packet.allowed);
-      }
-    }
-  }
-
   public static void handleSwimPacket(SwimPacket packet, Supplier<NetworkEvent.Context> ctx) {
     PacketListener listener = ctx.get().getNetworkManager().getPacketListener();
     if (listener instanceof ServerPacketListener) {
@@ -98,31 +64,6 @@ public class PacketHandler {
     if (listener instanceof ServerPacketListener) {
       ServerPlayer sender = ctx.get().getSender();
       if (sender != null) ((Swimmer) sender).setHasMovementInput(packet.hasMovementInput);
-    }
-  }
-
-  public static class ShieldAllowedPacket {
-    public boolean allowed;
-
-    public ShieldAllowedPacket(boolean allowed) {
-      this.allowed = allowed;
-    }
-
-    public ShieldAllowedPacket(FriendlyByteBuf buffer) {
-      allowed = buffer.readBoolean();
-    }
-
-    public void encoder(FriendlyByteBuf buffer) {
-      buffer.writeBoolean(allowed);
-    }
-
-    public void handle(Supplier<NetworkEvent.Context> ctx) {
-      ctx.get()
-          .enqueueWork(
-              () ->
-                  DistExecutor.unsafeRunWhenOn(
-                      Dist.CLIENT, () -> () -> PacketHandler.handle(this, ctx)));
-      ctx.get().setPacketHandled(true);
     }
   }
 
