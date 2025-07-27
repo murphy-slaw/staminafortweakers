@@ -24,11 +24,17 @@ public class StaminaHudRenderer {
         this.smoothed = 0;
     }
 
-    private float getDisplayStamina(LocalPlayer player) {
-        double curStamina = player.getAttributeValue(Services.REGISTRY.getStaminaAttribute());
-        this.smoothed = (this.smoothed * (double)(SmoothedTicks -1)/SmoothedTicks) + curStamina/SmoothedTicks;
-        return (float) (this.smoothed / player.getAttributeValue(Services.REGISTRY.getMaxStaminaAttribute()));
-    }
+  private float getDisplayStamina(LocalPlayer player) {
+    double curStamina = player.getAttributeValue(Services.REGISTRY.getStaminaAttribute());
+    double maxStamina = player.getAttributeValue(Services.REGISTRY.getMaxStaminaAttribute());
+    if (curStamina <= 0.1d) smoothed = 0d;
+    else if (curStamina >= maxStamina) smoothed = curStamina;
+    else
+      this.smoothed =
+          (this.smoothed * (double) (SmoothedTicks - 1) / SmoothedTicks)
+              + curStamina / SmoothedTicks;
+    return (float) (this.smoothed / maxStamina);
+  }
 
    public void renderHud(GuiGraphics context, Minecraft client) {
         int width = context.guiWidth();
@@ -145,11 +151,13 @@ public class StaminaHudRenderer {
         context.fill(x1 - 1, y1 - 1, x2 + 1, y2 + 1, -1, Color.ofOpaque(config.staminaBarOutlineColor).getColor());
         context.fill(x1, y1, x2, y2, -1, Color.ofOpaque(config.staminaBarBackgroundColor).getColor());
 
-        if (config.bar.orientation == StaminaConfig.Orientation.HORIZONTAL)
-            context.fill(x1, y1, (int) Math.ceil(x1 + (barWidth * displayStamina)), y2, -1, color.getColor());
-        else
-            context.fill(x1, y2, x2, (int) Math.ceil(y2 - (barHeight * displayStamina)), -1, color.getColor());
-    }
+    if (config.bar.orientation == StaminaConfig.Orientation.HORIZONTAL)
+      context.fill(
+          x1, y1, (int) Math.floor(x1 + (barWidth * displayStamina)), y2, -1, color.getColor());
+    else
+      context.fill(
+          x1, y2, x2, (int) Math.floor(y2 - (barHeight * displayStamina)), -1, color.getColor());
+  }
 
     private @NotNull Color getColor(float pct) {
         if (pct <= Math.max(config.windedPercentage / 2.0F, 10F)) {
