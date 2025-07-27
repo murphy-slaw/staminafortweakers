@@ -1,4 +1,4 @@
-package net.funkpla.staminafortweakers.platform.services;
+package net.funkpla.staminafortweakers.registry;
 
 import static net.funkpla.staminafortweakers.registry.Potions.*;
 

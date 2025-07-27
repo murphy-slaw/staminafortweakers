@@ -1,6 +1,6 @@
 package net.funkpla.staminafortweakers;
 
-import net.funkpla.staminafortweakers.platform.services.PotionRecipes;
+import net.funkpla.staminafortweakers.registry.PotionRecipes;
 import net.funkpla.staminafortweakers.registry.Attributes;
 import net.funkpla.staminafortweakers.registry.Potions;
 import net.funkpla.staminafortweakers.registry.StatusEffects;

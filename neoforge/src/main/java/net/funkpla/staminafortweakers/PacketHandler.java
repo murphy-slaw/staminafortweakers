@@ -1,9 +1,7 @@
 package net.funkpla.staminafortweakers;
 
 import net.funkpla.staminafortweakers.packet.payload.MovementPacketPayload;
-import net.funkpla.staminafortweakers.packet.payload.ShieldAllowedPacketPayload;
 import net.funkpla.staminafortweakers.packet.payload.SwimPacketPayload;
-import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ServerPacketListener;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -24,10 +22,6 @@ public class PacketHandler {
     registrar.playToServer(
         SwimPacketPayload.TYPE,
         SwimPacketPayload.CODEC,
-        new DirectionalPayloadHandler<>(PacketHandler::handle, PacketHandler::handle));
-    registrar.playToClient(
-        ShieldAllowedPacketPayload.TYPE,
-        ShieldAllowedPacketPayload.CODEC,
         new DirectionalPayloadHandler<>(PacketHandler::handle, PacketHandler::handle));
   }
 
@@ -62,18 +56,4 @@ public class PacketHandler {
     PacketDistributor.sendToServer(new SwimPacketPayload(swamUp));
   }
 
-  public static void handle(final ShieldAllowedPacketPayload msg, final IPayloadContext ctx) {
-    ctx.enqueueWork(() -> handleShieldAllowedPacket(msg, ctx));
-  }
-
-  public static void handleShieldAllowedPacket(
-      final ShieldAllowedPacketPayload packet, IPayloadContext ctx) {
-    if (ctx.listener() instanceof ClientPacketListener) {
-      ((Exhaustible) ctx.player()).setShieldAllowed(packet.shieldAllowed());
-    }
-  }
-
-  public static void sendShieldAllowedPacket(ServerPlayer player, boolean allowed) {
-    PacketDistributor.sendToPlayer(player, new ShieldAllowedPacketPayload(allowed));
-  }
 }

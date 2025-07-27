@@ -1,7 +1,5 @@
 package net.funkpla.staminafortweakers.mixin;
 
-import static net.funkpla.staminafortweakers.platform.Services.PACKET;
-
 import java.util.Optional;
 import net.funkpla.staminafortweakers.Attacker;
 import net.funkpla.staminafortweakers.Miner;
@@ -21,6 +19,7 @@ import net.minecraft.server.level.ServerPlayerGameMode;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -44,7 +43,6 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
   @Unique private static final double MIN_RECOVERY = 0.25d;
   @Shadow @Final public ServerPlayerGameMode gameMode;
   @Unique private Timer recoveryCooldown = new Timer(config.recoveryExhaustDelayTicks);
-  @Unique private Timer shieldCooldown = new Timer(config.shieldRecoveryDelayTicks);
   @Unique private Vec3 lastPos = new Vec3(0, 0, 0);
   @Unique private boolean swimUp;
   @Unique private boolean depleted;
@@ -199,8 +197,6 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
     exhaust();
     lastPos = position();
     recoveryCooldown.tickDown();
-    shieldCooldown.tickDown();
-    if (shieldCooldown.expired()) setShieldAllowed(true);
     setSwamUp(false);
     // setHasMovementInput(false);
     setAttacked(false);
@@ -219,9 +215,12 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
         applyEffect(e);
       }
       setSprinting(false);
-      setShieldAllowed(false);
+
       if (isUsingShield()) stopUsingItem();
-      if (shieldCooldown.expired()) shieldCooldown = new Timer(config.recoveryExhaustDelayTicks);
+      ItemCooldowns cooldowns = ((ServerPlayer)(Object)this).getCooldowns();
+      if (!cooldowns.isOnCooldown(Items.SHIELD)){
+          cooldowns.addCooldown(Items.SHIELD,config.shieldRecoveryDelayTicks);
+      }
 
       if (Services.PLATFORM.isModLoaded("vc_gliders")) VCGlidersCompat.crashGlider(this);
 
@@ -315,14 +314,6 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
   public boolean isUsingShield() {
     return this.isUsingItem()
         && this.getItemInHand(this.getUsedItemHand()).getItem() == Items.SHIELD;
-  }
-
-  @Unique
-  @Override
-  public void setShieldAllowed(boolean allowed) {
-    if (isShieldAllowed() == allowed) return;
-    super.setShieldAllowed(allowed);
-    PACKET.sendShieldAllowedPacket((ServerPlayer) (Object) this, allowed);
   }
 
   @Unique
