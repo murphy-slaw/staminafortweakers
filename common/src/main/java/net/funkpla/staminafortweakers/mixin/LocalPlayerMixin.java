@@ -1,9 +1,8 @@
 package net.funkpla.staminafortweakers.mixin;
 
-import me.shedaniel.autoconfig.AutoConfig;
+import net.funkpla.staminafortweakers.Common;
 import net.funkpla.staminafortweakers.Exhaustible;
 import net.funkpla.staminafortweakers.Swimmer;
-import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.platform.Services;
 import net.funkpla.staminafortweakers.registry.SoundEvents;
 import net.minecraft.client.player.LocalPlayer;
@@ -25,8 +24,6 @@ public abstract class LocalPlayerMixin extends PlayerMixin implements Swimmer, E
     @Unique
     private static final int BREATH_TICKS = 20;
     @Unique
-    private final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
-    @Unique
     private int breathCount = 0;
 
     protected LocalPlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
@@ -43,7 +40,7 @@ public abstract class LocalPlayerMixin extends PlayerMixin implements Swimmer, E
     private void doExhaustionSounds(CallbackInfo ci) {
         if (isUnderWater())
             return;
-        if (!config.exhaustionSounds)
+        if (!Common.config.exhaustionSounds)
             return;
         breathCount += this.random.nextInt(2);
         if (breathCount >= BREATH_TICKS) {

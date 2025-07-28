@@ -27,7 +27,7 @@ public class StaminaHudRenderer {
   private float getDisplayStamina(LocalPlayer player) {
     double curStamina = player.getAttributeValue(Services.REGISTRY.getStaminaAttribute());
     double maxStamina = player.getAttributeValue(Services.REGISTRY.getMaxStaminaAttribute());
-    if (curStamina <= 0.1d) smoothed = 0d;
+    if (curStamina <= 1d) smoothed = 0d;
     else if (curStamina >= maxStamina) smoothed = curStamina;
     else
       this.smoothed =
@@ -47,7 +47,7 @@ public class StaminaHudRenderer {
     float displayStamina = getDisplayStamina(player);
     Color color;
 
-    if (((Exhaustible) (Object) player).shouldExhaust()) {
+    if (((Exhaustible) player).shouldExhaust()) {
       color = getColor(displayStamina * 100);
     } else {
       color = Color.ofOpaque(config.staminaBarTirelessColor);
