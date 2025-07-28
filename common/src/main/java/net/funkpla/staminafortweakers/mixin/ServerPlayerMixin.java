@@ -2,6 +2,7 @@ package net.funkpla.staminafortweakers.mixin;
 
 import java.util.Optional;
 import net.funkpla.staminafortweakers.Attacker;
+import net.funkpla.staminafortweakers.Common;
 import net.funkpla.staminafortweakers.Miner;
 import net.funkpla.staminafortweakers.Swimmer;
 import net.funkpla.staminafortweakers.compat.vc_gliders.VCGlidersCompat;
@@ -36,9 +37,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, Miner, Attacker {
-
-  /** A small cooldown to prevent stamina from bouncing around while mining. */
-  @Unique private static final int MINING_COOLDOWN = 10;
 
   @Unique private static final double MIN_RECOVERY = 0.25d;
   @Shadow @Final public ServerPlayerGameMode gameMode;
@@ -83,12 +81,14 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
   }
 
   @Unique
-  private float getTravelingModifier() {
+  @Override
+  public float getTravelingModifier() {
     return 1.0F - (getTravelingLevel() / 3.0F);
   }
 
   @Unique
-  private float getDepthStriderModifier() {
+  @Override
+  public float getDepthStriderModifier() {
     return 1.0F - (getDepthStriderLevel() / 3.0F);
   }
 
@@ -106,7 +106,8 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
   }
 
   @Unique
-  private void maybeDamageLeggings() {
+  @Override
+  public void maybeDamageLeggings() {
     maybeDamageArmor(EquipmentSlot.LEGS);
   }
 
@@ -134,21 +135,25 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
   }
 
   @Unique
-  private float getMiningModifier() {
+  @Override
+  public float getMiningModifier() {
     return getEfficiencyModifier() * getUntiringModifier();
   }
 
+  @Unique
   @Override
   public void setSwamUp(boolean b) {
     swimUp = b;
   }
 
+  @Unique
   @Override
   public boolean swamUp() {
     return swimUp;
   }
 
   @Unique
+  @Override
   public boolean isWading() {
     return isInWater() && hasMovementInput();
   }
@@ -156,40 +161,10 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
   @Inject(method = "tick", at = @At("TAIL"))
   public void updateStamina(CallbackInfo ci) {
     if (isCreative() || isSpectator()) return;
-    double ySpeed = position().y() - lastPos.y();
     depleted = false;
 
-    if (shouldExhaust()) {
-      if (isSwimming() || swamUp() || isWading()) {
-        depleteStamina(config.depletionPerTickSwimming * getDepthStriderModifier());
-      } else if (isSprinting() && !isPassenger()) {
-        depleteStamina(config.depletionPerTickSprinting * getTravelingModifier());
-        maybeDamageLeggings();
-      }
-      if (config.depletionPerJump > 0 && hasJumped()) {
-        depleteStamina(config.depletionPerJump * getTravelingModifier());
-        maybeDamageLeggings();
-      }
-      if (config.depletionPerTickClimbing > 0 && onClimbable() && ySpeed > 0 && !onGround())
-        depleteStamina(config.depletionPerTickClimbing);
-      if (config.depletionPerMiningTick > 0 && isMining()) {
-        depleteStamina(config.depletionPerMiningTick * getMiningModifier());
-        if (recoveryCooldown.expired()) {
-          recoveryCooldown = new Timer(MINING_COOLDOWN);
-        }
-      }
-      if (config.depletionPerAttack > 0 && getAttacked()) {
-        depleteStamina(config.depletionPerAttack);
-      }
-      if (config.depletionPerShieldTick > 0 && isUsingShield()) {
-        depleteStamina(config.depletionPerShieldTick);
-      }
-      if (Services.PLATFORM.isModLoaded("vc_gliders")) {
-        if (config.depletionPerGliderTick > 0 && VCGlidersCompat.isGliding(this)) {
-          depleteStamina(config.depletionPerGliderTick);
-        }
-      }
-    }
+    if (shouldExhaust()) Common.getRuleset().run(((ServerPlayer) (Object) this));
+
     if (depleted && config.recoveryDelayTicks > 0 && recoveryCooldown.expired()) {
       recoveryCooldown = new Timer(config.recoveryDelayTicks);
     }
@@ -198,8 +173,26 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
     lastPos = position();
     recoveryCooldown.tickDown();
     setSwamUp(false);
-    // setHasMovementInput(false);
     setAttacked(false);
+  }
+
+  @Unique
+  @Override
+  public boolean shouldClimbExhaust() {
+    double ySpeed = position().y() - lastPos.y();
+    return onClimbable() && ySpeed > 0 && !onGround();
+  }
+
+  @Unique
+  @Override
+  public boolean shouldSprintExhaust() {
+    return isSprinting() && !isPassenger();
+  }
+
+  @Unique
+  @Override
+  public boolean shouldSwimExhaust() {
+    return isSwimming() || swamUp() || isWading();
   }
 
   @Unique
@@ -217,9 +210,9 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
       setSprinting(false);
 
       if (isUsingShield()) stopUsingItem();
-      ItemCooldowns cooldowns = ((ServerPlayer)(Object)this).getCooldowns();
-      if (!cooldowns.isOnCooldown(Items.SHIELD)){
-          cooldowns.addCooldown(Items.SHIELD,config.shieldRecoveryDelayTicks);
+      ItemCooldowns cooldowns = ((ServerPlayer) (Object) this).getCooldowns();
+      if (!cooldowns.isOnCooldown(Items.SHIELD)) {
+        cooldowns.addCooldown(Items.SHIELD, config.shieldRecoveryDelayTicks);
       }
 
       if (Services.PLATFORM.isModLoaded("vc_gliders")) VCGlidersCompat.crashGlider(this);
@@ -232,7 +225,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
         applyEffect(e);
       }
     } else if (isFatigued()) {
-      for (EffectConfig e : config.windedEffects) {
+      for (EffectConfig e : config.fatiguedEffects) {
         applyEffect(e);
       }
     }
@@ -270,7 +263,8 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
   }
 
   @Unique
-  private void depleteStamina(float depletionAmount) {
+  @Override
+  public void depleteStamina(float depletionAmount) {
     setStamina(getStamina() - depletionAmount);
     if (getStamina() < 0) setStamina(0);
     depleted = true;
@@ -300,7 +294,8 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
   }
 
   @Unique
-  private boolean isMining() {
+  @Override
+  public boolean isMining() {
     return Services.PLATFORM.isDestroyingBlock(gameMode);
   }
 
@@ -311,6 +306,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
   }
 
   @Unique
+  @Override
   public boolean isUsingShield() {
     return this.isUsingItem()
         && this.getItemInHand(this.getUsedItemHand()).getItem() == Items.SHIELD;

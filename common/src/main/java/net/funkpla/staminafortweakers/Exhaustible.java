@@ -4,4 +4,16 @@ public interface Exhaustible {
     boolean shouldExhaust();
     boolean isExhausted();
     boolean isWinded();
+    boolean shouldSprintExhaust();
+    boolean shouldSwimExhaust();
+    boolean shouldClimbExhaust();
+    boolean hasJumped();
+    boolean isMining();
+    boolean getAttacked();
+    boolean isUsingShield();
+    void depleteStamina(float depletionAmount);
+    void maybeDamageLeggings();
+    float getMiningModifier();
+    float getTravelingModifier();
+    float getDepthStriderModifier();
 }

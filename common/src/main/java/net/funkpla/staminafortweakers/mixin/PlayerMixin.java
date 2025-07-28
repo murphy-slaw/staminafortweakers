@@ -4,6 +4,7 @@ import java.util.Optional;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.funkpla.staminafortweakers.Climber;
 import net.funkpla.staminafortweakers.Exhaustible;
+import net.funkpla.staminafortweakers.Swimmer;
 import net.funkpla.staminafortweakers.config.SimpleEffectConfig;
 import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.platform.Services;
@@ -24,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Player.class)
-public abstract class PlayerMixin extends LivingEntity implements Climber, Exhaustible {
+public abstract class PlayerMixin extends LivingEntity implements Climber, Exhaustible, Swimmer {
 
   @Unique
   protected final StaminaConfig config =
@@ -107,10 +108,12 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
   }
 
   @Unique
-  protected boolean hasJumped() {
+  @Override
+  public boolean hasJumped() {
     return jumped;
   }
 
+  @Unique
   @Override
   public Vec3 getClimbSpeed(Vec3 original) {
     AttributeInstance climbSpeed = getAttribute(Services.REGISTRY.getClimbSpeedAttribute());
@@ -119,6 +122,7 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
     return new Vec3(original.x, climbSpeed.getValue(), original.z);
   }
 
+  @Unique
   @Override
   public boolean shouldExhaust() {
     for (SimpleEffectConfig s : config.untiringEquivalentEffects) {
@@ -132,12 +136,14 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
     return !hasEffect(Services.REGISTRY.getTirelessnessEffect());
   }
 
-    @Unique
+  @Unique
+  @Override
   public boolean hasMovementInput() {
     return hasMovementInput;
   }
 
   @Unique
+  @Override
   public void setHasMovementInput(boolean b) {
     hasMovementInput = b;
   }

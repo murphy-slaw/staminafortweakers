@@ -1,6 +1,7 @@
 package net.funkpla.staminafortweakers;
 
 public interface Swimmer {
+    boolean isWading();
     boolean swamUp();
     boolean hasMovementInput();
 
