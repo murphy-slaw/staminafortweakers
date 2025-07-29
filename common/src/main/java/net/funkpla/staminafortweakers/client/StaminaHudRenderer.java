@@ -111,15 +111,14 @@ public class StaminaHudRenderer {
 
     Color bg = Color.ofOpaque(config.staminaBarBackgroundColor);
 
-    context.setColor(bg.getRed(), bg.getGreen(), bg.getBlue(), bg.getAlpha());
+    setRenderColor(context, bg);
     context.blit(bgIcon, x1, y1, 0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
 
     int cutout = (int) Math.ceil(iconHeight * displayStamina);
     int remainder = iconHeight - cutout;
 
-    context.setColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+    setRenderColor(context, color);
     context.blit(icon, x1, y1 + remainder, 0, remainder, iconWidth, cutout, iconWidth, iconHeight);
-    context.setColor(1, 1, 1, 1);
   }
 
   private void renderStaminaBar(
@@ -179,5 +178,19 @@ public class StaminaHudRenderer {
       return Color.ofOpaque(config.staminaBarFatiguedColor);
     }
     return Color.ofOpaque(config.staminaBarColor);
+  }
+
+  private float[] colorToRGBA(Color color) {
+    return new float[] {
+      color.getRed() / 255f,
+      color.getGreen() / 255f,
+      color.getBlue() / 255f,
+      color.getAlpha() / 255f
+    };
+  }
+
+  private void setRenderColor(GuiGraphics context, Color color) {
+    float[] rgba = colorToRGBA(color);
+    context.setColor(rgba[0], rgba[1], rgba[2], rgba[3]);
   }
 }
