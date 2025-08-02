@@ -3,13 +3,17 @@ package net.funkpla.staminafortweakers;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.event.client.player.ClientPreAttackCallback;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.fabricmc.loader.api.FabricLoader;
+import net.funkpla.staminafortweakers.platform.Services;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
+import net.minecraft.world.item.ItemStack;
 
 public class StaminaClientMod implements ClientModInitializer {
 
@@ -31,6 +35,21 @@ public class StaminaClientMod implements ClientModInitializer {
                     container,
                     Component.literal("Old Style Stamina Icons"),
                     ResourcePackActivationType.NORMAL));
+
+    ClientPreAttackCallback.EVENT.register(
+        (client, player, clickCount) -> {
+          if (player.isCreative() || player.isSpectator()) return false;
+          ItemStack stack = player.getMainHandItem();
+          if (!stack.isEmpty()) {
+            if ((stack.is(ConventionalItemTags.SPEARS)
+                    || stack.is(ConventionalItemTags.SWORDS)
+                    || stack.is(ConventionalItemTags.AXES))
+                && clickCount != 0) {
+              Services.PACKET.sendWeaponSwingPacket();
+            }
+          }
+          return false;
+        });
   }
 
   private static class IconManagerFabric extends IconManager

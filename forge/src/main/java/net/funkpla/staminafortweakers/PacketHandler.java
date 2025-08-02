@@ -1,19 +1,12 @@
 package net.funkpla.staminafortweakers;
 
 import java.util.function.Supplier;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.PacketListener;
 import net.minecraft.network.protocol.game.ServerPacketListener;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public class PacketHandler {
@@ -30,15 +23,29 @@ public class PacketHandler {
     INSTANCE.registerMessage(
         messageId++, SwimPacket.class, SwimPacket::encoder, SwimPacket::new, SwimPacket::handle);
     INSTANCE.registerMessage(
-            messageId++, MovementInputPacket.class, MovementInputPacket::encoder, MovementInputPacket::new, MovementInputPacket::handle);
+        messageId++,
+        MovementInputPacket.class,
+        MovementInputPacket::encoder,
+        MovementInputPacket::new,
+        MovementInputPacket::handle);
+    INSTANCE.registerMessage(
+        messageId++,
+        WeaponSwingPacket.class,
+        WeaponSwingPacket::encoder,
+        WeaponSwingPacket::new,
+        WeaponSwingPacket::handle);
   }
 
-  public static void sendSwimPacket(){
+  public static void sendSwimPacket() {
     INSTANCE.sendToServer(new SwimPacket(true));
   }
 
-  public static void sendMovementInputPacket(boolean hasMovementInput){
+  public static void sendMovementInputPacket(boolean hasMovementInput) {
     INSTANCE.sendToServer(new MovementInputPacket(hasMovementInput));
+  }
+
+  public static void sendWeaponSwingPacket() {
+    INSTANCE.sendToServer(new WeaponSwingPacket(true));
   }
 
   public static void handle(SwimPacket msg, Supplier<NetworkEvent.Context> ctx) {
@@ -51,6 +58,11 @@ public class PacketHandler {
     ctx.get().setPacketHandled(true);
   }
 
+  public static void handle(WeaponSwingPacket msg, Supplier<NetworkEvent.Context> ctx) {
+    ctx.get().enqueueWork(() -> handleWeaponSwingPacket(msg, ctx));
+    ctx.get().setPacketHandled(true);
+  }
+
   public static void handleSwimPacket(SwimPacket packet, Supplier<NetworkEvent.Context> ctx) {
     PacketListener listener = ctx.get().getNetworkManager().getPacketListener();
     if (listener instanceof ServerPacketListener) {
@@ -59,11 +71,21 @@ public class PacketHandler {
     }
   }
 
-  public static void handleMovementInputPacket(MovementInputPacket packet, Supplier<NetworkEvent.Context> ctx){
+  public static void handleMovementInputPacket(
+      MovementInputPacket packet, Supplier<NetworkEvent.Context> ctx) {
     PacketListener listener = ctx.get().getNetworkManager().getPacketListener();
     if (listener instanceof ServerPacketListener) {
       ServerPlayer sender = ctx.get().getSender();
       if (sender != null) ((Swimmer) sender).setHasMovementInput(packet.hasMovementInput);
+    }
+  }
+
+  public static void handleWeaponSwingPacket(
+      WeaponSwingPacket packet, Supplier<NetworkEvent.Context> ctx) {
+    PacketListener listener = ctx.get().getNetworkManager().getPacketListener();
+    if (listener instanceof ServerPacketListener) {
+      ServerPlayer sender = ctx.get().getSender();
+      if (sender != null) ((Attacker) sender).setSwungWeapon(packet.swung);
     }
   }
 
@@ -90,11 +112,40 @@ public class PacketHandler {
 
   public static class MovementInputPacket {
     public boolean hasMovementInput;
-    public MovementInputPacket(boolean hasMovementInput) {this.hasMovementInput=hasMovementInput;}
+
+    public MovementInputPacket(boolean hasMovementInput) {
+      this.hasMovementInput = hasMovementInput;
+    }
+
     public MovementInputPacket(FriendlyByteBuf buffer) {
       hasMovementInput = buffer.readBoolean();
     }
-    public void encoder(FriendlyByteBuf buffer) { buffer.writeBoolean(hasMovementInput);}
+
+    public void encoder(FriendlyByteBuf buffer) {
+      buffer.writeBoolean(hasMovementInput);
+    }
+
+    public void handle(Supplier<NetworkEvent.Context> ctx) {
+      ctx.get().enqueueWork(() -> PacketHandler.handle(this, ctx));
+      ctx.get().setPacketHandled(true);
+    }
+  }
+
+  public static class WeaponSwingPacket {
+    public boolean swung;
+
+    public WeaponSwingPacket(boolean swung) {
+      this.swung = swung;
+    }
+
+    public WeaponSwingPacket(FriendlyByteBuf buffer) {
+      swung = buffer.readBoolean();
+    }
+
+    public void encoder(FriendlyByteBuf buffer) {
+      buffer.writeBoolean(swung);
+    }
+
     public void handle(Supplier<NetworkEvent.Context> ctx) {
       ctx.get().enqueueWork(() -> PacketHandler.handle(this, ctx));
       ctx.get().setPacketHandled(true);

@@ -39,6 +39,7 @@ public class Common {
             .tryAdd(new ClimbingExhausts())
             .tryAdd(new MiningExhausts())
             .tryAdd(new AttackingExhausts())
+            .tryAdd(new SwingingWeaponExhausts())
             .tryAdd(new ShieldUseExhausts())
             .tryAdd(new GlidingExhausts())
             .build();

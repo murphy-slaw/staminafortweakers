@@ -2,18 +2,19 @@ package net.funkpla.staminafortweakers.platform.services;
 
 import net.funkpla.staminafortweakers.PacketHandler;
 
-public class ForgePacketHelper implements IPacketHelper {
+public class NeoForgePacketHelper implements IPacketHelper {
+  @Override
   public void sendMovementInputPacket(boolean hasMovementInput) {
-    PacketHandler.sendMovementInputPacket(hasMovementInput);
+    PacketHandler.sendMovementPacket(hasMovementInput);
   }
 
   @Override
   public void sendSwimPacket() {
-    PacketHandler.sendSwimPacket();
+    PacketHandler.sendSwimPacket(true);
   }
 
   @Override
   public void sendWeaponSwingPacket() {
-    PacketHandler.sendWeaponSwingPacket();
+    PacketHandler.sendWeaponSwingPacket(true);
   }
 }

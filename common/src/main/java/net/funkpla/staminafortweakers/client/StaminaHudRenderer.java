@@ -113,12 +113,14 @@ public class StaminaHudRenderer {
 
     setRenderColor(context, bg);
     context.blit(bgIcon, x1, y1, 0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
+    context.setColor(1f, 1f, 1f, 1f);
 
     int cutout = (int) Math.ceil(iconHeight * displayStamina);
     int remainder = iconHeight - cutout;
 
     setRenderColor(context, color);
     context.blit(icon, x1, y1 + remainder, 0, remainder, iconWidth, cutout, iconWidth, iconHeight);
+    context.setColor(1f, 1f, 1f, 1f);
   }
 
   private void renderStaminaBar(

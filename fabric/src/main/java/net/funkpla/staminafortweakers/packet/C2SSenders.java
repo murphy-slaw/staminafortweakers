@@ -5,14 +5,21 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.network.FriendlyByteBuf;
 
 public class C2SSenders {
-    public static void sendSwimPacket() {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        buf.writeBoolean(true);
-        ClientPlayNetworking.send(C2SPackets.SWIMMING_PACKET_ID, buf);
-    }
-    public static void sendMovementInputPacket(boolean moving) {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        buf.writeBoolean(moving);
-        ClientPlayNetworking.send(C2SPackets.MOVEMENT_INPUT_PACKET_ID, buf);
-    }
+  public static void sendSwimPacket() {
+    FriendlyByteBuf buf = PacketByteBufs.create();
+    buf.writeBoolean(true);
+    ClientPlayNetworking.send(C2SPackets.SWIMMING_PACKET_ID, buf);
+  }
+
+  public static void sendMovementInputPacket(boolean moving) {
+    FriendlyByteBuf buf = PacketByteBufs.create();
+    buf.writeBoolean(moving);
+    ClientPlayNetworking.send(C2SPackets.MOVEMENT_INPUT_PACKET_ID, buf);
+  }
+
+  public static void sendWeaponSwingPacket() {
+    FriendlyByteBuf buf = PacketByteBufs.create();
+    buf.writeBoolean(true);
+    ClientPlayNetworking.send(C2SPackets.WEAPON_SWING_PACKET_ID, buf);
+  }
 }
