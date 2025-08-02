@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0] 2025-08-02
+
+### Fixed
+
+- Eliminated unintended recovery cooldown on world join.
+- Fixed some issues with stamina icon colors caused by dumb math.
+
+### Changed
+
+- Replaced old stamina icons with shiny new pixel art. (The old icons are still available as a built-in resource pack.)
+- Refactored exhaustion code into modular rules to make it easier to add depletion events.
+
+### Added
+
+- Added depletion event for swinging a weapon without hitting anything. (Defaults to no cost.)
+- Added `staminafortweakers:melee_weapons` item tag to configure which items cause depletion on swing.
 
 ## [1.7.1] 2025-07-26
 
