@@ -14,7 +14,7 @@ So many knobs to tweak!
   * Jumping
   * Climbing
   * Mining blocks
-  * Attacking
+  * Attacking or swinging a weapon
   * Shield use
 * Optional, somewhat upsetting panting noises when the player is winded.
 * Recovery under different conditions
@@ -45,17 +45,20 @@ So many knobs to tweak!
 * Untiring enchantment for tools
   * Reduces stamina depletion for mining
   * Three levels, completely nullifies stamina depletion from mining at level III.
-* Mod compat with [Gliders](https://github.com/Jeryn99/Gliders/)
+* Mod compat with [Gliders](https://modrinth.com/mod/gliders)
   * Set depletion per tick when using a glider
   * When you're exhausted, you fall out of the sky. Be careful!
 
 With all these options, you can make stamina management anything from a mild annoyance to a nearly crippling impediment! Good times.
 
 ## Future Plans
+
 Even more ridiculous options! Suggestions welcome on the [issues page](https://github.com/murphy-slaw/staminafortweakers/issues).
 
 ## Acknowledgements
+
 ### Sounds:
+
 Breath_Scared_18.wav by LittleRobotSoundFactory -- https://freesound.org/s/270496/ -- License: Attribution 4.0
 
 ### Graphics
