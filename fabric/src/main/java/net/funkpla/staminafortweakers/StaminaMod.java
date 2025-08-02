@@ -33,7 +33,6 @@ public class StaminaMod implements ModInitializer {
 
     ServerLifecycleEvents.SERVER_STARTING.register(
         server -> {
-          Attributes.register();
           StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
           config.validatePostStart();
         });
