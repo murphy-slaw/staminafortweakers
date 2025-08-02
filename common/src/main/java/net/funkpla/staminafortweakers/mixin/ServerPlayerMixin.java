@@ -40,7 +40,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
 
   @Unique private static final double MIN_RECOVERY = 0.25d;
   @Shadow @Final public ServerPlayerGameMode gameMode;
-  @Unique private Timer recoveryCooldown = new Timer(config.recoveryExhaustDelayTicks);
+  @Unique private Timer recoveryCooldown = new Timer(0);
   @Unique private Vec3 lastPos = new Vec3(0, 0, 0);
   @Unique private boolean swimUp;
   @Unique private boolean depleted;
