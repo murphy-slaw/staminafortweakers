@@ -45,6 +45,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
   @Unique private boolean swimUp;
   @Unique private boolean depleted;
   @Unique private boolean attacked = false;
+  @Unique private boolean swungWeapon = false;
 
   protected ServerPlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
     super(entityType, world);
@@ -174,6 +175,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
     recoveryCooldown.tickDown();
     setSwamUp(false);
     setAttacked(false);
+    setSwungWeapon(false);
   }
 
   @Unique
@@ -322,5 +324,17 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
   @Override
   public void setAttacked(boolean attacked) {
     this.attacked = attacked;
+  }
+
+  @Unique
+  @Override
+  public void setSwungWeapon(boolean swung) {
+    this.swungWeapon = swung;
+  }
+
+  @Unique
+  @Override
+  public boolean getSwungWeapon() {
+    return this.swungWeapon;
   }
 }

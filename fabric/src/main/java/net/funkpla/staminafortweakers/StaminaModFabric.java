@@ -9,9 +9,13 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.funkpla.staminafortweakers.packet.C2SReceivers;
 import net.funkpla.staminafortweakers.registry.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -19,6 +23,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 public class StaminaModFabric implements ModInitializer {
+
+  private static boolean onClientPlayerPreAttack(
+      Minecraft client, LocalPlayer player, int clickCount) {
+    ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
+    if (!(stack.isEmpty() || player.isCreative() || player.isSpectator())) {
+      if (stack.is(ConventionalItemTags.MELEE_WEAPON_TOOLS)) {}
+    }
+    return false;
+  }
 
   @Override
   public void onInitialize() {

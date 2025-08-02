@@ -2,6 +2,7 @@ package net.funkpla.staminafortweakers;
 
 import net.funkpla.staminafortweakers.packet.payload.MovementPacketPayload;
 import net.funkpla.staminafortweakers.packet.payload.SwimPacketPayload;
+import net.funkpla.staminafortweakers.packet.payload.WeaponSwingPacketPayload;
 import net.minecraft.network.protocol.game.ServerPacketListener;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -22,6 +23,10 @@ public class PacketHandler {
     registrar.playToServer(
         SwimPacketPayload.TYPE,
         SwimPacketPayload.CODEC,
+        new DirectionalPayloadHandler<>(PacketHandler::handle, PacketHandler::handle));
+    registrar.playToServer(
+        WeaponSwingPacketPayload.TYPE,
+        WeaponSwingPacketPayload.CODEC,
         new DirectionalPayloadHandler<>(PacketHandler::handle, PacketHandler::handle));
   }
 
@@ -56,4 +61,19 @@ public class PacketHandler {
     PacketDistributor.sendToServer(new SwimPacketPayload(swamUp));
   }
 
+  public static void handle(final WeaponSwingPacketPayload msg, final IPayloadContext ctx) {
+    ctx.enqueueWork(() -> handleWeaponSwingPacket(msg, ctx));
+  }
+
+  public static void handleWeaponSwingPacket(
+      final WeaponSwingPacketPayload packet, final IPayloadContext ctx) {
+    if (ctx.listener() instanceof ServerPacketListener) {
+      ServerPlayer sender = (ServerPlayer) ctx.player();
+      ((Attacker) sender).setSwungWeapon(packet.swung());
+    }
+  }
+
+  public static void sendWeaponSwingPacket(boolean swung) {
+    PacketDistributor.sendToServer(new WeaponSwingPacketPayload(swung));
+  }
 }
