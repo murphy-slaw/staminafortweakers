@@ -3,7 +3,6 @@ package net.funkpla.staminafortweakers;
 import net.funkpla.staminafortweakers.platform.Services;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -16,7 +15,7 @@ public class ClientEventHandler {
     Player player = event.getEntity();
     if (player.isCreative() || player.isSpectator()) return;
     if (!stack.isEmpty()) {
-      if (stack.is(Tags.Items.TOOLS)) {
+      if (stack.is(Constants.MELEE_WEAPON)) {
         Services.PACKET.sendWeaponSwingPacket();
       }
     }
