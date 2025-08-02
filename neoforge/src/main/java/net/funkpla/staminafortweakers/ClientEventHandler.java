@@ -4,7 +4,6 @@ import net.funkpla.staminafortweakers.platform.Services;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 public class ClientEventHandler {
@@ -14,7 +13,7 @@ public class ClientEventHandler {
     Player player = event.getEntity();
     if (player.isCreative() || player.isSpectator()) return;
     if (!stack.isEmpty()) {
-      if (stack.is(Tags.Items.MELEE_WEAPON_TOOLS)) {
+      if (stack.is(Constants.MELEE_WEAPON)) {
         Services.PACKET.sendWeaponSwingPacket();
       }
     }

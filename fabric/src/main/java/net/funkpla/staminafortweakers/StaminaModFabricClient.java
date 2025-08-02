@@ -7,7 +7,6 @@ import net.fabricmc.fabric.api.event.client.player.ClientPreAttackCallback;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
-import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.fabricmc.loader.api.FabricLoader;
 import net.funkpla.staminafortweakers.platform.Services;
 import net.minecraft.network.chat.Component;
@@ -41,7 +40,7 @@ public class StaminaModFabricClient implements ClientModInitializer {
           if (player.isCreative() || player.isSpectator()) return false;
           ItemStack stack = player.getMainHandItem();
           if (!stack.isEmpty()) {
-            if (stack.is(ConventionalItemTags.MELEE_WEAPON_TOOLS) && clickCount != 0) {
+            if (stack.is(Constants.MELEE_WEAPON) && clickCount != 0) {
               Services.PACKET.sendWeaponSwingPacket();
             }
           }
