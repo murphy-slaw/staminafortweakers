@@ -1,6 +1,7 @@
 package net.funkpla.staminafortweakers;
 
 import me.shedaniel.autoconfig.AutoConfig;
+import net.funkpla.staminafortweakers.compat.bettercombat.BetterCombatCompat;
 import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -33,6 +34,7 @@ public class StaminaModNeoForgeClient {
       modBus.register(this);
       eventBus.register(ClientEventHandler.class);
     }
+    BetterCombatCompat.init();
   }
 
   @SubscribeEvent

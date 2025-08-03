@@ -43,6 +43,8 @@ dependencies {
     modImplementation include("maven.modrinth:AdditionalEntityAttributes:${aea_version}")
     modCompileOnly "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cca_version}"
     modCompileOnly "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${cca_version}"
+    modCompileOnly("maven.modrinth:better-combat:${bettercombat_version}-fabric")
+    modCompileOnly("maven.modrinth:playeranimator:${playeranimator_version}-fabric")
     api("org.projectlombok:lombok:1.18.36")
     annotationProcessor("org.projectlombok:lombok:1.18.36")
 }
@@ -69,6 +71,7 @@ loom {
         }
     }
 }
+
 publishMods {
     file = remapJar.archiveFile
     type = STABLE

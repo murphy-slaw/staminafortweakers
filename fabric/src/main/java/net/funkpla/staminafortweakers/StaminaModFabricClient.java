@@ -8,11 +8,10 @@ import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
-import net.funkpla.staminafortweakers.platform.Services;
+import net.funkpla.staminafortweakers.compat.bettercombat.BetterCombatCompat;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
-import net.minecraft.world.item.ItemStack;
 
 public class StaminaModFabricClient implements ClientModInitializer {
 
@@ -37,15 +36,11 @@ public class StaminaModFabricClient implements ClientModInitializer {
 
     ClientPreAttackCallback.EVENT.register(
         (client, player, clickCount) -> {
-          if (player.isCreative() || player.isSpectator()) return false;
-          ItemStack stack = player.getMainHandItem();
-          if (!stack.isEmpty()) {
-            if (stack.is(Constants.MELEE_WEAPON) && clickCount != 0) {
-              Services.PACKET.sendWeaponSwingPacket();
-            }
-          }
+          if (clickCount != 0) Common.trySwingPacket(player);
           return false;
         });
+
+    BetterCombatCompat.init();
   }
 
   private static class IconManagerFabric extends IconManager

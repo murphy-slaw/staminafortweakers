@@ -42,8 +42,12 @@ dependencies {
     compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation 'org.jetbrains:annotations:25.0.0'
-    api "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
+    api("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
     compileOnly("maven.modrinth:gliders:${gliders_version}")
+    compileOnly("maven.modrinth:better-combat:${bettercombat_version}-neoforge")
+    compileOnly("maven.modrinth:playeranimator:${playeranimator_version}-forge")
     api("org.projectlombok:lombok:1.18.36")
     annotationProcessor("org.projectlombok:lombok:1.18.36")
 }
