@@ -1,7 +1,7 @@
 package net.funkpla.staminafortweakers;
 
-
 import me.shedaniel.autoconfig.AutoConfig;
+import net.funkpla.staminafortweakers.compat.bettercombat.BetterCombatCompat;
 import net.funkpla.staminafortweakers.config.StaminaConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
@@ -23,5 +23,6 @@ public class ClientSetup {
     if (resManager instanceof ReloadableResourceManager) {
       ((ReloadableResourceManager) resManager).registerReloadListener(new IconManager());
     }
+    BetterCombatCompat.init();
   }
 }

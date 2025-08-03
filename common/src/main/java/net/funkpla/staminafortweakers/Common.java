@@ -4,8 +4,11 @@ import lombok.Setter;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.funkpla.staminafortweakers.config.StaminaConfig;
+import net.funkpla.staminafortweakers.platform.Services;
 import net.funkpla.staminafortweakers.rules.*;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 public class Common {
   public static StaminaConfig config;
@@ -43,5 +46,14 @@ public class Common {
             .tryAdd(new ShieldUseExhausts())
             .tryAdd(new GlidingExhausts())
             .build();
+  }
+
+  public static void trySwingPacket(LocalPlayer player) {
+    if (!(player.isCreative() || player.isSpectator())) {
+      ItemStack stack = player.getMainHandItem();
+      if (!stack.isEmpty() && stack.is(Constants.MELEE_WEAPON)) {
+        Services.PACKET.sendWeaponSwingPacket();
+      }
+    }
   }
 }

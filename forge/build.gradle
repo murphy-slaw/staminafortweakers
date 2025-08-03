@@ -76,6 +76,8 @@ dependencies {
     modApi("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}")
     modCompileOnly("maven.modrinth:gliders:${gliders_version}")
     modCompileOnly("net.threetag:PalladiumCore:${palladium_core_version}")
+    modCompileOnly("maven.modrinth:better-combat:${bettercombat_version}-forge")
+    modCompileOnly("maven.modrinth:playeranimator:${playeranimator_version}-forge")
     api("org.projectlombok:lombok:1.18.36")
     annotationProcessor("org.projectlombok:lombok:1.18.36")
 }

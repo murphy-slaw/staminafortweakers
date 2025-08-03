@@ -44,8 +44,8 @@ dependencies {
     modImplementation include("maven.modrinth:AdditionalEntityAttributes:${aea_version}")
     modCompileOnly "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cca_version}"
     modCompileOnly "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${cca_version}"
-    modImplementation("maven.modrinth:better-combat:1.8.6+1.20.1-fabric")
-    modImplementation("maven.modrinth:playeranimator:1.0.2-rc1+1.20-fabric")
+    modCompileOnly("maven.modrinth:better-combat:${bettercombat_version}-fabric")
+    modCompileOnly("maven.modrinth:playeranimator:${playeranimator_version}-fabric")
     api("org.projectlombok:lombok:1.18.36")
     annotationProcessor("org.projectlombok:lombok:1.18.36")
 }
