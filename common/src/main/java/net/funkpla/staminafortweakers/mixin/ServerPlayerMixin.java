@@ -166,7 +166,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
 
     if (shouldExhaust()) Common.getRuleset().run(((ServerPlayer) (Object) this));
 
-    if (depleted && config.recoveryDelayTicks > 0 && recoveryCooldown.expired()) {
+    if (depleted && config.recoveryDelayTicks > 0) {
       recoveryCooldown = new Timer(config.recoveryDelayTicks);
     }
     if (canRecover()) recover();

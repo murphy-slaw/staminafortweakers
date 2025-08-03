@@ -22,6 +22,9 @@ public class C2SReceivers {
         ((payload, context) -> ((Swimmer) context.player()).setHasMovementInput(payload.moving())));
     ServerPlayNetworking.registerGlobalReceiver(
         WeaponSwingPacketPayload.TYPE,
-        ((payload, context) -> ((Attacker) context.player()).setSwungWeapon(payload.swung())));
+        (payload, context) -> {
+          if (!context.player().swinging)
+            ((Attacker) context.player()).setSwungWeapon(payload.swung());
+        });
   }
 }
