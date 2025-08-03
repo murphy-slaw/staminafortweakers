@@ -48,6 +48,8 @@ So many knobs to tweak!
 * Mod compat with [Gliders](https://modrinth.com/mod/gliders)
   * Set depletion per tick when using a glider
   * When you're exhausted, you fall out of the sky. Be careful!
+* Mod compat with Better Combat
+  * Weapon swing depletion costs work with "hold to attack"
 
 With all these options, you can make stamina management anything from a mild annoyance to a nearly crippling impediment! Good times.
 
