@@ -69,7 +69,7 @@ public class PacketHandler {
       final WeaponSwingPacketPayload packet, final IPayloadContext ctx) {
     if (ctx.listener() instanceof ServerPacketListener) {
       ServerPlayer sender = (ServerPlayer) ctx.player();
-      ((Attacker) sender).setSwungWeapon(packet.swung());
+      if (!sender.swinging) ((Attacker) sender).setSwungWeapon(packet.swung());
     }
   }
 

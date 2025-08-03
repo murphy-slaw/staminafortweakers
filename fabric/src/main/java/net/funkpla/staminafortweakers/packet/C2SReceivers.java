@@ -22,7 +22,7 @@ public class C2SReceivers {
         C2SPackets.WEAPON_SWING_PACKET_ID,
         ((server, player, handler, buf, responseSender) -> {
           boolean s = buf.readBoolean();
-          ((Attacker) player).setSwungWeapon(s);
+          if (!player.swinging) ((Attacker) player).setSwungWeapon(s);
         }));
   }
 }

@@ -85,7 +85,7 @@ public class PacketHandler {
     PacketListener listener = ctx.get().getNetworkManager().getPacketListener();
     if (listener instanceof ServerPacketListener) {
       ServerPlayer sender = ctx.get().getSender();
-      if (sender != null) ((Attacker) sender).setSwungWeapon(packet.swung);
+      if (sender != null && !sender.swinging) ((Attacker) sender).setSwungWeapon(packet.swung);
     }
   }
 
