@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.2] 2025-08-04
+
+### Fixed
+- Shield use code now checks a tag (`staminafortweakers:shield`) instead of checking for the `minecraft:shield` item. Some modded shields may work out of the box, others may need to be added to the tag with a data pack.
+- No longer checking for item tags during Better Combat `AttackStart` events, since the event won't fire unless BC thinks the player is holding a weapon. Should fix weapon swing exhaustion for most modded weapons when BC is installed.
+
 ## [1.8.1] 2025-08-03
 
 ### Fixed
