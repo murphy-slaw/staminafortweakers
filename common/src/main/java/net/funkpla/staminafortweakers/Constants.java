@@ -12,4 +12,6 @@ public class Constants {
   public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
   public static final TagKey<Item> MELEE_WEAPON =
       TagKey.create(Registries.ITEM, Common.locate("melee_weapon"));
+  public static final TagKey<Item> SHIELDS =
+      TagKey.create(Registries.ITEM, Common.locate("shield"));
 }

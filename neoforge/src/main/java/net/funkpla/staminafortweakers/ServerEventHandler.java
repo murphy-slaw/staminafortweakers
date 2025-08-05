@@ -1,7 +1,6 @@
 package net.funkpla.staminafortweakers;
 
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
@@ -29,7 +28,7 @@ public class ServerEventHandler {
   public static void handleUseShield(PlayerInteractEvent.RightClickItem event) {
     Player player = event.getEntity();
     if (player.isCreative() || player.isSpectator()) return;
-    if (player.getItemInHand(event.getHand()).getItem() == Items.SHIELD) {
+    if (player.getItemInHand(event.getHand()).is(Constants.SHIELDS)) {
       if (((Exhaustible) player).isExhausted()) {
         event.setCanceled(true);
       }

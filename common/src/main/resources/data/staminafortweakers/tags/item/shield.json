@@ -1,0 +1,13 @@
+{
+    "values": [
+        "minecraft:shield",
+        {
+            "id": "#c:tools/shield",
+            "required": false
+        },
+        {
+            "id": "#forge:tools/shields",
+            "required": false
+        }
+    ]
+}
