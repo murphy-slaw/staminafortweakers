@@ -2,10 +2,8 @@ package net.funkpla.staminafortweakers.mixin;
 
 import static net.minecraft.world.item.enchantment.EnchantmentHelper.getDepthStrider;
 
-import net.funkpla.staminafortweakers.Attacker;
-import net.funkpla.staminafortweakers.Common;
-import net.funkpla.staminafortweakers.Miner;
-import net.funkpla.staminafortweakers.Swimmer;
+import java.util.Optional;
+import net.funkpla.staminafortweakers.*;
 import net.funkpla.staminafortweakers.compat.vc_gliders.VCGlidersCompat;
 import net.funkpla.staminafortweakers.config.EffectConfig;
 import net.funkpla.staminafortweakers.config.StaminaConfig;
@@ -17,9 +15,9 @@ import net.minecraft.server.level.ServerPlayerGameMode;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -190,11 +188,15 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
       }
       setSprinting(false);
 
-      if (isUsingShield()) stopUsingItem();
-      ItemCooldowns cooldowns = ((ServerPlayer) (Object) this).getCooldowns();
-      if (!cooldowns.isOnCooldown(Items.SHIELD)) {
-        cooldowns.addCooldown(Items.SHIELD, config.shieldRecoveryDelayTicks);
-      }
+      getUsedShield()
+          .ifPresent(
+              shieldItem -> {
+                stopUsingItem();
+                ItemCooldowns cooldowns = ((ServerPlayer) (Object) this).getCooldowns();
+                if (!cooldowns.isOnCooldown(shieldItem) && config.shieldRecoveryDelayTicks > 0) {
+                  cooldowns.addCooldown(shieldItem, config.shieldRecoveryDelayTicks);
+                }
+              });
 
       if (platformHelper.isModLoaded("vc_gliders")) VCGlidersCompat.crashGlider(this);
 
@@ -288,8 +290,16 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
   @Unique
   @Override
   public boolean isUsingShield() {
-    return this.isUsingItem()
-        && this.getItemInHand(this.getUsedItemHand()).getItem() == Items.SHIELD;
+    return this.isUsingItem() && this.getItemInHand(this.getUsedItemHand()).is(Constants.SHIELDS);
+  }
+
+  @Unique
+  public Optional<Item> getUsedShield() {
+    if (isUsingItem()) {
+      ItemStack stack = this.getItemInHand(this.getUsedItemHand());
+      if (stack.is(Constants.SHIELDS)) return Optional.of(stack.getItem());
+    }
+    return Optional.empty();
   }
 
   @Unique

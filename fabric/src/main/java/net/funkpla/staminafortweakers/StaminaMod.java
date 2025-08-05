@@ -16,7 +16,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 public class StaminaMod implements ModInitializer {
 
@@ -55,7 +54,7 @@ public class StaminaMod implements ModInitializer {
         (player, level, hand) -> {
           ItemStack stack = player.getItemInHand(hand);
           if (!(player.isCreative() || player.isSpectator())) {
-            if (stack.getItem() == Items.SHIELD) {
+            if (stack.is(Constants.SHIELDS)) {
               if (((Exhaustible) player).isExhausted()) return InteractionResultHolder.fail(stack);
             }
           }
