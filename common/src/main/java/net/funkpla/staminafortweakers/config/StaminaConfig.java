@@ -6,13 +6,12 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.EnumHandler.EnumDisplayOption;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
-import net.funkpla.staminafortweakers.Common;
 import net.funkpla.staminafortweakers.Constants;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 
 @SuppressWarnings("CanBeFinal")
-@Config(name = "staminafortweakers")
+@Config(name = Constants.MOD_ID)
 public class StaminaConfig implements ConfigData {
 
   @Comment("Percentage of total stamina triggering exhaustion")
@@ -173,8 +172,9 @@ public class StaminaConfig implements ConfigData {
   public StaminaBarConfig bar = new StaminaBarConfig();
 
   /*
-   * Stamina bar configuration
+   * Stamina bar colors.
    */
+
   @Comment("Stamina bar background color")
   @ConfigEntry.ColorPicker
   @ConfigEntry.Category("Colors")
@@ -211,8 +211,9 @@ public class StaminaConfig implements ConfigData {
   public int staminaBarTirelessColor = 0xFEB236;
 
   /*
-   * Stamina bar colors.
+  Customizable effects
    */
+
   @ConfigEntry.Gui.PrefixText
   @Comment("Exhaustion effects")
   @ConfigEntry.Category("Effects")
@@ -226,7 +227,7 @@ public class StaminaConfig implements ConfigData {
   @ConfigEntry.Category("Effects")
   public List<EffectConfig> fatiguedEffects = new ArrayList<>();
 
-  @Comment("Effects equivalent to Untiring")
+  @Comment("Effects that prevent stamina depletion")
   @ConfigEntry.Category("Effects")
   public List<SimpleEffectConfig> untiringEquivalentEffects = new ArrayList<>();
 
@@ -258,27 +259,7 @@ public class StaminaConfig implements ConfigData {
     effects.removeAll(missing);
   }
 
-  /*
-  Customizable effects
-   */
-
-  @Override
   public void validatePostLoad() {
-    if (exhaustedEffects.isEmpty()) {
-      exhaustedEffects.add(new EffectConfig("staminafortweakers:fatigue", 3, 4, true, true));
-      exhaustedEffects.add(new EffectConfig("minecraft:darkness", 60, 0, true, false));
-      exhaustedEffects.add(new EffectConfig("minecraft:mining_fatigue", 20, 1, true, true));
-    }
-    if (windedEffects.isEmpty()) {
-      windedEffects.add(new EffectConfig("staminafortweakers:fatigue", 3, 2, true, true));
-    }
-    if (fatiguedEffects.isEmpty()) {
-      fatiguedEffects.add(new EffectConfig("staminafortweakers:fatigue", 3, 0, true, true));
-    }
-    Common.setConfigDirty(true);
-  }
-
-  public void validatePostStart() {
     Constants.LOG.info("Validating Exhausted effects.");
     validateEffectConfigs(exhaustedEffects);
     Constants.LOG.info("Validating Winded effects.");
