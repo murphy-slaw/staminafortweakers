@@ -86,6 +86,10 @@ public class StaminaConfig implements ConfigData {
   @ConfigEntry.Category("Exhaustion")
   public boolean efficiencyExhausts = true;
 
+  /*
+   * Recovery rules
+   */
+
   @Comment("% of max stamina recovered per tick.")
   @ConfigEntry.Category("Recovery")
   public float recoveryPerTick = 0.5F;
@@ -106,9 +110,6 @@ public class StaminaConfig implements ConfigData {
   @ConfigEntry.Category("Recovery")
   public boolean recoverWhenHungry = true;
 
-  /*
-   * Recovery rules
-   */
   @Comment("Do players recover stamina when not on the ground?")
   @ConfigEntry.Category("Recovery")
   public boolean recoverWhileAirborne = true;
@@ -135,6 +136,10 @@ public class StaminaConfig implements ConfigData {
   @ConfigEntry.BoundedDiscrete(max = 600)
   @ConfigEntry.Category("Recovery")
   public int shieldRecoveryDelayTicks = 40;
+
+  @Comment("Do players fully recover stamina on respawn?")
+  @ConfigEntry.Category("Recovery")
+  public boolean fullRecoveryOnRespawn = true;
 
   @Comment("Which formula to use for recovery")
   @ConfigEntry.Category("Recovery")

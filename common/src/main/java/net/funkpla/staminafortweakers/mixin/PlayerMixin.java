@@ -86,6 +86,20 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
     getAttribute(Services.REGISTRY.getStaminaAttribute()).setBaseValue(stamina);
   }
 
+  @Unique
+  @Override
+  public void resetStamina() {
+    setStamina(getMaxStamina());
+  }
+
+  @Unique
+  @Override
+  public void handleRespawn() {
+    if (config.fullRecoveryOnRespawn) {
+      resetStamina();
+    }
+  }
+
   /**
    * Track whether the entity jumped this tick. Set the flag in jump() and clear it at the beginning
    * of every tick.

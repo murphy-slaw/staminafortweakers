@@ -32,4 +32,8 @@ public interface Exhaustible {
   float getTravelingModifier();
 
   float getDepthStriderModifier();
+
+  void resetStamina();
+
+  default void handleRespawn() {}
 }

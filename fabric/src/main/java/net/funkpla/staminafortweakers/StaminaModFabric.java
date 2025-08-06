@@ -5,6 +5,7 @@ import static net.funkpla.staminafortweakers.Common.init;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
@@ -45,6 +46,11 @@ public class StaminaModFabric implements ModInitializer {
         server -> {
           StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
           config.validatePostStart();
+        });
+
+    ServerPlayerEvents.AFTER_RESPAWN.register(
+        (oldPlayer, newPlayer, alive) -> {
+          ((Exhaustible) newPlayer).handleRespawn();
         });
 
     PlayerBlockBreakEvents.AFTER.register(

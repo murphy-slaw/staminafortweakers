@@ -4,6 +4,7 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 
@@ -33,5 +34,10 @@ public class ServerEventHandler {
         event.setCanceled(true);
       }
     }
+  }
+
+  @SubscribeEvent
+  public static void handleRespawn(PlayerEvent.PlayerRespawnEvent event) {
+    ((Exhaustible) event.getEntity()).handleRespawn();
   }
 }
