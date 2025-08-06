@@ -86,6 +86,10 @@ public class StaminaConfig implements ConfigData {
   @ConfigEntry.Category("Exhaustion")
   public boolean efficiencyExhausts = true;
 
+  /*
+   * Recovery rules
+   */
+
   @Comment("% of max stamina recovered per tick.")
   @ConfigEntry.Category("Recovery")
   public float recoveryPerTick = 0.5F;
@@ -106,9 +110,6 @@ public class StaminaConfig implements ConfigData {
   @ConfigEntry.Category("Recovery")
   public boolean recoverWhenHungry = true;
 
-  /*
-   * Recovery rules
-   */
   @Comment("Do players recover stamina when not on the ground?")
   @ConfigEntry.Category("Recovery")
   public boolean recoverWhileAirborne = true;
@@ -135,6 +136,11 @@ public class StaminaConfig implements ConfigData {
   @ConfigEntry.BoundedDiscrete(max = 600)
   @ConfigEntry.Category("Recovery")
   public int shieldRecoveryDelayTicks = 40;
+
+  @Comment("Do players fully recover stamina on respawn?")
+  @ConfigEntry.Category("Recovery")
+  @ConfigEntry.Gui.Excluded
+  public boolean fullRecoveryOnRespawn = true;
 
   @Comment("Which formula to use for recovery")
   @ConfigEntry.Category("Recovery")
@@ -224,13 +230,13 @@ public class StaminaConfig implements ConfigData {
   @ConfigEntry.Category("Effects")
   public List<SimpleEffectConfig> untiringEquivalentEffects = new ArrayList<>();
 
-    private boolean effectIdMissing(INamedEffect e){
-        var b = BuiltInRegistries.MOB_EFFECT.containsKey(ResourceLocation.of(e.getId(), ':'));
-        if (!b) {
-            Constants.LOG.warn("Effect {} not found in registry, removing.", e.getId());
-        }
-        return !b;
+  private boolean effectIdMissing(INamedEffect e) {
+    var b = BuiltInRegistries.MOB_EFFECT.containsKey(ResourceLocation.of(e.getId(), ':'));
+    if (!b) {
+      Constants.LOG.warn("Effect {} not found in registry, removing.", e.getId());
     }
+    return !b;
+  }
 
   private void validateEffectConfigs(List<EffectConfig> effects) {
     List<EffectConfig> missing = new ArrayList<>();

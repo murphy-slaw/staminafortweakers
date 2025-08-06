@@ -29,6 +29,7 @@
     "text.autoconfig.staminafortweakers.option.recoveryExhaustDelayTicks": "Delay (ticks) before recovering from exhaustion",
     "text.autoconfig.staminafortweakers.option.recoveryDelayTicks": "Delay (ticks) before recovering after depletion",
     "text.autoconfig.staminafortweakers.option.shieldRecoveryDelayTicks": "Delay (ticks) before regaining shield use",
+    "text.autoconfig.staminafortweakers.option.fullRecoveryOnRespawn": "Fully recover stamina on respawn",
     "text.autoconfig.staminafortweakers.option.formula": "Recovery formula",
     "text.autoconfig.staminafortweakers.category.Exhaustion": "Exhaustion",
     "text.autoconfig.staminafortweakers.category.Recovery": "Recovery",
