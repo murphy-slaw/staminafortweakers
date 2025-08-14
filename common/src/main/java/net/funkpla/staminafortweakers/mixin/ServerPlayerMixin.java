@@ -285,10 +285,15 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
         && (config.recoverWhenHungry || isNotHungry())
         && ((config.recoverWhileSneaking && isShiftKeyDown())
             || (config.recoverWhileWalking || isStandingStill()))
-        && (config.recoverWhileAirborne || onGround())
+        && (config.recoverWhileAirborne || isOnGroundOrMounted())
         && (config.recoverUnderwater || !isUnderWater())
         && (config.recoverWhileBreathless || getAirSupply() > 0)
         && !isUsingShield();
+  }
+
+  @Unique
+  public boolean isOnGroundOrMounted() {
+    return onGround() || getVehicle() != null;
   }
 
   @Unique
