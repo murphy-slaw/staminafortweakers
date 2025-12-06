@@ -37,7 +37,7 @@ public abstract class LocalPlayerMixin extends PlayerMixin implements Swimmer, E
   @Inject(method = "tick", at = @At("HEAD"))
   private void doExhaustionSounds(CallbackInfo ci) {
     if (isUnderWater()) return;
-    if (!Common.config.exhaustionSounds) return;
+    if (!Common.getConfig().exhaustionSounds) return;
     breathCount += this.random.nextInt(2);
     if (breathCount >= BREATH_TICKS) {
       breathCount = 0;

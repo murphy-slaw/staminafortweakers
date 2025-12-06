@@ -161,7 +161,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
     if (isCreative() || isSpectator()) return;
     depleted = false;
 
-    if (shouldExhaust()) Common.getRuleset().run(((ServerPlayer) (Object) this));
+    if (shouldExhaust()) Common.getRules().run(((ServerPlayer) (Object) this));
 
     if (depleted && config.recoveryDelayTicks > 0) {
       recoveryCooldown = new Timer(config.recoveryDelayTicks);
@@ -282,7 +282,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
     return !depleted
         && recoveryCooldown.expired()
         && (config.recoverWhenHungry || isNotHungry())
-        && ((config.recoverWhileSneaking && isShiftKeyDown())
+        && ((config.recoverWhileSneaking && isSteppingCarefully())
             || (config.recoverWhileWalking || isStandingStill()))
         && (config.recoverWhileAirborne || isOnGroundOrMounted())
         && (config.recoverUnderwater || !isUnderWater())
@@ -341,13 +341,13 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
 
   @Unique
   @Override
-  public void setSwungWeapon(boolean swung) {
-    this.swungWeapon = swung;
+  public boolean getSwungWeapon() {
+    return this.swungWeapon;
   }
 
   @Unique
   @Override
-  public boolean getSwungWeapon() {
-    return this.swungWeapon;
+  public void setSwungWeapon(boolean swung) {
+    this.swungWeapon = swung;
   }
 }

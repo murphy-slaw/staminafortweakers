@@ -1,7 +1,5 @@
 package net.funkpla.staminafortweakers;
 
-import static net.funkpla.staminafortweakers.Common.init;
-
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
@@ -19,12 +17,12 @@ public class StaminaModFabric implements ModInitializer {
 
   @Override
   public void onInitialize() {
-    init();
     Attributes.register();
     StatusEffects.register();
     SoundEvents.register();
     Potions.register();
     C2SReceivers.registerPackets();
+    Common.initConfig();
 
     ServerPlayerEvents.AFTER_RESPAWN.register(
         (oldPlayer, newPlayer, alive) -> ((Exhaustible) newPlayer).handleRespawn());
