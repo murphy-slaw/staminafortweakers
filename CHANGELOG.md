@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.0] 2025-12-05
+
+### Fixed
+
+- Use getAttributeValue() instead of getAttributeBaseValue() in several places so that modifiers work correctly.
+- Use Double.compare() in a couple of places where precision issues were causing weirdness.
+- Fixed a race condition which could cause the config to lose effect configs.
+
+### Changed
+
+- Lots of refactoring of the config system under the hood to make default config handling and rule reloading on 
+  config change much, much simpler.
+
 ## [1.8.2] 2025-08-04
 
 ### Fixed
