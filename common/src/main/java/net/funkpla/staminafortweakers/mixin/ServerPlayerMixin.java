@@ -239,10 +239,9 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
   @Unique
   private void recoverStamina(double recoveryAmount) {
     double s = (getMaxStamina() * recoveryAmount / 100);
-    setStamina(getStamina() + s);
-    if (getStamina() > getMaxStamina()) {
-      setStamina(getMaxStamina());
-    }
+    int compared = Double.compare(getStamina(), getMaxStamina());
+    if (compared > 0) setStamina(getMaxStamina());
+    else if (compared < 0) setStamina(getStamina() + s);
   }
 
   @Unique

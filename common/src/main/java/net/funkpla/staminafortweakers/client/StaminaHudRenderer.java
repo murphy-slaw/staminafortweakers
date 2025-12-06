@@ -27,8 +27,8 @@ public class StaminaHudRenderer {
   private float getDisplayStamina(LocalPlayer player) {
     double curStamina = player.getAttributeValue(Services.REGISTRY.getStaminaAttribute());
     double maxStamina = player.getAttributeValue(Services.REGISTRY.getMaxStaminaAttribute());
-    if (curStamina <= 1d) smoothed = 0d;
-    else if (curStamina >= maxStamina) smoothed = curStamina;
+    if (Double.compare(curStamina, 1d) <= 0) smoothed = 0d;
+    else if (Double.compare(curStamina, maxStamina) >= 0) smoothed = curStamina;
     else
       this.smoothed =
           (this.smoothed * (double) (SmoothedTicks - 1) / SmoothedTicks)
