@@ -1,7 +1,6 @@
 package net.funkpla.staminafortweakers.client;
 
 import java.util.Objects;
-import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.math.Color;
 import net.funkpla.staminafortweakers.Common;
 import net.funkpla.staminafortweakers.Exhaustible;
@@ -17,7 +16,6 @@ import org.joml.Vector2i;
 
 public class StaminaHudRenderer {
   private static final int SmoothedTicks = 5;
-  private final StaminaConfig config = AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
   private double smoothed;
 
   public StaminaHudRenderer() {
@@ -37,6 +35,7 @@ public class StaminaHudRenderer {
   }
 
   public void renderHud(GuiGraphics context, float ignoredTickDelta, Minecraft client) {
+    StaminaConfig config = Common.getConfig();
     int width = context.guiWidth();
     int height = context.guiHeight();
     double scale = client.getWindow().getGuiScale();
@@ -70,6 +69,7 @@ public class StaminaHudRenderer {
       float displayStamina,
       Color color) {
 
+    StaminaConfig config = Common.getConfig();
     int y1;
     int x1;
     ResourceLocation icon;
@@ -125,6 +125,7 @@ public class StaminaHudRenderer {
 
   private void renderStaminaBar(
       GuiGraphics context, int height, int width, float displayStamina, Color color) {
+    StaminaConfig config = Common.getConfig();
     int x1;
     int y1;
     int barWidth;
@@ -159,7 +160,13 @@ public class StaminaHudRenderer {
         y2 + 1,
         -1,
         Color.ofOpaque(config.staminaBarOutlineColor).getColor());
-    context.fill(x1, y1, x2, y2, -1, Color.ofOpaque(config.staminaBarBackgroundColor).getColor());
+    context.fill(
+        x1,
+        y1,
+        x2,
+        y2,
+        -1,
+        me.shedaniel.math.Color.ofOpaque(config.staminaBarBackgroundColor).getColor());
 
     if (config.bar.orientation == StaminaConfig.Orientation.HORIZONTAL)
       context.fill(
@@ -170,6 +177,7 @@ public class StaminaHudRenderer {
   }
 
   private @NotNull Color getColor(float pct) {
+    StaminaConfig config = Common.getConfig();
     if (pct <= Math.max(config.windedPercentage / 2.0F, 10F)) {
       return Color.ofOpaque(config.staminaBarNearlyExhaustedColor);
     }

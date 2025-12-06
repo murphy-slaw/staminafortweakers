@@ -1,7 +1,10 @@
 package net.funkpla.staminafortweakers;
 
 import java.nio.file.Path;
-import net.funkpla.staminafortweakers.registry.*;
+import net.funkpla.staminafortweakers.registry.Attributes;
+import net.funkpla.staminafortweakers.registry.Enchantments;
+import net.funkpla.staminafortweakers.registry.Potions;
+import net.funkpla.staminafortweakers.registry.StatusEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.PathPackResources;
@@ -14,13 +17,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(Constants.MOD_ID)
 public class StaminaModForge {
 
   public StaminaModForge() {
-    Common.init();
     IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
     StatusEffects.registerStatusEffects();
     Attributes.registerAttributes();
@@ -30,6 +33,12 @@ public class StaminaModForge {
     DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientSetup::new);
     modBus.addListener(Attributes::addLivingEntityAttributes);
     modBus.addListener(StaminaModForge::addPackFinders);
+    modBus.addListener(StaminaModForge::commonSetup);
+  }
+
+  @SubscribeEvent
+  public static void commonSetup(FMLCommonSetupEvent event) {
+    Common.initConfig();
   }
 
   @SubscribeEvent

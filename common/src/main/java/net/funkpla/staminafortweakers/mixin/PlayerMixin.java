@@ -1,8 +1,8 @@
 package net.funkpla.staminafortweakers.mixin;
 
 import java.util.Optional;
-import me.shedaniel.autoconfig.AutoConfig;
 import net.funkpla.staminafortweakers.Climber;
+import net.funkpla.staminafortweakers.Common;
 import net.funkpla.staminafortweakers.Exhaustible;
 import net.funkpla.staminafortweakers.Swimmer;
 import net.funkpla.staminafortweakers.config.SimpleEffectConfig;
@@ -26,9 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Player.class)
 public abstract class PlayerMixin extends LivingEntity implements Climber, Exhaustible, Swimmer {
 
-  @Unique
-  protected final StaminaConfig config =
-      AutoConfig.getConfigHolder(StaminaConfig.class).getConfig();
+  @Unique protected final StaminaConfig config = Common.getConfig();
 
   @Unique protected boolean hasMovementInput = false;
   @Unique private boolean jumped;
