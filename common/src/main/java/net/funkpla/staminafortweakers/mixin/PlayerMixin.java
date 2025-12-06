@@ -73,12 +73,12 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
 
   @Unique
   public double getMaxStamina() {
-    return getAttributeBaseValue(Services.REGISTRY.getMaxStaminaAttribute());
+    return getAttributeValue(Services.REGISTRY.getMaxStaminaAttribute());
   }
 
   @Unique
   public double getStamina() {
-    return getAttributeBaseValue(Services.REGISTRY.getStaminaAttribute());
+    return getAttributeValue(Services.REGISTRY.getStaminaAttribute());
   }
 
   @Unique
