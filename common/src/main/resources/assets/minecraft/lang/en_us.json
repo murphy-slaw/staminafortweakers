@@ -15,5 +15,7 @@
   "item.minecraft.splash_potion.effect.long_tirelessness_potion": "Splash Potion of Tirelessness",
   "item.minecraft.lingering_potion.effect.long_tirelessness_potion": "Lingering Potion of Tirelessness",
   "item.minecraft.tipped_arrow.effect.long_tirelessness_potion": "Arrow of Tirelessness",
-  "attribute.name.staminafortweakers.generic.climb_speed": "Climbing Speed"
+  "attribute.name.staminafortweakers.generic.climb_speed": "Climbing Speed",
+   "attribute.name.staminafortweakers.generic.stamina": "Stamina",
+   "attribute.name.staminafortweakers.generic.max_stamina": "Max Stamina"
 }
