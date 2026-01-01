@@ -11,6 +11,8 @@ public interface Exhaustible {
 
   boolean shouldSwimExhaust();
 
+  boolean shouldWadeExhaust();
+
   boolean shouldClimbExhaust();
 
   boolean hasJumped();

@@ -1,6 +1,7 @@
 package net.funkpla.staminafortweakers.config;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
@@ -37,6 +38,10 @@ public class StaminaConfig implements ConfigData {
   @ConfigEntry.Category("Exhaustion")
   @Comment("Stamina points depleted per tick while swimming.")
   public float depletionPerTickSwimming = 0.5F;
+
+  @ConfigEntry.Category("Exhaustion")
+  @Comment("Stamina points depleted per tick while moving in water.")
+  public float depletionPerTickWading = 0.25F;
 
   /*
    * Exhaustion rules

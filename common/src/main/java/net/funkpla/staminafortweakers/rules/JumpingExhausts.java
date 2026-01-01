@@ -7,7 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 public class JumpingExhausts implements IRule {
   @Override
   public boolean shouldEnable(StaminaConfig config) {
-    return config.depletionPerJump  > 0;
+    return config.depletionPerJump > 0;
   }
 
   @Override
@@ -21,5 +21,13 @@ public class JumpingExhausts implements IRule {
       exhaustible.depleteStamina(config.depletionPerJump * exhaustible.getTravelingModifier());
       exhaustible.maybeDamageLeggings();
     }
+  }
+
+  @Override
+  public boolean execute(StaminaConfig config, ServerPlayer player) {
+    if (test(player)) {
+      doResult(config, player);
+    }
+    return false;
   }
 }
