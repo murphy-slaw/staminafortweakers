@@ -39,15 +39,16 @@ public class RuleManager
   public void updateRules(StaminaConfig config) {
     ruleset =
         new Ruleset(config)
+            .tryAdd(new GlidingExhausts())
             .tryAdd(new SwimmingExhausts())
-            .tryAdd(new SprintingExhausts())
+            .tryAdd(new WadingExhausts())
             .tryAdd(new JumpingExhausts())
+            .tryAdd(new SprintingExhausts())
             .tryAdd(new ClimbingExhausts())
             .tryAdd(new MiningExhausts())
             .tryAdd(new AttackingExhausts())
             .tryAdd(new SwingingWeaponExhausts())
             .tryAdd(new ShieldUseExhausts())
-            .tryAdd(new GlidingExhausts())
             .build();
   }
 }

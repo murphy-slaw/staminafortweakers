@@ -195,6 +195,12 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
   }
 
   @Unique
+  @Override
+  public boolean shouldWadeExhaust() {
+    return isWading();
+  }
+
+  @Unique
   private void applyEffect(EffectConfig e) {
     var mobEffectInstance = e.getEffectInstance();
     mobEffectInstance.ifPresent(this::addEffect);
