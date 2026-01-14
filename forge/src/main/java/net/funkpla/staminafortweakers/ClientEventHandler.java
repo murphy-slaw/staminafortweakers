@@ -15,7 +15,7 @@ public class ClientEventHandler {
     Player player = event.getEntity();
     if (player.isCreative() || player.isSpectator()) return;
     if (!stack.isEmpty()) {
-      if (stack.is(Constants.MELEE_WEAPON)) {
+      if (stack.is(Constants.MELEE_WEAPON) && !Services.PLATFORM.isModLoaded("bettercombat")) {
         Services.PACKET.sendWeaponSwingPacket();
       }
     }
