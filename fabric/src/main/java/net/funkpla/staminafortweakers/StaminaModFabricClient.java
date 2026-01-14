@@ -40,7 +40,9 @@ public class StaminaModFabricClient implements ClientModInitializer {
         (client, player, clickCount) -> {
           if (clickCount != 0 && !(player.isCreative() || player.isSpectator())) {
             ItemStack stack = player.getMainHandItem();
-            if (!stack.isEmpty() && stack.is(Constants.MELEE_WEAPON)) {
+            if (!stack.isEmpty()
+                && stack.is(Constants.MELEE_WEAPON)
+                && !Services.PLATFORM.isModLoaded("bettercombat")) {
               Services.PACKET.sendWeaponSwingPacket();
             }
           }
