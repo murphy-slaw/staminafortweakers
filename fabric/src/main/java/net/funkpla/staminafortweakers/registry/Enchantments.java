@@ -1,5 +1,6 @@
 package net.funkpla.staminafortweakers.registry;
 
+import net.funkpla.staminafortweakers.Common;
 import net.funkpla.staminafortweakers.enchantment.TravelingEnchantment;
 import net.funkpla.staminafortweakers.enchantment.UntiringEnchantment;
 import net.minecraft.core.Registry;
@@ -11,7 +12,7 @@ public class Enchantments {
   public static final Enchantment UNTIRING_ENCHANTMENT = new UntiringEnchantment();
 
   private static void registerEnchantment(String name, Enchantment enchantment) {
-    Registry.register(BuiltInRegistries.ENCHANTMENT, name, enchantment);
+    Registry.register(BuiltInRegistries.ENCHANTMENT, Common.locate(name), enchantment);
   }
 
   private static void registerEnchantments() {
