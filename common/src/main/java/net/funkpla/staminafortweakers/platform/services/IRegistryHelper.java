@@ -11,6 +11,8 @@ public interface IRegistryHelper {
 
   Holder<Attribute> getMaxStaminaAttribute();
 
+  Holder<Attribute> getStaminaRecoveryAttribute();
+
   Holder<Attribute> getClimbSpeedAttribute();
 
   Holder<MobEffect> getTirelessnessEffect();

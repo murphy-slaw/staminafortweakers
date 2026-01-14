@@ -21,4 +21,8 @@ public class AttributeHelper {
   public static Attribute createMaxStamina() {
     return createAttribute("generic.max_stamina", 100, 0, 1024);
   }
+
+  public static Attribute createStaminaRecovery() {
+    return createAttribute("generic.stamina_recovery_rate", 1, 0, 1024);
+  }
 }

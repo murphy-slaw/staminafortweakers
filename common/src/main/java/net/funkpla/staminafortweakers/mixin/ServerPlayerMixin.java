@@ -252,19 +252,24 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
   }
 
   @Unique
+  private double getRecoveryPerTick() {
+    return config.recoveryPerTick
+        * getAttribute(Services.REGISTRY.getStaminaRecoveryAttribute()).getValue();
+  }
+
+  @Unique
   private double getBaseRecovery() {
     if (config.formula == StaminaConfig.Formula.LOGARITHMIC) return calcLogRecovery();
     // Formula.LINEAR
-    return config.recoveryPerTick;
+    return getRecoveryPerTick();
   }
 
   @Unique
   private double calcLogRecovery() {
     double r =
-        Math.log(Math.pow((getMaxStamina() - getStamina() + 1), (double) 1 / 3))
-            / Math.log(3)
-            * config.recoveryPerTick;
-    return Math.max(MIN_RECOVERY, r);
+        Math.log(Math.pow((getMaxStamina() - getStamina() + 1), (double) 1 / 3)) / Math.log(3);
+    return Math.max(MIN_RECOVERY, r)
+        * getAttribute(Services.REGISTRY.getStaminaRecoveryAttribute()).getValue();
   }
 
   @Unique
