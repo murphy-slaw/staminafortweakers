@@ -235,6 +235,17 @@ public class StaminaConfig implements ConfigData {
   @ConfigEntry.Category("Effects")
   public List<SimpleEffectConfig> untiringEquivalentEffects = new ArrayList<>();
 
+  @ConfigEntry.Gui.PrefixText
+  @Comment("Chance Traveling will damage armor each active tick")
+  @ConfigEntry.Category("Enchantments")
+  @ConfigEntry.BoundedDiscrete(max = 100)
+  public int travelingDamageChance = 4;
+
+  @ConfigEntry.Gui.PrefixText
+  @ConfigEntry.Category("Enchantments")
+  @Comment("Traveling minimum durability")
+  public int travelingMinimumDurability = 0;
+
   private boolean effectIdMissing(INamedEffect e) {
     var b = BuiltInRegistries.MOB_EFFECT.containsKey(ResourceLocation.bySeparator(e.getId(), ':'));
     if (!b) {
