@@ -59,12 +59,16 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
 
   @Unique
   private boolean hasTraveling() {
+    ItemStack leggings = this.getItemBySlot(EquipmentSlot.LEGS);
+    if (leggings.getMaxDamage() - leggings.getDamageValue() < config.travelingMinimumDurability)
+      return false;
     return getTravelingLevel() > 0;
   }
 
   @Unique
   @Override
   public float getTravelingModifier() {
+    if (!hasTraveling()) return 1F;
     return 1.0F - (getTravelingLevel() / 3.0F);
   }
 
@@ -76,7 +80,8 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
 
   @Unique
   private void maybeDamageArmor(EquipmentSlot slot) {
-    if (hasTraveling() && this.getRandom().nextFloat() < 0.04f) {
+    int roll = this.getRandom().nextInt(100);
+    if (hasTraveling() && roll < config.travelingDamageChance) {
       ItemStack itemStack = this.getItemBySlot(slot);
       itemStack.hurtAndBreak(1, this, player -> player.broadcastBreakEvent(slot));
     }
