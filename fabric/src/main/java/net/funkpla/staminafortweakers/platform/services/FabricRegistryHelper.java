@@ -26,6 +26,11 @@ public class FabricRegistryHelper implements IRegistryHelper {
   }
 
   @Override
+  public Attribute getStaminaRecoveryAttribute() {
+    return Attributes.STAMINA_RECOVERY_RATE.value();
+  }
+
+  @Override
   public Attribute getClimbSpeedAttribute() {
     return Attributes.CLIMB_SPEED.value();
   }

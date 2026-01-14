@@ -8,11 +8,16 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 
 public class Attributes {
-  public static final Holder<Attribute> STAMINA = registerAttribute("generic.stamina", AttributeHelper.createStamina());
-  public static final Holder<Attribute> MAX_STAMINA = registerAttribute("generic.max_stamina", AttributeHelper.createMaxStamina());
-  public static final Holder<Attribute> CLIMB_SPEED = registerAttribute("generic.climb_speed", AttributeHelper.createClimbSpeed());
+  public static final Holder<Attribute> STAMINA =
+      registerAttribute("generic.stamina", AttributeHelper.createStamina());
+  public static final Holder<Attribute> MAX_STAMINA =
+      registerAttribute("generic.max_stamina", AttributeHelper.createMaxStamina());
+  public static final Holder<Attribute> STAMINA_RECOVERY_RATE =
+      registerAttribute("generic.stamina_recovery_rate", AttributeHelper.createStaminaRecovery());
+  public static final Holder<Attribute> CLIMB_SPEED =
+      registerAttribute("generic.climb_speed", AttributeHelper.createClimbSpeed());
 
-  private static Holder<Attribute> registerAttribute(String name, Attribute attribute){
+  private static Holder<Attribute> registerAttribute(String name, Attribute attribute) {
     return Registry.registerForHolder(BuiltInRegistries.ATTRIBUTE, Common.locate(name), attribute);
   }
 

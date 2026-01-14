@@ -28,7 +28,8 @@ public abstract class PlayerAttributeMixin extends LivingEntity implements Climb
       at = @At("RETURN"))
   private static void staminafortweakers$addPlayerAttributes(
       final CallbackInfoReturnable<AttributeSupplier.Builder> info) {
-      info.getReturnValue().add(Services.REGISTRY.getStaminaAttribute());
-      info.getReturnValue().add(Services.REGISTRY.getMaxStaminaAttribute());
+    info.getReturnValue().add(Services.REGISTRY.getStaminaAttribute());
+    info.getReturnValue().add(Services.REGISTRY.getMaxStaminaAttribute());
+    info.getReturnValue().add(Services.REGISTRY.getStaminaRecoveryAttribute());
   }
 }

@@ -4,7 +4,6 @@ import net.funkpla.staminafortweakers.Constants;
 import net.funkpla.staminafortweakers.attribute.AttributeHelper;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -25,6 +24,11 @@ public class Attributes {
 
   @ObjectHolder(
       registryName = "minecraft:attribute",
+      value = "staminafortweakers:generic.stamina_recovery_rate")
+  public static final Attribute STAMINA_RECOVERY_RATE = null;
+
+  @ObjectHolder(
+      registryName = "minecraft:attribute",
       value = "staminafortweakers:generic.climb_speed")
   public static final Attribute CLIMB_SPEED = null;
 
@@ -32,9 +36,10 @@ public class Attributes {
       DeferredRegister.create(ForgeRegistries.ATTRIBUTES, Constants.MOD_ID);
 
   public static void registerAttributes() {
-    ATTRIBUTES.register( "generic.climb_speed", AttributeHelper::createClimbSpeed);
+    ATTRIBUTES.register("generic.climb_speed", AttributeHelper::createClimbSpeed);
     ATTRIBUTES.register("generic.stamina", AttributeHelper::createStamina);
     ATTRIBUTES.register("generic.max_stamina", AttributeHelper::createMaxStamina);
+    ATTRIBUTES.register("generic.stamina_recovery_rate", AttributeHelper::createStaminaRecovery);
     ATTRIBUTES.register(FMLJavaModLoadingContext.get().getModEventBus());
   }
 
@@ -43,5 +48,6 @@ public class Attributes {
     event.getTypes().forEach(type -> event.add(type, CLIMB_SPEED));
     event.add(EntityType.PLAYER, STAMINA);
     event.add(EntityType.PLAYER, MAX_STAMINA);
+    event.add(EntityType.PLAYER, STAMINA_RECOVERY_RATE);
   }
 }
