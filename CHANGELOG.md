@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.0]
+
+A bugfix release with a couple of small feature additions.
+
+### Fixed
+- Don't deplete both the sprinting cost and swimming cost when sprint-swimming
+- Don't deplete the weapon swing cost twice for vanilla weapons when Better Combat is installed
+
+### Added
+- Separate stamina cost for wading (moving in water without sprint-swimming)
+- Two new configuration items for the Traveling enchantment:
+  - `travelingDamageChance`: Percentage chance that Traveling will damage enchanted leggings on a tick it is active. 
+    (Was previously hardcoded to 4%)
+  - `travelingMinimumDurability`: If durability for enchanted leggings is below this value, Traveling will not activate
+- A new attribute, `staminafortweakers.generic.stamina_recovery_rate`, which is applied as a multiplier to all 
+  stamina recovery calculations. Defaults to 1.0 (which leaves existing behavior the same)
 
 ## [1.9.1] 2025-12-26
 
