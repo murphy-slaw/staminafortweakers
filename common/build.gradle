@@ -51,6 +51,8 @@ dependencies {
     compileOnly("maven.modrinth:playeranimator:${playeranimator_version}-forge")
     api("org.projectlombok:lombok:1.18.36")
     annotationProcessor("org.projectlombok:lombok:1.18.36")
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.3"))
+    implementation(jarJar("io.github.llamalad7:mixinextras-neoforge:0.5.3"))
 }
 
 configurations {

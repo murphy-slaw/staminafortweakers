@@ -74,6 +74,10 @@ public class StaminaConfig implements ConfigData {
   @ConfigEntry.Category("Exhaustion")
   public float depletionPerShieldTick = 0;
 
+  @Comment("Stamina points depleted per successful shield block")
+  @ConfigEntry.Category("Exhaustion")
+  public float depletionPerShieldBlock = 0;
+
   @Comment("Stamina points depleted per tick while using a glider")
   @ConfigEntry.Category("Exhaustion")
   public float depletionPerGliderTick = 0;

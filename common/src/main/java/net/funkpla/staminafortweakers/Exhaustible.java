@@ -25,6 +25,8 @@ public interface Exhaustible {
 
   boolean isUsingShield();
 
+  boolean hasShieldBlocked();
+
   void depleteStamina(float depletionAmount);
 
   void maybeDamageLeggings();

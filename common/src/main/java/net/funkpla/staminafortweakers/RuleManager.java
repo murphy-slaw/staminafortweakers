@@ -49,6 +49,7 @@ public class RuleManager
             .tryAdd(new AttackingExhausts())
             .tryAdd(new SwingingWeaponExhausts())
             .tryAdd(new ShieldUseExhausts())
+            .tryAdd(new ShieldBlocksExhaust())
             .build();
   }
 }

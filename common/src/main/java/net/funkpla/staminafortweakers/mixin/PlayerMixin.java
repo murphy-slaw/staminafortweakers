@@ -1,5 +1,7 @@
 package net.funkpla.staminafortweakers.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import java.util.Optional;
 import net.funkpla.staminafortweakers.Climber;
 import net.funkpla.staminafortweakers.Common;
@@ -31,6 +33,7 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
 
   @Unique protected boolean hasMovementInput = false;
   @Unique private boolean jumped;
+  @Unique private boolean shieldBlocked;
 
   protected PlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
     super(entityType, world);
@@ -103,8 +106,13 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
    * of every tick.
    */
   @Inject(method = "tick", at = @At("HEAD"))
-  private void clearFlags(CallbackInfo ci) {
+  private void clearFlagsBefore(CallbackInfo ci) {
     jumped = false;
+  }
+
+  @Inject(method = "tick", at = @At("TAIL"))
+  private void clearFlagsAfter(CallbackInfo ci) {
+    shieldBlocked = false;
   }
 
   @Inject(method = "jumpFromGround", at = @At("TAIL"))
@@ -123,6 +131,18 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
   @Override
   public boolean hasJumped() {
     return jumped;
+  }
+
+  @WrapMethod(method = "hurtCurrentlyUsedShield")
+  private void handleShieldBlock(float damage, Operation<Void> original) {
+    shieldBlocked = true;
+    original.call(damage);
+  }
+
+  @Unique
+  @Override
+  public boolean hasShieldBlocked() {
+    return shieldBlocked;
   }
 
   @Unique
