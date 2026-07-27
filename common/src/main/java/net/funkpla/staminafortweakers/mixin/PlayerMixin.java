@@ -33,7 +33,7 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
 
   @Unique protected boolean hasMovementInput = false;
   @Unique private boolean jumped;
-  @Unique private boolean shieldBlocked;
+  @Unique protected boolean shieldBlocked;
 
   protected PlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
     super(entityType, world);
@@ -110,11 +110,6 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
     jumped = false;
   }
 
-  @Inject(method = "tick", at = @At("TAIL"))
-  private void clearFlagsAfter(CallbackInfo ci) {
-    shieldBlocked = false;
-  }
-
   @Inject(method = "jumpFromGround", at = @At("TAIL"))
   private void setJumpedFlag(CallbackInfo ci) {
     jumped = true;
@@ -143,6 +138,12 @@ public abstract class PlayerMixin extends LivingEntity implements Climber, Exhau
   @Override
   public boolean hasShieldBlocked() {
     return shieldBlocked;
+  }
+
+  @Unique
+  @Override
+  public void setShieldBlocked(boolean blocked) {
+    this.shieldBlocked = blocked;
   }
 
   @Unique

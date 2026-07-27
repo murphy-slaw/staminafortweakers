@@ -48,8 +48,8 @@ public class RuleManager
             .tryAdd(new MiningExhausts())
             .tryAdd(new AttackingExhausts())
             .tryAdd(new SwingingWeaponExhausts())
-            .tryAdd(new ShieldUseExhausts())
             .tryAdd(new ShieldBlocksExhaust())
+            .tryAdd(new ShieldUseExhausts())
             .build();
   }
 }

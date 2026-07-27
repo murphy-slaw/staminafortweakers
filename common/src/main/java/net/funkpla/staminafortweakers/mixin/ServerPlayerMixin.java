@@ -178,6 +178,7 @@ public abstract class ServerPlayerMixin extends PlayerMixin implements Swimmer, 
     setSwamUp(false);
     setAttacked(false);
     setSwungWeapon(false);
+    shieldBlocked = false;
   }
 
   @Unique
