@@ -10,7 +10,9 @@
     "PlayerMixin"
   ],
   "client": [
-    "LocalPlayerMixin"
+    "LocalPlayerMixin",
+    "RollManagerMixin",
+    "HudRenderHelperMixin"
   ],
   "injectors": {
     "defaultRequire": 1

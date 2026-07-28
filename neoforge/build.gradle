@@ -53,6 +53,7 @@ neoForge {
         compileOnly("maven.modrinth:gliders:${gliders_version}+neoforge")
         compileOnly("maven.modrinth:better-combat:${bettercombat_version}-neoforge")
         compileOnly("maven.modrinth:playeranimator:${playeranimator_version}-forge")
+        compileOnly("maven.modrinth:combat-roll:${combat_roll_version}-neoforge")
         api("org.projectlombok:lombok:1.18.36")
         annotationProcessor("org.projectlombok:lombok:1.18.36")
         compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.3"))
