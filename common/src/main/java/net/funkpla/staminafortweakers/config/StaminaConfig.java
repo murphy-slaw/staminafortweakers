@@ -220,7 +220,7 @@ public class StaminaConfig implements ConfigData {
   public int staminaBarTirelessColor = 0xFEB236;
 
   /*
-  Customizable effects
+   * Customizable effects
    */
 
   @ConfigEntry.Gui.PrefixText
@@ -250,6 +250,26 @@ public class StaminaConfig implements ConfigData {
   @ConfigEntry.Category("Enchantments")
   @Comment("Traveling minimum durability")
   public int travelingMinimumDurability = 0;
+
+  /*
+   * Combat Roll compat
+   */
+
+  @Comment("Enable Daedelus' Combat Roll compatibility")
+  @ConfigEntry.Category("CombatRoll")
+  public boolean combatRollCompat = false;
+
+  @Comment("Stamina points depleted per combat roll")
+  @ConfigEntry.Category("CombatRoll")
+  public float depletionPerCombatRoll = 10F;
+
+  @Comment("Combat Roll cooldown override in ticks (-1 = Default)")
+  @ConfigEntry.Category("CombatRoll")
+  public int combatRollCooldownTicks = -1;
+
+  @Comment("Completely hide the Combat Roll HUD widget")
+  @ConfigEntry.Category("CombatRoll")
+  public boolean hideCombatRollHud = false;
 
   private boolean effectIdMissing(INamedEffect e) {
     var b = BuiltInRegistries.MOB_EFFECT.containsKey(ResourceLocation.of(e.getId(), ':'));

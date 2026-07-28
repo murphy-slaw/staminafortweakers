@@ -1,6 +1,7 @@
 package net.funkpla.staminafortweakers;
 
 import java.nio.file.Path;
+import net.funkpla.staminafortweakers.compat.combat_roll.CombatRollCompat;
 import net.funkpla.staminafortweakers.registry.Attributes;
 import net.funkpla.staminafortweakers.registry.Enchantments;
 import net.funkpla.staminafortweakers.registry.Potions;
@@ -39,6 +40,7 @@ public class StaminaModForge {
   @SubscribeEvent
   public static void commonSetup(FMLCommonSetupEvent event) {
     Common.initConfig();
+    CombatRollCompat.init();
   }
 
   @SubscribeEvent

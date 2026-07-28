@@ -7,6 +7,8 @@ public interface Exhaustible {
 
   boolean isWinded();
 
+  boolean isFatigued();
+
   boolean shouldSprintExhaust();
 
   boolean shouldSwimExhaust();

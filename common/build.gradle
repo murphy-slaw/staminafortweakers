@@ -47,6 +47,7 @@ dependencies {
     modCompileOnly("maven.modrinth:gliders:${gliders_version}")
     modCompileOnly("maven.modrinth:better-combat:${bettercombat_version}-forge")
     modCompileOnly("maven.modrinth:playeranimator:${playeranimator_version}-forge")
+    modCompileOnly("maven.modrinth:combat-roll:${combat_roll_version}-forge")
 
     modApi("net.threetag:PalladiumCore:${palladium_core_version}")
 

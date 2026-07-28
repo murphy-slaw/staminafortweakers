@@ -46,6 +46,7 @@ dependencies {
     modCompileOnly "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${cca_version}"
     modCompileOnly("maven.modrinth:better-combat:${bettercombat_version}-fabric")
     modCompileOnly("maven.modrinth:playeranimator:${playeranimator_version}-fabric")
+    modCompileOnly("maven.modrinth:combat-roll:${combat_roll_version}-fabric")
     api("org.projectlombok:lombok:1.18.36")
     annotationProcessor("org.projectlombok:lombok:1.18.36")
 }

@@ -3,14 +3,16 @@
   "package": "net.funkpla.staminafortweakers.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "PlayerAttributeMixin",
-    "LivingEntityAttributeMixin",
-    "ServerPlayerMixin",
-    "LivingEntityMixin",
-    "PlayerMixin"
+      "LivingEntityAttributeMixin",
+      "LivingEntityMixin",
+      "PlayerAttributeMixin",
+      "PlayerMixin",
+      "ServerPlayerMixin"
   ],
   "client": [
-    "LocalPlayerMixin"
+      "HudRenderHelperMixin",
+      "LocalPlayerMixin",
+      "RollManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
