@@ -3,6 +3,7 @@ package net.funkpla.staminafortweakers;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingShieldBlockEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -16,6 +17,15 @@ public class ServerEventHandler {
     Player player = event.getEntity();
     if (player.level().isClientSide || player.isCreative() || player.isSpectator()) return;
     ((Attacker) player).setAttacked(true);
+  }
+
+  @SubscribeEvent
+  public static void handleShieldBlock(LivingShieldBlockEvent event) {
+    if (!(event.getEntity() instanceof Player player)) return;
+    if (player.level().isClientSide || player.isCreative() || player.isSpectator()) return;
+    if (event.getBlocked()) {
+      ((Exhaustible) player).setShieldBlocked(true);
+    }
   }
 
   @SubscribeEvent
