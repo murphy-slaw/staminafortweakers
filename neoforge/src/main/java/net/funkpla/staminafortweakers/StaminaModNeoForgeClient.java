@@ -1,8 +1,7 @@
 package net.funkpla.staminafortweakers;
 
-import me.shedaniel.autoconfig.AutoConfig;
 import net.funkpla.staminafortweakers.compat.bettercombat.BetterCombatCompat;
-import net.funkpla.staminafortweakers.config.StaminaConfig;
+import net.funkpla.staminafortweakers.config.StaminaConfigScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -49,6 +48,6 @@ public class StaminaModNeoForgeClient {
   }
 
   private Screen createScreen(ModContainer modContainer, Screen parent) {
-    return AutoConfig.getConfigScreen(StaminaConfig.class, parent).get();
+    return StaminaConfigScreen.create(parent);
   }
 }

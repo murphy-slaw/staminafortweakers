@@ -9,7 +9,9 @@
   ],
   "client": [
     "LocalPlayerMixin",
-    "LivingEntityFluidMixin"
+    "LivingEntityFluidMixin",
+    "RollManagerMixin",
+    "HudRenderHelperMixin"
   ],
   "injectors": {
     "defaultRequire": 1

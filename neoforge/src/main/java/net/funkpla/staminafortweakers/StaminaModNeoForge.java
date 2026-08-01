@@ -1,5 +1,6 @@
 package net.funkpla.staminafortweakers;
 
+import net.funkpla.staminafortweakers.compat.combat_roll.CombatRollCompat;
 import net.funkpla.staminafortweakers.registry.Attributes;
 import net.funkpla.staminafortweakers.registry.PotionRecipes;
 import net.funkpla.staminafortweakers.registry.Potions;
@@ -27,5 +28,6 @@ public class StaminaModNeoForge {
   @SubscribeEvent
   public static void commonSetup(FMLCommonSetupEvent event) {
     Common.initConfig();
+    CombatRollCompat.init();
   }
 }

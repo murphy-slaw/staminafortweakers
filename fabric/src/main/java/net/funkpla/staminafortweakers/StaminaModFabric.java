@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.funkpla.staminafortweakers.compat.combat_roll.CombatRollCompat;
 import net.funkpla.staminafortweakers.packet.C2SReceivers;
 import net.funkpla.staminafortweakers.registry.*;
 import net.minecraft.world.InteractionResult;
@@ -23,6 +24,7 @@ public class StaminaModFabric implements ModInitializer {
     Potions.register();
     C2SReceivers.registerPackets();
     Common.initConfig();
+    CombatRollCompat.init();
 
     ServerPlayerEvents.AFTER_RESPAWN.register(
         (oldPlayer, newPlayer, alive) -> ((Exhaustible) newPlayer).handleRespawn());
