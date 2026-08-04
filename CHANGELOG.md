@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.0] 2026-08-04
+
+### Added
+- Compatibility with [Combat Roll](https://modrinth.com/mod/combat-roll)
+  - Assign a stamina cost for rolling, optionally disable Combat Roll cooldowns and rely on stamina as the throttle 
+    for the roll ability
+  - Thanks to [Shaaux](https://github.com/Shaaux) for the code!
+
+### Fixed
+- Fixed the rule for exhaustion on shield blocks not working on 1.21.1
+  - Thanks again to Shaaux for the patch!
+
 ## [1.11.0] 2026-03-16
 
 ### Added
